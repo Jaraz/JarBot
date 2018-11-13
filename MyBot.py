@@ -19,10 +19,10 @@ from hlt.positionals import Position
 # import random
 
 
-RADAR_WIDTH = 2
+RADAR_WIDTH = 1
 
 '''
-To add
+To add later
 fix when ships get stuck
 Ship construction should be a function of game length
 cargo hold orders should shorten at the start and lengthen as the game goes on
@@ -31,6 +31,26 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 # Logging allows you to save messages for yourself. This is required because the regular STDOUT
 #   (print statements) are reserved for the engine-bot communication.
 import logging
+
+
+def giveShipOrders(ship, currentOrders):
+    # build ship status
+    status = None
+    if currentOrders is None:
+        status = "exploring"
+        
+    if game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
+        logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
+        status = "returnSuicide"
+            
+    elif currentOrders == "returning":
+        if ship.position == me.shipyard.position:
+            status = "exploring"
+                
+    elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
+        status = "returning"
+    
+    return status
 
 #resolve movement function
 def resolveMovement(ships, destinations, status):
@@ -53,17 +73,22 @@ def resolveMovement(ships, destinations, status):
         nextTurnPosition[ship.id] = game_map.normalize(ship.position + Position(*orderList[ship.id]))
     
     # resolve movement    
-    # check if overlap
+    useSecondBest = False
     for ship in ships:
         for i in ships:
             # check if you need a new move
             if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
                 # first try other unsafe moves, if empty just move so you don't bottleneck
                 nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+                
                 if len(nextBest) > 1:
                     nextLocation = game_map.normalize(ship.position + Position(*nextBest[1]))
-                    logging.info("next location {}, nextTurnPosition.values = {}".format(nextLocation,nextTurnPosition.values()))
                     if nextLocation not in nextTurnPosition.values():
+                        logging.info("Ship {} will use next best to go {}, danger at {}nextTurnPostiion.values()".format(ship,nextLocation,nextTurnPosition.values()))
+                        useSecondBest == True
+
+                # IF second best isn't available we need to switch to something random
+                if useSecondBest == True:
                         orderList[ship.id] = nextBest[1]
                 elif (ship.position.directional_offset(Direction.North)) not in nextTurnPosition.values():
                     orderList[ship.id] = Direction.North
@@ -76,8 +101,10 @@ def resolveMovement(ships, destinations, status):
                 else:
                     orderList[ship.id] = Direction.Still
                 
+                useSecondBest = False
                 # new position
                 nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
+                
         # check if suicide mission home
         if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
             orderList[ship.id] = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
@@ -86,7 +113,7 @@ def resolveMovement(ships, destinations, status):
     logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
     
-#return all surrounding cardiens
+#return all surrounding cardinals
 def get_surrounding_cardinals2(pos, width):
     locations = []
     for i in range(-width,width+1):
@@ -105,9 +132,10 @@ def findHigherHalite2(pos, destinations, width = RADAR_WIDTH):
     # halite in new cell * 25% > manhattan distance 
     # ex: 250 per turn or manhattan distance (3 turns) * 25% current cell + moving costs 
     
-
+    
     #find max halite
     # need to add a cost function to decide where to go
+    finalLocation = pos
     for x in location_choices:
         haliteCheck = game_map[x].halite_amount
         #logging.info("Check it out ! : {}".format(Position(*x)))
@@ -199,25 +227,16 @@ while True:
         ### Set ship priorities ###
         ###########################
         if ship.id not in ship_status:
-            ship_status[ship.id] = "exploring"
-        
-        if game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
-            logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
-            ship_status[ship.id] = "returnSuicide"
-            
-        elif ship_status[ship.id] == "returning":
-            if ship.position == me.shipyard.position:
-                ship_status[ship.id] = "exploring"
-                
-        elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
-            ship_status[ship.id] = "returning"
+            ship_status[ship.id] = giveShipOrders(ship, None)
+        else:
+            ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id])
             
         # if time running out head home and suicide. Need to add suicide code
         logging.info("Ship {} is: {}".format(ship.id, ship_status[ship.id]))
 
-        ##################################
-        ### Figure out ship destination ###
-        ##################################
+        ###############################
+        ### Assign ship destination ###
+        ###############################
         if ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
             ship_destination[ship.id] = ship.position
             logging.info("Ship {} is low on fuel and staying still".format(ship.id))
