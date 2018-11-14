@@ -35,6 +35,7 @@ import logging
 
 def giveShipOrders(ship, currentOrders):
     # build ship status
+
     status = None
     if currentOrders is None:
         status = "exploring"
@@ -42,11 +43,9 @@ def giveShipOrders(ship, currentOrders):
     if game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
         logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
         status = "returnSuicide"
-            
     elif currentOrders == "returning":
         if ship.position == me.shipyard.position:
             status = "exploring"
-                
     elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
         status = "returning"
     
@@ -61,6 +60,7 @@ def resolveMovement(ships, destinations, status):
     # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
+        #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         order = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         if not order:
             order = Direction.Still
@@ -118,7 +118,7 @@ def resolveMovement(ships, destinations, status):
 def get_surrounding_cardinals2(pos, width):
     locations = []
     for i in range(-width,width+1):
-        for j in range(-width,width):
+        for j in range(-width,width+1):
             locations.append(pos + Position(i,j))
     return locations
 
@@ -132,8 +132,7 @@ def findHigherHalite2(pos, destinations, width = RADAR_WIDTH):
     # moving costs 10% of current halite or get 25% available in cell
     # halite in new cell * 25% > manhattan distance 
     # ex: 250 per turn or manhattan distance (3 turns) * 25% current cell + moving costs 
-    
-    
+   
     #find max halite
     # need to add a cost function to decide where to go
     finalLocation = pos
@@ -143,8 +142,11 @@ def findHigherHalite2(pos, destinations, width = RADAR_WIDTH):
         if haliteCheck > maxHalite and x != pos and not (x in destinations.values()):
             maxHalite = haliteCheck
             finalLocation = x
-    logging.info("location_choices are {}, we chose highest halite {}".format(location_choices, finalLocation))
+    logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
     
+    # if highest halite is current pos just chose something random
+    if finalLocation == pos:
+        finalLocation = pos + game_map.get_unsafe_moves(pos, random.choice(ship.position.get_surrounding_cardinals()))
     return finalLocation
     
 
@@ -233,7 +235,7 @@ while True:
             ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id])
             
         # if time running out head home and suicide. Need to add suicide code
-        logging.info("Ship {} is: {}".format(ship.id, ship_status[ship.id]))
+        logging.info("Ship {} is {} currently at {}".format(ship.id, ship_status[ship.id], ship.position))
 
         ###############################
         ### Assign ship destination ###
@@ -261,7 +263,8 @@ while True:
     ########################
     ### Resolve movement ###
     ########################
-    logging.info("List looks like: {}".format(ship_destination))
+    logging.info("Current position: {}".format(ship_destination))    
+    logging.info("Destination list (pre resolve): {}".format(ship_destination))
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
