@@ -19,7 +19,7 @@ from hlt.positionals import Position
 # import random
 
 
-RADAR_WIDTH = 1
+RADAR_WIDTH = 2
 
 '''
 To add later
@@ -31,23 +31,27 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 # Logging allows you to save messages for yourself. This is required because the regular STDOUT
 #   (print statements) are reserved for the engine-bot communication.
 import logging
-
+logging.disable
 
 def giveShipOrders(ship, currentOrders):
     # build ship status
 
+    logging.info("Ship {} was {}".format(ship, currentOrders))
+
     status = None
     if currentOrders is None:
         status = "exploring"
-        
-    if game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
+    elif game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
         logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
         status = "returnSuicide"
     elif currentOrders == "returning":
+        status = "returning"
         if ship.position == me.shipyard.position:
             status = "exploring"
     elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
         status = "returning"
+    elif currentOrders == "exploring":
+        status = "exploring"
     
     return status
 
@@ -124,7 +128,8 @@ def get_surrounding_cardinals2(pos, width):
 
 # version 2
 # returns location of higher halite in radar
-def findHigherHalite2(pos, destinations, width = RADAR_WIDTH):
+def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
+    pos = ship.position
     maxHalite = 0 
     location_choices = get_surrounding_cardinals2(pos, RADAR_WIDTH)
 
@@ -139,7 +144,11 @@ def findHigherHalite2(pos, destinations, width = RADAR_WIDTH):
     for x in location_choices:
         haliteCheck = game_map[x].halite_amount
         #logging.info("Check it out ! : {}".format(Position(*x)))
-        if haliteCheck > maxHalite and x != pos and not (x in destinations.values()):
+        otherDest = destinations.copy()
+        if ship.id in otherDest:
+            otherDest.pop(ship.id)
+            
+        if haliteCheck > maxHalite and x != pos and not (x in otherDest.values()):
             maxHalite = haliteCheck
             finalLocation = x
     logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
@@ -245,7 +254,7 @@ while True:
             logging.info("Ship {} is low on fuel and staying still".format(ship.id))
         
         elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
-            ship_destination[ship.id] = findHigherHalite2(ship.position, ship_destination)
+            ship_destination[ship.id] = findHigherHalite2(ship, ship_destination)
             logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
         elif ship_status[ship.id] == "returning":
@@ -269,7 +278,8 @@ while True:
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
     # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied and not (me.shipyard.position in finalDestination.values()):
+    #if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied and not (me.shipyard.position in finalDestination.values()):
+    if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
