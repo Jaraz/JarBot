@@ -90,16 +90,17 @@ def resolveMovement(ships, destinations, status):
                 # IF second best isn't available we need to switch to something random
                 if useSecondBest == True:
                         orderList[ship.id] = nextBest[1]
-                elif (ship.position.directional_offset(Direction.North)) not in nextTurnPosition.values():
-                    orderList[ship.id] = Direction.North
-                elif (ship.position.directional_offset(Direction.West)) not in nextTurnPosition.values():
-                    orderList[ship.id] = Direction.West
-                elif (ship.position.directional_offset(Direction.South)) not in nextTurnPosition.values():
-                    orderList[ship.id] = Direction.South
-                elif (ship.position.directional_offset(Direction.East)) not in nextTurnPosition.values():
-                    orderList[ship.id] = Direction.East
                 else:
-                    orderList[ship.id] = Direction.Still
+                    possibilities = ship.position.get_surrounding_cardinals()
+                    logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
+                    possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
+
+                    if len(possibilities) == 0:
+                        orderList[ship.id] = Direction.Still
+                    else:
+                        newDirection = game_map.get_unsafe_moves(ship.position, random.choice(possibilities))
+                        logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
+                        orderList[ship.id] = newDirection[0]
                 
                 useSecondBest = False
                 # new position
