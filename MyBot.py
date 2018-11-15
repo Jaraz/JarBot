@@ -31,6 +31,16 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 # Logging allows you to save messages for yourself. This is required because the regular STDOUT
 #   (print statements) are reserved for the engine-bot communication.
 import logging
+#logging.basicConfig(level=logging.NOTSET)
+
+# returns average halite in area based on width, also returns max halite
+def getSurroundingHalite(pos, width):
+    halite = []
+    for i in range(-width,width+1):
+        for j in range(-width,width+1):
+            halite.append(game_map[pos + Position(i,j)].halite_amount)
+    return sum(halite)/len(halite)
+
 
 def giveShipOrders(ship, currentOrders):
     # build ship status
@@ -191,11 +201,15 @@ game = hlt.Game()
 # At this point "game" variable is populated with initial map data.
 # This is a good place to do computationally expensive start-up pre-processing.
 # As soon as you call "ready" function below, the 2 second per turn timer will start.
+#constants.load_constants()
 
+################
 ### Settings ###
-shipBuildingTurns = 175
-collectingRatio   = 20
-returnFlagRatio   = 1.5
+################
+shipBuildingTurns = 175 # how many turns to build ships
+collectingRatio   = 20 # higher means you move on less frequently to next halite
+returnFlagRatio   = 1.5 # higher means it returns earlier, ratio to 1000
+
 
 
 logging.info("map information: {}".format(Position(1,1)))
@@ -247,7 +261,16 @@ while True:
             logging.info("Ship {} is low on fuel and staying still".format(ship.id))
         
         elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
-            ship_destination[ship.id] = findHigherHalite2(ship, ship_destination)
+            # i want the ship to see if its in a halite deadzone and then widen the window
+            # if not in deadzone
+            logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
+            
+            if getSurroundingHalite(ship.position,1) < 50:
+                haliteScanWidth =  RADAR_WIDTH + 2
+            else:
+                haliteScanWidth =  RADAR_WIDTH
+            
+            ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
             logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
         elif ship_status[ship.id] == "returning":
