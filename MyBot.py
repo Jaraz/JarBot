@@ -19,7 +19,7 @@ from hlt.positionals import Position
 # import random
 
 
-RADAR_WIDTH = 2
+RADAR_WIDTH = 1
 
 '''
 To add later
@@ -31,7 +31,6 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 # Logging allows you to save messages for yourself. This is required because the regular STDOUT
 #   (print statements) are reserved for the engine-bot communication.
 import logging
-logging.disable
 
 def giveShipOrders(ship, currentOrders):
     # build ship status
@@ -133,13 +132,7 @@ def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
     maxHalite = 0 
     location_choices = get_surrounding_cardinals2(pos, RADAR_WIDTH)
 
-    # cost function calculation
-    # moving costs 10% of current halite or get 25% available in cell
-    # halite in new cell * 25% > manhattan distance 
-    # ex: 250 per turn or manhattan distance (3 turns) * 25% current cell + moving costs 
-   
     #find max halite
-    # need to add a cost function to decide where to go
     finalLocation = pos
     for x in location_choices:
         haliteCheck = game_map[x].halite_amount
