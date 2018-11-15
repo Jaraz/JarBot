@@ -207,7 +207,7 @@ game = hlt.Game()
 ### Settings ###
 ################
 shipBuildingTurns = 175 # how many turns to build ships
-collectingRatio   = 10 # higher means you move on less frequently to next halite
+collectingRatio   = 10 # higher means you move less frequently to next halite
 returnFlagRatio   = 1.5 # higher means it returns earlier, ratio to 1000
 
 
