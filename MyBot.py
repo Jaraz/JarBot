@@ -98,7 +98,7 @@ def resolveMovement(ships, destinations, status):
                     nextLocation = game_map.normalize(ship.position + Position(*nextBest[1]))
                     if nextLocation not in nextTurnPosition.values():
                         logging.info("Ship {} will use next best to go {}, danger at {}nextTurnPostiion.values()".format(ship,nextLocation,nextTurnPosition.values()))
-                        useSecondBest == True
+                        useSecondBest = True
 
                 # IF second best isn't available we need to switch to something random
                 if useSecondBest == True:
@@ -140,7 +140,7 @@ def get_surrounding_cardinals2(pos, width):
 def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
     pos = ship.position
     maxHalite = 0 
-    location_choices = get_surrounding_cardinals2(pos, RADAR_WIDTH)
+    location_choices = get_surrounding_cardinals2(pos, width)
 
     #find max halite
     finalLocation = pos
@@ -207,11 +207,11 @@ game = hlt.Game()
 ### Settings ###
 ################
 shipBuildingTurns = 175 # how many turns to build ships
-collectingRatio   = 20 # higher means you move on less frequently to next halite
+collectingRatio   = 10 # higher means you move on less frequently to next halite
 returnFlagRatio   = 1.5 # higher means it returns earlier, ratio to 1000
 
 
-
+#logging.disable(logging.CRITICAL)
 logging.info("map information: {}".format(Position(1,1)))
 
 
@@ -256,17 +256,22 @@ while True:
         ###############################
         ### Assign ship destination ###
         ###############################
+        # If ship is low on fuel don't move
         if ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
             ship_destination[ship.id] = ship.position
             logging.info("Ship {} is low on fuel and staying still".format(ship.id))
         
+        # If ship shouldn't mine any more
+        # in theory you shoudl start with a high threshold and then move lower near end game
         elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
             # i want the ship to see if its in a halite deadzone and then widen the window
             # if not in deadzone
             logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
             
-            if getSurroundingHalite(ship.position,1) < 50:
+            if getSurroundingHalite(ship.position,1) < 100 and game.turn_number < 400:
                 haliteScanWidth =  RADAR_WIDTH + 2
+            #elif getSurroundingHalite(ship.position,3) < 100:
+            #    haliteScanWidth =  RADAR_WIDTH + 6
             else:
                 haliteScanWidth =  RADAR_WIDTH
             

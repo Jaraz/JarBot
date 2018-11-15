@@ -74,6 +74,7 @@ shipBuildingTurns = 150
 collectingRatio   = 20
 returnFlagRatio   = 1.5
 
+logging.disable(logging.CRITICAL)
 logging.info("map information: {}".format(Position(1,1)))
 
 
