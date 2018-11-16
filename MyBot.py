@@ -74,11 +74,15 @@ def resolveMovement(ships, destinations, status):
     for ship in ships:
         # next move
         #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
-        order = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
-        if not order:
+        firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+        if not firstOrder:
             order = Direction.Still
         else: 
-            order = order[0]
+            order = random.choice(firstOrder)
+            nextBest = None
+            if len(firstOrder) > 1:
+                firstOrder.pop(firstOrder.index(order))
+                nextBest = random.choice(firstOrder) ### need to fix this 
         
         orderList[ship.id] = order
         
@@ -94,17 +98,17 @@ def resolveMovement(ships, destinations, status):
             logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
             if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
                 # first try other unsafe moves, if empty just move so you don't bottleneck
-                nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+                #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
                 
-                if len(nextBest) > 1:
-                    nextLocation = game_map.normalize(ship.position + Position(*nextBest[1]))
+                if nextBest is not None:
+                    nextLocation = game_map.normalize(ship.position + Position(*nextBest))
                     if nextLocation not in nextTurnPosition.values():
                         logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
                         useSecondBest = True
 
                 # IF second best isn't available we need to switch to something random
                 if useSecondBest == True:
-                        orderList[ship.id] = nextBest[1]
+                        orderList[ship.id] = nextBest
                 else:
                     possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
                     logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))

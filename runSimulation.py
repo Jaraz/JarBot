@@ -16,7 +16,7 @@ argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 4
 newBotScores = []
 oldBotScores = []
 
-runSims = 100
+runSims = 1
 
 for i in range(0, runSims):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
