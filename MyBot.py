@@ -90,6 +90,8 @@ def resolveMovement(ships, destinations, status):
     for ship in ships:
         for i in ships:
             # check if you need a new move
+            # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still
+            logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
             if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
                 # first try other unsafe moves, if empty just move so you don't bottleneck
                 nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
@@ -97,14 +99,15 @@ def resolveMovement(ships, destinations, status):
                 if len(nextBest) > 1:
                     nextLocation = game_map.normalize(ship.position + Position(*nextBest[1]))
                     if nextLocation not in nextTurnPosition.values():
-                        logging.info("Ship {} will use next best to go {}, danger at {}nextTurnPostiion.values()".format(ship,nextLocation,nextTurnPosition.values()))
+                        logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
                         useSecondBest = True
 
                 # IF second best isn't available we need to switch to something random
                 if useSecondBest == True:
                         orderList[ship.id] = nextBest[1]
                 else:
-                    possibilities = ship.position.get_surrounding_cardinals()
+                    possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
+                    logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
                     logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
                     possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
 
@@ -132,13 +135,14 @@ def get_surrounding_cardinals2(pos, width):
     locations = []
     for i in range(-width,width+1):
         for j in range(-width,width+1):
-            locations.append(pos + Position(i,j))
+            #locations.append(game_map.normalize(pos) + game_map.normalize(Position(i,j)))
+            locations.append(game_map.normalize(pos + Position(i,j)))
     return locations
 
 # version 2
 # returns location of higher halite in radar
 def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
-    pos = ship.position
+    pos = game_map.normalize(ship.position)
     maxHalite = 0 
     location_choices = get_surrounding_cardinals2(pos, width)
 
@@ -153,12 +157,12 @@ def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
             
         if haliteCheck > maxHalite and x != pos and not (x in otherDest.values()):
             maxHalite = haliteCheck
-            finalLocation = x
+            finalLocation = game_map.normalize(x)
     logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
     
     # if highest halite is current pos just chose something random
     if finalLocation == pos:
-        finalLocation = pos + game_map.get_unsafe_moves(pos, random.choice(ship.position.get_surrounding_cardinals()))
+        finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
     return finalLocation
     
 
@@ -293,7 +297,7 @@ while True:
     ########################
     ### Resolve movement ###
     ########################
-    logging.info("Current position: {}".format(ship_destination))    
+    logging.info("RESOLVE MOVEMENT!!!!!!!")    
     logging.info("Destination list (pre resolve): {}".format(ship_destination))
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
