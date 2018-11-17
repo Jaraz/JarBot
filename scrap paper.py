@@ -5,10 +5,14 @@ Created on Fri Nov 16 18:35:03 2018
 @author: jaycw_000
 """
 
-import random
+import multiprocessing
 
-x = [5, 8, 10, 3]
+from os import getpid
 
-rc = random.choice(x)
-print(rc)
-x.pop(x.index(rc))
+def worker(procnum):
+    print("I am number {} in process {}".format(procnum, getpid()))
+    return getpid()
+
+if __name__ == '__main__':
+    pool = multiprocessing.Pool(processes = 4)
+    print(pool.map(worker, range(1000)))

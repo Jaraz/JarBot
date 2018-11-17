@@ -7,6 +7,7 @@ Created on Wed Nov 14 06:05:59 2018
 
 import subprocess
 import numpy as np
+import multiprocessing
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
@@ -16,23 +17,29 @@ argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 4
 newBotScores = []
 oldBotScores = []
 
-runSims = 1
+runSims = 16
 
-for i in range(0, runSims):
+def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
     
     results = res.communicate()[1]
-    q1 = results.split("\n")
-    q2 = results.split("[info] Player 0")[1].split()
-    q3 = results.split("[info] Player 1")[1].split()
+    lineSplit = results.split("\n")
+    player1 = int(results.split("[info] Player 0")[1].split()[6])
+    player2 = int(results.split("[info] Player 1")[1].split()[6])
     
-    newBotScores.append(int(q2[6]))
-    oldBotScores.append(int(q3[6]))
+    return player1, player2
 
-newScores = np.array(newBotScores)
-oldScores = np.array(oldBotScores)
-
-scoreDiff = newScores - oldScores
-print("Win % {}".format(sum(scoreDiff>0)/sum(scoreDiff>-1000000)))
-print("Average Score {}".format(np.mean(scoreDiff)))
-print("Median Score {}".format(np.median(scoreDiff)))
+if __name__ == '__main__':
+    pool = multiprocessing.Pool(processes = 8)
+    for newScore, oldScore in pool.map(runSim, range(runSims)):
+        newBotScores.append(newScore)
+        oldBotScores.append(oldScore)
+    #newBotScores, oldBotScores = map(runSim, range(runSims))
+    
+    newScores = np.array(newBotScores)
+    oldScores = np.array(oldBotScores)
+    
+    scoreDiff = newScores - oldScores
+    print("Win % {}".format(sum(scoreDiff>0)/sum(scoreDiff>-1000000)))
+    print("Average Score {}".format(np.mean(scoreDiff)))
+    print("Median Score {}".format(np.median(scoreDiff)))
