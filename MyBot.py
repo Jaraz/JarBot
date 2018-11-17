@@ -19,7 +19,6 @@ from hlt.positionals import Position
 # import random
 
 
-RADAR_WIDTH = 1
 
 '''
 To add later
@@ -32,6 +31,15 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 #   (print statements) are reserved for the engine-bot communication.
 import logging
 #logging.basicConfig(level=logging.NOTSET)
+
+# return map halite
+def getMapHalite():
+    width = game.game_map.width
+    totalH = 0 
+    for i in range(width):
+        for j in range(width):
+            totalH +=game.game_map[Position(i,j)].halite_amount
+    return totalH
 
 # returns average halite in area based on width, also returns max halite
 def getSurroundingHalite(pos, width):
@@ -145,7 +153,7 @@ def get_surrounding_cardinals2(pos, width):
 
 # version 2
 # returns location of higher halite in radar
-def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
+def findHigherHalite2(ship, destinations, width = 1):
     pos = game_map.normalize(ship.position)
     maxHalite = 0 
     location_choices = get_surrounding_cardinals2(pos, width)
@@ -217,14 +225,24 @@ game = hlt.Game()
 ################
 shipBuildingTurns = 175 # how many turns to build ships
 collectingRatio   = 10 # higher means you move less frequently to next halite
-returnFlagRatio   = 1.5 # higher means it returns earlier, ratio to 1000
+returnFlagRatio   = 1.3 # higher means it returns earlier, ratio to 1000
+totalHalite       = getMapHalite()
 
+RADAR_DEFAULT = 1
+RADAR_WIDE = 3
+RADAR_MAX = 7
 
 #logging.disable(logging.CRITICAL)
-logging.info("map information: {}".format(Position(1,1)))
+logging.info("map size: {}, max turns: {}, halite: {}".format(game.game_map.width, constants.MAX_TURNS, totalHalite))
 
-
-
+### Logic for ship building turns ###
+if game.game_map.width > 60:
+    shipBuildingTurns = 250
+    RADAR_MAX = 12
+elif game.game_map.width > 50:
+    shipBuildingTurns = 225
+elif game.game_map.width > 40:
+    shipBuildingTurns = 185
 
 game.ready("MyPythonBot")
 
@@ -237,6 +255,9 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 ship_status = {} # track what ships want to do
 ship_destination = {} # track where ships want to go
 
+# Track ship yield
+totalShipsBuilt = [0]
+
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
     #   running update_frame().
@@ -244,6 +265,7 @@ while True:
     # You extract player metadata and the updated map metadata here for convenience.
     me = game.me
     game_map = game.game_map
+
 
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
@@ -277,12 +299,12 @@ while True:
             # if not in deadzone
             #logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
             
-            if getSurroundingHalite(ship.position,1) < 100 and game.turn_number < 400:
-                haliteScanWidth =  RADAR_WIDTH + 2
-            #elif getSurroundingHalite(ship.position,3) < 100:
-            #    haliteScanWidth =  RADAR_WIDTH + 6
+            if getSurroundingHalite(ship.position,1) < 100 and game.turn_number < 300:
+                haliteScanWidth =  RADAR_WIDE
+            elif getSurroundingHalite(ship.position,3) < 100:
+                haliteScanWidth =  RADAR_MAX
             else:
-                haliteScanWidth =  RADAR_WIDTH
+                haliteScanWidth =  RADAR_DEFAULT
             
             ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
             #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
@@ -311,46 +333,11 @@ while True:
     #if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied and not (me.shipyard.position in finalDestination.values()):
     if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):
         command_queue.append(me.shipyard.spawn())
+        totalShipsBuilt.append(totalShipsBuilt[-1] + 1)
+
+    minedHalite = max(totalShipsBuilt) * constants.SHIP_COST + me.halite_amount - 5000
+    logging.info("Max ships: {}, Halite mined: {}, shipYieldPerTurn: {}".format(max(totalShipsBuilt), minedHalite, minedHalite/max(totalShipsBuilt)/game.turn_number))
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
 
-
-
-####### Structure ideas ########
-# 1) Set ship priorities
-# 2) Set ship movement goals
-# 3) issue commands to all ships
-
-'''
-        if ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
-            command_queue.append(ship.stay_still())
-            logging.info("Ship {} is low on fueld and staying still".format(ship.id))
-        
-        elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
-            # safe random movement
-            next_move = findHigherHalite2(ship.position)
-            command_queue.append(ship.move(next_move))
-            logging.info("Ship {} next safe move is {}".format(ship.id, next_move))
-        
-        elif ship_status[ship.id] == "returning":
-            move = game_map.naive_navigate(ship, me.shipyard.position)
-            command_queue.append(ship.move(move))
-            logging.info("Ship {} is returning home this way {}".format(ship.id, move))
-        
-        elif ship_status[ship.id] == "returnSuicide":
-            #if you are next to station, suicide!!!!
-            if me.shipyard.position in ship.position.get_surrounding_cardinals():
-                move = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
-            else:
-                move = game_map.naive_navigate(ship, me.shipyard.position)
-
-            logging.info("Ship {} is returning home for its last journey {}".format(ship.id, move))
-            command_queue.append(ship.move(move))
-            logging.info("Ship {} is surrounded by {}".format(ship.id, ship.position.get_surrounding_cardinals()))
-        
-        else:
-            command_queue.append(ship.stay_still())
-            logging.info("Ship {} has no other choice but to stay still".format(ship.id))
-
-'''
