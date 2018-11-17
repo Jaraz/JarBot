@@ -45,13 +45,13 @@ def getSurroundingHalite(pos, width):
 def giveShipOrders(ship, currentOrders):
     # build ship status
 
-    logging.info("Ship {} was {}".format(ship, currentOrders))
+    #logging.info("Ship {} was {}".format(ship, currentOrders))
 
     status = None
     if currentOrders is None:
         status = "exploring"
     elif game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
-        logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
+        #logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
         status = "returnSuicide"
     elif currentOrders == "returning":
         status = "returning"
@@ -95,7 +95,7 @@ def resolveMovement(ships, destinations, status):
         for i in ships:
             # check if you need a new move
             # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still
-            logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
+            #logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
             if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
                 # first try other unsafe moves, if empty just move so you don't bottleneck
                 #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
@@ -103,7 +103,7 @@ def resolveMovement(ships, destinations, status):
                 if nextBest is not None:
                     nextLocation = game_map.normalize(ship.position + Position(*nextBest))
                     if nextLocation not in nextTurnPosition.values():
-                        logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
+                        #logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
                         useSecondBest = True
 
                 # IF second best isn't available we need to switch to something random
@@ -111,15 +111,15 @@ def resolveMovement(ships, destinations, status):
                         orderList[ship.id] = nextBest
                 else:
                     possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
-                    logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
-                    logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
+                    #logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
+                    #logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
                     possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
 
                     if len(possibilities) == 0:
                         orderList[ship.id] = Direction.Still
                     else:
                         newDirection = game_map.get_unsafe_moves(ship.position, random.choice(possibilities))
-                        logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
+                        #logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
                         orderList[ship.id] = newDirection[0]
                 
                 useSecondBest = False
@@ -131,7 +131,7 @@ def resolveMovement(ships, destinations, status):
             orderList[ship.id] = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
         finalOrder.append(ship.move(orderList[ship.id]))
         
-    logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
+    #logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
     
 #return all surrounding cardinals
@@ -162,10 +162,11 @@ def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
         if haliteCheck > maxHalite and x != pos and not (x in otherDest.values()):
             maxHalite = haliteCheck
             finalLocation = game_map.normalize(x)
-    logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
+    #logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
     
     # if highest halite is current pos just chose something random
     if finalLocation == pos:
+        logging.info("HELLO WORLD!!!!!")
         finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
     return finalLocation
     
@@ -178,7 +179,7 @@ def findHigherHalite(pos):
     location_choices = pos.get_surrounding_cardinals()
     safe_moves = [game_map.naive_navigate(ship, x) for x in location_choices]
     
-    logging.info("cardinal check : {}".format(pos.get_surrounding_cardinals()))
+    #logging.info("cardinal check : {}".format(pos.get_surrounding_cardinals()))
    
     # only look at actual moves
     moves = list(filter(((0,0)).__ne__,safe_moves))
@@ -259,7 +260,7 @@ while True:
             ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id])
             
         # if time running out head home and suicide. Need to add suicide code
-        logging.info("Ship {} is {} currently at {}".format(ship.id, ship_status[ship.id], ship.position))
+        #logging.info("Ship {} is {} currently at {}".format(ship.id, ship_status[ship.id], ship.position))
 
         ###############################
         ### Assign ship destination ###
@@ -267,14 +268,14 @@ while True:
         # If ship is low on fuel don't move
         if ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
             ship_destination[ship.id] = ship.position
-            logging.info("Ship {} is low on fuel and staying still".format(ship.id))
+            #logging.info("Ship {} is low on fuel and staying still".format(ship.id))
         
         # If ship shouldn't mine any more
         # in theory you shoudl start with a high threshold and then move lower near end game
         elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
             # i want the ship to see if its in a halite deadzone and then widen the window
             # if not in deadzone
-            logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
+            #logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
             
             if getSurroundingHalite(ship.position,1) < 100 and game.turn_number < 400:
                 haliteScanWidth =  RADAR_WIDTH + 2
@@ -284,25 +285,25 @@ while True:
                 haliteScanWidth =  RADAR_WIDTH
             
             ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
-            logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
+            #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
         elif ship_status[ship.id] == "returning":
             ship_destination[ship.id] = me.shipyard.position
-            logging.info("Ship {} is returning home this way {}".format(ship.id, me.shipyard.position))
+            #logging.info("Ship {} is returning home this way {}".format(ship.id, me.shipyard.position))
         
         elif ship_status[ship.id] == "returnSuicide":
-            logging.info("Ship {} is returning home for its last journey".format(ship.id))
+            #logging.info("Ship {} is returning home for its last journey".format(ship.id))
             ship_destination[ship.id] = me.shipyard.position
         
         else:
             ship_destination[ship.id] = ship.position
-            logging.info("Ship {} has no other choice but to stay still".format(ship.id))
+            #logging.info("Ship {} has no other choice but to stay still".format(ship.id))
 
     ########################
     ### Resolve movement ###
     ########################
-    logging.info("RESOLVE MOVEMENT!!!!!!!")    
-    logging.info("Destination list (pre resolve): {}".format(ship_destination))
+    #logging.info("RESOLVE MOVEMENT!!!!!!!")    
+    #logging.info("Destination list (pre resolve): {}".format(ship_destination))
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.
