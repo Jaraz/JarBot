@@ -5,7 +5,7 @@ from .entity import Entity, Shipyard, Ship, Dropoff
 from .player import Player
 from .positionals import Direction, Position
 from .common import read_input
-
+import logging
 
 class MapCell:
     """A cell on the game map."""
@@ -14,6 +14,7 @@ class MapCell:
         self.halite_amount = halite_amount
         self.ship = None
         self.structure = None
+        self.enemyShip = None
 
     @property
     def is_empty(self):
@@ -50,6 +51,12 @@ class MapCell:
         Use in conjunction with GameMap.naive_navigate.
         """
         self.ship = ship
+
+    def mark_enemy_ship(self,ship):
+        self.enemyShip = ship
+    
+    def is_enemy(self):
+        return self.enemyShip is not None
 
     def __eq__(self, other):
         return self.position == other.position
@@ -123,6 +130,26 @@ class GameMap:
         return (Direction.South if target.y > source.y else Direction.North if target.y < source.y else None,
                 Direction.East if target.x > source.x else Direction.West if target.x < source.x else None)
 
+
+
+    def get_safe_moves(self, source, destination):
+        """
+        Return the Direction(s) to move closer to the target point, or empty if the points are the same.
+        This move accounts for enemy collisions. T
+        :param source: The starting position
+        :param destination: The destination towards which you wish to move your object.
+        :return: A list of valid (closest) Directions towards your target.
+        """
+        unsafeMoves = self.get_unsafe_moves(source,destination)
+        
+        for move in unsafeMoves:
+            # check if safe
+            checkLoc = self.normalize(source.directional_offset(move))
+            logging.info("checkLoc {}".format(checkLoc))
+            if self[checkLoc].is_enemy():
+                unsafeMoves.remove(move)
+        return unsafeMoves
+
     def get_unsafe_moves(self, source, destination):
         """
         Return the Direction(s) to move closer to the target point, or empty if the points are the same.
@@ -145,32 +172,6 @@ class GameMap:
             possible_moves.append(y_cardinality if distance.y < (self.height / 2)
                                   else Direction.invert(y_cardinality))
         return possible_moves
-
-    def navigate(self, ship, destination):
-        '''
-        returns a safe move to destination even if blocked
-        '''
-        source = self.normalize(ship.position)
-        destination = self.normalize(destination)
-        distance = abs(destination - source)
-        y_cardinality, x_cardinality = self._get_target_direction(source, destination)
-        
-        # go east
-        if distance.x != 0:
-            if distance.x < (self.width / 2):
-                x_move = x_cardinality
-            else:
-                x_move = Direction.invert(x_cardinality)
-        
-        if distance.y != 0:
-            if distance.y < (self.height / 2):
-                y_move = y_cardinality
-            else:
-                y_move = Direction.invert(y_cardinality)
-
-        
-            
-        return x_move
 
     def naive_navigate(self, ship, destination):
         """
@@ -215,6 +216,7 @@ class GameMap:
         for y in range(self.height):
             for x in range(self.width):
                 self[Position(x, y)].ship = None
+                self[Position(x, y)].enemyShip = None
 
         for _ in range(int(read_input())):
             cell_x, cell_y, cell_energy = map(int, read_input().split())
