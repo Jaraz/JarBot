@@ -165,10 +165,10 @@ def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
     #logging.info("For {} location_choices are {}, we chose highest halite {}".format(pos,location_choices, finalLocation))
     
     # if highest halite is current pos just chose something random
-    if finalLocation == pos:
-        logging.info("HELLO WORLD!!!!!")
-        finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
-    return finalLocation
+    #if finalLocation == pos:
+        #logging.info("HELLO WORLD!!!!!")
+        #finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
+    #return finalLocation
     
 
 # given ship position return where (SAFE) and best halite
