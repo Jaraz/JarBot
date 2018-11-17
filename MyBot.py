@@ -168,7 +168,7 @@ def findHigherHalite2(ship, destinations, width = RADAR_WIDTH):
     #if finalLocation == pos:
         #logging.info("HELLO WORLD!!!!!")
         #finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
-    #return finalLocation
+    return finalLocation
     
 
 # given ship position return where (SAFE) and best halite
