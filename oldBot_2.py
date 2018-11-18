@@ -4,6 +4,7 @@
 # Import the Halite SDK, which will let you interact with the game.
 import hlt
 
+#import numpy as np
 import random
 #import queue
 
@@ -16,8 +17,7 @@ from hlt.positionals import Position
 
 # This library allows you to generate random numbers.
 # import random
-# helper variables
-GLOBAL_DEPO = 0
+
 
 
 '''
@@ -32,6 +32,15 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 import logging
 #logging.basicConfig(level=logging.NOTSET)
 
+# return map halite
+def getMapHalite():
+    width = game.game_map.width
+    totalH = 0 
+    for i in range(width):
+        for j in range(width):
+            totalH +=game.game_map[Position(i,j)].halite_amount
+    return totalH
+
 # returns average halite in area based on width, also returns max halite
 def getSurroundingHalite(pos, width):
     halite = []
@@ -43,28 +52,24 @@ def getSurroundingHalite(pos, width):
 
 def giveShipOrders(ship, currentOrders):
     # build ship status
-    global GLOBAL_DEPO
 
     #logging.info("Ship {} was {}".format(ship, currentOrders))
 
     status = None
     if currentOrders is None:
         status = "exploring"
-    elif GLOBAL_DEPO < MAX_DEPO and game.turn_number > shipBuildingTurns and getSurroundingHalite(ship.position, DEPO_HALITE_LOOK) > DEPO_HALITE and me.halite_amount >= constants.DROPOFF_COST:
-        status = 'build depo'
-        GLOBAL_DEPO += 1
     elif game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
         #logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
         status = "returnSuicide"
     elif currentOrders == "returning":
         status = "returning"
-        if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
+        if ship.position == me.shipyard.position:
             status = "exploring"
     elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
         status = "returning"
     elif currentOrders == "exploring":
         status = "exploring"
-    logging.info("Ship {} status is {}".format(ship.id, status))
+    
     return status
 
 #resolve movement function
@@ -129,28 +134,11 @@ def resolveMovement(ships, destinations, status):
                 useSecondBest = False
                 # new position
                 nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
-
                 
         # check if suicide mission home
         if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
             orderList[ship.id] = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
-        elif status[ship.id] == 'returnSuicide':
-            logging.info("Dropoffs {}, surrounding {}".format(me.get_dropoff_locations(),ship.position.get_surrounding_cardinals()))
-            dropOffTarget = None
-            nextToDrop = False
-            surrounding = ship.position.get_surrounding_cardinals()
-            for i in me.get_dropoff_locations():
-                if i in surrounding:
-                    nextToDrop = True
-                    dropOffTarget = i
-            if nextToDrop:
-                orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
-                
-        ### BUILD DEPO ###
-        if status[ship.id] == 'build depo':
-            finalOrder.append(ship.make_dropoff())        
-        else:
-            finalOrder.append(ship.move(orderList[ship.id]))
+        finalOrder.append(ship.move(orderList[ship.id]))
         
     logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
@@ -175,7 +163,6 @@ def findHigherHalite2(ship, destinations, width = 1):
     finalLocation = pos
     for x in location_choices:
         haliteCheck = game_map[x].halite_amount
-        #haliteCheck = game_map[x].smoothHalite
         #logging.info("Check it out ! : {}".format(Position(*x)))
         otherDest = destinations.copy()
         if ship.id in otherDest:
@@ -205,12 +192,8 @@ game = hlt.Game()
 shipBuildingTurns = 175 # how many turns to build ships
 collectingRatio   = 10 # higher means you move less frequently to next halite
 returnFlagRatio   = 1 # higher means it returns earlier, ratio to 1000
-totalHalite       = game.game_map.totalHalite
-MAX_DEPO          = 1
-DEPO_HALITE_LOOK  = 5
-DEPO_HALITE       = 125
+totalHalite       = getMapHalite()
 
-#default is 1, 3, 7
 RADAR_DEFAULT = 1
 RADAR_WIDE = 3
 RADAR_MAX = 7
@@ -222,13 +205,12 @@ logging.info("map size: {}, max turns: {}, halite: {}".format(game.game_map.widt
 if game.game_map.width > 60:
     shipBuildingTurns = 250
     RADAR_MAX = 12
-    DEPO_HALITE += 25
 elif game.game_map.width > 50:
     shipBuildingTurns = 225
 elif game.game_map.width > 40:
-    shipBuildingTurns = 200
+    shipBuildingTurns = 185
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -300,24 +282,17 @@ while True:
             ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
             #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
-        elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
-            # choose closest depo or shipyard
-            possibleLocations = [me.shipyard]
-            possibleLocations.extend(me.get_dropoffs())
-            closestChoice=  game_map.findClosest(ship, possibleLocations)
-            ship_destination[ship.id] = closestChoice
-            logging.info("Ship {} is returning home to {}, choices were {}".format(ship.id, closestChoice, possibleLocations))
+        elif ship_status[ship.id] == "returning":
+            ship_destination[ship.id] = me.shipyard.position
             #logging.info("Ship {} is returning home this way {}".format(ship.id, me.shipyard.position))
-
+        
+        elif ship_status[ship.id] == "returnSuicide":
+            #logging.info("Ship {} is returning home for its last journey".format(ship.id))
+            ship_destination[ship.id] = me.shipyard.position
+        
         else:
             ship_destination[ship.id] = ship.position
             #logging.info("Ship {} has no other choice but to stay still".format(ship.id))
-
-        ### COUNTER MEASURES ###
-        ### Counter measures check if ship sits on shipyard
-        if game_map[me.shipyard.position].is_enemy() and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
-            ship_status[ship.id] == "returnSuicide"
-            ship_destination[ship.id] = me.shipyard.position
 
     ########################
     ### Resolve movement ###
