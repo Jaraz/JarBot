@@ -12,16 +12,19 @@ import numpy as np
 import multiprocessing
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv "python MyBot.py" "python oldBot.py"'
+#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
-#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
+
+# low halite seed
+#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 32 --height 32 --seed 1542549748 "python MyBot.py" "python oldBot.py" '
 
 newBotScores = []
 oldBotScores = []
 seedArray = []
 
-runSims = 20
+runSims = 1000
 
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)

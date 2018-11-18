@@ -228,7 +228,7 @@ elif game.game_map.width > 50:
 elif game.game_map.width > 40:
     shipBuildingTurns = 200
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

@@ -76,7 +76,7 @@ def resolveMovement(ships, destinations, status):
     # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
-        #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
+        logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
         if not firstOrder:
@@ -175,16 +175,16 @@ def findHigherHalite2(ship, destinations, width = 1):
     finalLocation = pos
     for x in location_choices:
         haliteCheck = game_map[x].halite_amount
-        #haliteCheck = game_map[x].smoothHalite
         #logging.info("Check it out ! : {}".format(Position(*x)))
         otherDest = destinations.copy()
         if ship.id in otherDest:
             otherDest.pop(ship.id)
-            
+        logging.info("!!!! ship {}, looking at {}, halite {}".format(ship.id, x, haliteCheck))
         if haliteCheck > maxHalite and x != pos and not (x in otherDest.values()):
+            logging.info("For {}, halite amt {} at {}".format(ship.id, haliteCheck, x))
             maxHalite = haliteCheck
             finalLocation = game_map.normalize(x)
-    #logging.info("For ship {} at {} location_choices are {}, we chose highest halite {}".format(ship.id, pos,location_choices, finalLocation))
+    logging.info("For ship {} at {} location_choices are {}, we chose highest halite {}".format(ship.id, pos,location_choices, finalLocation))
     
     return finalLocation
     
@@ -203,7 +203,7 @@ game = hlt.Game()
 ### Settings ###
 ################
 shipBuildingTurns = 175 # how many turns to build ships
-collectingRatio   = 10 # higher means you move less frequently to next halite
+collectingStop    = 50 # Ignore halite less than this
 returnFlagRatio   = 1 # higher means it returns earlier, ratio to 1000
 totalHalite       = game.game_map.totalHalite
 MAX_DEPO          = 1
@@ -227,6 +227,8 @@ elif game.game_map.width > 50:
     shipBuildingTurns = 225
 elif game.game_map.width > 40:
     shipBuildingTurns = 200
+else:
+    collectingStop = 50
 
 game.ready("JarBot")
 
@@ -249,6 +251,7 @@ while True:
     # You extract player metadata and the updated map metadata here for convenience.
     me = game.me
     game_map = game.game_map
+    ship_destination = {} # reset destinations
 
     # label map w/ enemy ship locations
     enemyShips = []
@@ -285,7 +288,7 @@ while True:
         
         # If ship shouldn't mine any more
         # in theory you shoudl start with a high threshold and then move lower near end game
-        elif (game_map[ship.position].halite_amount < constants.MAX_HALITE / collectingRatio or ship.is_full) and ship_status[ship.id] == "exploring":
+        elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
             # i want the ship to see if its in a halite deadzone and then widen the window
             # if not in deadzone
             #logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
