@@ -7,6 +7,7 @@ from .positionals import Direction, Position
 from .common import read_input
 import logging
 
+
 class MapCell:
     """A cell on the game map."""
     def __init__(self, position, halite_amount):
@@ -79,6 +80,7 @@ class GameMap:
         self.width = width
         self.height = height
         self._cells = cells
+        self.totalHalite = 0
 
     def __getitem__(self, location):
         """
@@ -106,6 +108,22 @@ class GameMap:
         resulting_position = abs(source - target)
         return min(resulting_position.x, self.width - resulting_position.x) + \
             min(resulting_position.y, self.height - resulting_position.y)
+
+    def findClosest(self, ship, targets):
+        """
+        ChoosesReturn closest from ship to targets w/ manhattan distance.
+        :param ship: The ship instance
+        :param targets: A list of target locations
+        :return: The location of closest dropoff point
+        """ 
+        closestDist = 10000
+        finalLocation = None
+        for i in targets:
+            dist = self.calculate_distance(ship.position, i.position)
+            if dist < closestDist:
+                closestDist = dist
+                finalLocation = i.position
+        return finalLocation
 
     def normalize(self, position):
         """
@@ -145,7 +163,6 @@ class GameMap:
         for move in unsafeMoves:
             # check if safe
             checkLoc = self.normalize(source.directional_offset(move))
-            logging.info("checkLoc {}".format(checkLoc))
             if self[checkLoc].is_enemy():
                 unsafeMoves.remove(move)
         return unsafeMoves
@@ -213,11 +230,24 @@ class GameMap:
         """
         # Mark cells as safe for navigation (will re-mark unsafe cells
         # later)
-        for y in range(self.height):
-            for x in range(self.width):
-                self[Position(x, y)].ship = None
-                self[Position(x, y)].enemyShip = None
-
+        self.totalHalite = 0
         for _ in range(int(read_input())):
             cell_x, cell_y, cell_energy = map(int, read_input().split())
             self[Position(cell_x, cell_y)].halite_amount = cell_energy
+
+        for y in range(self.height):
+            for x in range(self.width):
+                self.totalHalite += self[Position(x,y)].halite_amount
+                self[Position(x, y)].ship = None
+                self[Position(x, y)].enemyShip = None
+                '''
+                self[Position(x,y)].smoothHalite =(self[Position(x-1,y-1)].halite_amount + \
+                                             self[Position(x-1,y+0)].halite_amount + \
+                                             self[Position(x-1,y+1)].halite_amount + \
+                                             self[Position(x+0,y-1)].halite_amount + \
+                                             self[Position(x+0,y+0)].halite_amount + \
+                                             self[Position(x+0,y+1)].halite_amount + \
+                                             self[Position(x+1,y-1)].halite_amount + \
+                                             self[Position(x+1,y+0)].halite_amount + \
+                                             self[Position(x+1,y+1)].halite_amount) / 9                
+                '''

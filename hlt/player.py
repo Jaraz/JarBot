@@ -41,6 +41,15 @@ class Player:
         """
         return list(self._dropoffs.values())
 
+    def get_dropoff_locations(self):
+        """
+        :return: Returns all dropoff locations in list
+        """
+        loc = []
+        for i in self.get_dropoffs():
+            loc.append(i.position)
+        return loc
+
     def has_ship(self, ship_id):
         """
         Check whether the player has a ship with a given ID.

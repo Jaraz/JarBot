@@ -82,7 +82,8 @@ def resolveMovement(ships, destinations, status):
     for ship in ships:
         # next move
         #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
-        firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+        #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+        firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
         if not firstOrder:
             order = Direction.Still
         else: 
@@ -102,7 +103,7 @@ def resolveMovement(ships, destinations, status):
     for ship in ships:
         for i in ships:
             # check if you need a new move
-            # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still
+            # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still + is enemy there
             #logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
             if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
                 # first try other unsafe moves, if empty just move so you don't bottleneck
@@ -170,46 +171,11 @@ def findHigherHalite2(ship, destinations, width = 1):
         if haliteCheck > maxHalite and x != pos and not (x in otherDest.values()):
             maxHalite = haliteCheck
             finalLocation = game_map.normalize(x)
-    logging.info("For ship {} at {} location_choices are {}, we chose highest halite {}".format(ship.id, pos,location_choices, finalLocation))
+    #logging.info("For ship {} at {} location_choices are {}, we chose highest halite {}".format(ship.id, pos,location_choices, finalLocation))
     
-    # if highest halite is current pos just chose something random
-    #if finalLocation == pos:
-        #logging.info("HELLO WORLD!!!!!")
-        #finalLocation = pos + game_map.get_unsafe_moves(pos, game_map.normalize(random.choice(ship.position.get_surrounding_cardinals())))
     return finalLocation
     
 
-# given ship position return where (SAFE) and best halite
-def findHigherHalite(pos):
-    maxHalite = 0
-    
-    # neighbor scanner
-    location_choices = pos.get_surrounding_cardinals()
-    safe_moves = [game_map.naive_navigate(ship, x) for x in location_choices]
-    
-    #logging.info("cardinal check : {}".format(pos.get_surrounding_cardinals()))
-   
-    # only look at actual moves
-    moves = list(filter(((0,0)).__ne__,safe_moves))
-    
-    if moves == []:
-        finalMove = random.choice(safe_moves)
-    else:
-        finalMove = random.choice(moves)
-        
-    for x in moves:
-        haliteCheck = game_map[pos + Position(*x)].halite_amount
-        #logging.info("Check it out ! : {}".format(Position(*x)))
-        if haliteCheck > maxHalite and x != (0,0):
-            maxHalite = haliteCheck
-            finalMove = x
-    
-    return finalMove
-
-# returns how far away ship object is
-#def shipDistanceToHome(pos1, pos2):
-#    game_map.calculate_distance(ship, me.shipyard.position)
-#    return 0
 
 """ <<<Game Begin>>> """
 
@@ -225,7 +191,7 @@ game = hlt.Game()
 ################
 shipBuildingTurns = 175 # how many turns to build ships
 collectingRatio   = 10 # higher means you move less frequently to next halite
-returnFlagRatio   = 1.3 # higher means it returns earlier, ratio to 1000
+returnFlagRatio   = 1 # higher means it returns earlier, ratio to 1000
 totalHalite       = getMapHalite()
 
 RADAR_DEFAULT = 1
@@ -266,11 +232,18 @@ while True:
     me = game.me
     game_map = game.game_map
 
-
+    # label map w/ enemy ship locations
+    enemyShips = []
+    ships = []
+    for player in game.players:
+        if player != me.id:
+            ships = game.players[player].get_ships()
+        for i in ships:
+            game_map[i.position].mark_enemy_ship(i)
+            
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
     command_queue = []
-
     for ship in me.get_ships():
 
         ###########################
