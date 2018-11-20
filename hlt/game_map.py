@@ -81,6 +81,7 @@ class GameMap:
         self.height = height
         self._cells = cells
         self.totalHalite = 0
+        self.haliteRegion = 0
         for y in range(self.height):
             for x in range(self.width):
                 self.totalHalite += self[Position(x,y)].halite_amount

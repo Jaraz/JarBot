@@ -139,6 +139,9 @@ def resolveMovement(ships, destinations, status):
                 # new position
                 nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
 
+        #####################
+        #### MISC CHECKS ####
+        #####################                
                 
         # check if suicide mission home
         if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
@@ -154,7 +157,10 @@ def resolveMovement(ships, destinations, status):
                     dropOffTarget = i
             if nextToDrop:
                 orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
-                
+         
+        # Check to ATTACK !!!! #
+        
+            
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
             finalOrder.append(ship.make_dropoff())        
@@ -172,6 +178,28 @@ def get_surrounding_cardinals2(pos, width):
             #locations.append(game_map.normalize(pos) + game_map.normalize(Position(i,j)))
             locations.append(game_map.normalize(pos + Position(i,j)))
     return locations
+
+def findDynaicHalite(ship, destinations, minHalite, maxWidth):
+    '''
+    loop until you hit enough halite and then hunt
+    '''
+    maxHalite = 0 
+    finalLocation = ship.position
+
+    for i in range(1, maxWidth + 1):
+        location_choices = get_surrounding_cardinals2(ship.position, i)
+    
+        #find max halite
+        for x in location_choices:
+            haliteCheck = game_map[x].halite_amount
+            if haliteCheck > maxHalite and x != ship.position and not (x in destinations.values()):
+                maxHalite = haliteCheck
+                finalLocation = game_map.normalize(x)
+    
+        if maxHalite > minHalite:
+            break
+    return finalLocation
+    
 
 # version 2
 # returns location of higher halite in radar
@@ -330,7 +358,8 @@ while True:
             else:
                 haliteScanWidth =  RADAR_DEFAULT
             
-            ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
+            ship_destination[ship.id] = findDynaicHalite(ship, ship_destination, 100, 7)
+            #ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
             #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
         elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
