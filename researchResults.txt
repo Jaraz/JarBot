@@ -1,5 +1,7 @@
 Try to write down explcit findings
 
+size 32: avg halite in a map is 160 to 200k?
+
 General ideas: 
 I think collecting stop should be a function of average halite in map
 	-Low halite maps should collect more per square than high halite maps

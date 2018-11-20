@@ -10,11 +10,14 @@ Multiprocessor supported test
 import subprocess
 import numpy as np
 import multiprocessing
+import timeit
+
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
-#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv "python MyBot.py" "python oldBot.py"'
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
+#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
+#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
 
 # low halite seed
@@ -24,7 +27,7 @@ newBotScores = []
 oldBotScores = []
 seedArray = []
 
-runSims = 1000
+runSims = 25
 
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
@@ -38,6 +41,7 @@ def runSim(i):
     return player1, player2, seed
 
 if __name__ == '__main__':
+    start_time = timeit.default_timer()
     pool = multiprocessing.Pool(processes = 4)
     for newScore, oldScore, seed in pool.map(runSim, range(runSims)):
         newBotScores.append(newScore)
@@ -53,3 +57,5 @@ if __name__ == '__main__':
     print("Average Score {}".format(np.mean(scoreDiff)))
     print("Median Score {}".format(np.median(scoreDiff)))
     print("Minimum Score {}".format(np.min(newScores)))
+
+    print((timeit.default_timer() - start_time)/runSims)

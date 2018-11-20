@@ -151,12 +151,10 @@ class GameMap:
         return (Direction.South if target.y > source.y else Direction.North if target.y < source.y else None,
                 Direction.East if target.x > source.x else Direction.West if target.x < source.x else None)
 
-
-
     def get_safe_moves(self, source, destination):
         """
         Return the Direction(s) to move closer to the target point, or empty if the points are the same.
-        This move accounts for enemy collisions. T
+        This move accounts for enemy collisions. 
         :param source: The starting position
         :param destination: The destination towards which you wish to move your object.
         :return: A list of valid (closest) Directions towards your target.
@@ -166,7 +164,9 @@ class GameMap:
         for move in unsafeMoves:
             # check if safe
             checkLoc = self.normalize(source.directional_offset(move))
+            logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
             if self[checkLoc].is_enemy():
+                logging.info("loc {} removed".format(checkLoc))
                 unsafeMoves.remove(move)
         return unsafeMoves
 

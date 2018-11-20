@@ -50,6 +50,15 @@ class Player:
             loc.append(i.position)
         return loc
 
+    def get_all_drop_locations(self):
+        '''
+        return ship yard + dropoffs
+        '''
+        loc = [self.shipyard.position]
+        for i in self.get_dropoffs():
+            loc.append(i.position)
+        return loc
+
     def has_ship(self, ship_id):
         """
         Check whether the player has a ship with a given ID.
