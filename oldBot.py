@@ -44,7 +44,7 @@ def getSurroundingHalite(pos, width):
 def giveShipOrders(ship, currentOrders):
     # build ship status
     global GLOBAL_DEPO
-
+    turns_left = (constants.MAX_TURNS - game.turn_number)
     #logging.info("Ship {} was {}".format(ship, currentOrders))
 
     status = None
@@ -53,14 +53,14 @@ def giveShipOrders(ship, currentOrders):
     elif GLOBAL_DEPO < MAX_DEPO and game.turn_number > shipBuildingTurns and getSurroundingHalite(ship.position, DEPO_HALITE_LOOK) > DEPO_HALITE and me.halite_amount >= constants.DROPOFF_COST:
         status = 'build depo'
         GLOBAL_DEPO += 1
-    elif game_map.calculate_distance(ship.position, me.shipyard.position) >= (constants.MAX_TURNS - game.turn_number) - 5:
+    elif min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= turns_left - 5:
         #logging.info("Ship {} time to head home: {}".format(ship.id, game_map.calculate_distance(ship.position, me.shipyard.position)))
         status = "returnSuicide"
     elif currentOrders == "returning":
         status = "returning"
         if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
             status = "exploring"
-    elif ship.halite_amount >= constants.MAX_HALITE / returnFlagRatio:
+    elif ship.halite_amount >= returnHaliteFlag:
         status = "returning"
     elif currentOrders == "exploring":
         status = "exploring"
@@ -73,12 +73,14 @@ def resolveMovement(ships, destinations, status):
     orderList = {}
     finalOrder = []
 
+
     # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
         #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
+        logging.info("Ship {} first order is {}".format(ship.id, firstOrder))
         if not firstOrder: # if no safe moves just stay still
             order = Direction.Still
         else: 
@@ -87,6 +89,7 @@ def resolveMovement(ships, destinations, status):
             nextBest = None
             if len(firstOrder) > 1:
                 nextBest = firstOrder[1] ### need to fix this 
+            logging.info("ship {}, order {}, nextbest {}".format(ship.id, order, nextBest))
         
         orderList[ship.id] = order
         
@@ -104,10 +107,12 @@ def resolveMovement(ships, destinations, status):
                 # first try other unsafe moves, if empty just move so you don't bottleneck
                 #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
                 
+                logging.info("Ship {} has an issue with {}".format(ship.id,i.id))
+                
                 if nextBest is not None:
                     nextLocation = game_map.normalize(ship.position + Position(*nextBest))
                     if nextLocation not in nextTurnPosition.values():
-                        #logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
+                        logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
                         useSecondBest = True
 
                 # IF second best isn't available we need to switch to something random
@@ -116,20 +121,27 @@ def resolveMovement(ships, destinations, status):
                 else:
                     possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
                     #logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
-                    #logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
+                    logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
                     possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
 
                     if len(possibilities) == 0:
                         orderList[ship.id] = Direction.Still
                     else:
-                        newDirection = game_map.get_unsafe_moves(ship.position, random.choice(possibilities))
+                        newDirection = game_map.get_safe_moves(ship.position, random.choice(possibilities))
                         #logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
-                        orderList[ship.id] = newDirection[0]
+                        if newDirection == []:
+                            orderList[ship.id] = Direction.Still
+                        else:
+                            orderList[ship.id] = random.choice(newDirection)
+                            logging.info("ship {} uses random new direction {}".format(ship.id, orderList[ship.id]))
                 
                 useSecondBest = False
                 # new position
                 nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
 
+        #####################
+        #### MISC CHECKS ####
+        #####################                
                 
         # check if suicide mission home
         if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
@@ -145,14 +157,17 @@ def resolveMovement(ships, destinations, status):
                     dropOffTarget = i
             if nextToDrop:
                 orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
-                
+         
+        # Check to ATTACK !!!! #
+        
+            
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
             finalOrder.append(ship.make_dropoff())        
         else:
             finalOrder.append(ship.move(orderList[ship.id]))
         
-    #logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
+    logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
     
 #return all surrounding cardinals
@@ -163,6 +178,28 @@ def get_surrounding_cardinals2(pos, width):
             #locations.append(game_map.normalize(pos) + game_map.normalize(Position(i,j)))
             locations.append(game_map.normalize(pos + Position(i,j)))
     return locations
+
+def findDynaicHalite(ship, destinations, minHalite, maxWidth):
+    '''
+    loop until you hit enough halite and then hunt
+    '''
+    maxHalite = 0 
+    finalLocation = ship.position
+
+    for i in range(1, maxWidth + 1):
+        location_choices = get_surrounding_cardinals2(ship.position, i)
+    
+        #find max halite
+        for x in location_choices:
+            haliteCheck = game_map[x].halite_amount
+            if haliteCheck > maxHalite and x != ship.position and not (x in destinations.values()):
+                maxHalite = haliteCheck
+                finalLocation = game_map.normalize(x)
+    
+        if maxHalite > minHalite:
+            break
+    return finalLocation
+    
 
 # version 2
 # returns location of higher halite in radar
@@ -201,19 +238,21 @@ game = hlt.Game()
 ################
 shipBuildingTurns = 175 # how many turns to build ships
 collectingStop    = 50 # Ignore halite less than this
-returnFlagRatio   = 1 # higher means it returns earlier, ratio to 1000
+returnHaliteFlag  = 950 # halite to return to base
 totalHalite       = game.game_map.totalHalite
+avgHalite         = totalHalite / (game.game_map.width * game.game_map.height)
 MAX_DEPO          = 1
 DEPO_HALITE_LOOK  = 5
 DEPO_HALITE       = 125
+DEPO_DISTANCE     = 0
 
 #default is 1, 3, 7
 RADAR_DEFAULT = 1
-RADAR_WIDE = 3
-RADAR_MAX = 7
+RADAR_WIDE = RADAR_DEFAULT + 2
+RADAR_MAX = RADAR_DEFAULT + 6
 
 #logging.disable(logging.CRITICAL)
-logging.info("map size: {}, max turns: {}, halite: {}".format(game.game_map.width, constants.MAX_TURNS, totalHalite))
+logging.info("map size: {}, max turns: {}, halite: {}".format(game.game_map.width, constants.MAX_TURNS, avgHalite))
 
 ### Logic for ship building turns ###
 if game.game_map.width > 60:
@@ -224,8 +263,25 @@ elif game.game_map.width > 50:
     shipBuildingTurns = 225
 elif game.game_map.width > 40:
     shipBuildingTurns = 200
+elif game.game_map.width < 40 and totalHalite < 160000:
+    shipBuildingTurns = 155
+    collectingStop = 50
+#elif game.game_map.width < 40 and totalHalite > 300000:
+#    shipBuildingTurns = 200
+#    collectingStop = 50
 else:
     collectingStop = 50
+
+if avgHalite > 180:
+    logging.info("Build more ships!")
+    shipBuildingTurns += 25
+    collectingStop += 25
+
+if avgHalite > 240:
+    DEPO_HALITE_LOOK  = 5
+    DEPO_HALITE       = 240
+
+    
 
 game.ready("oldBot")
 
@@ -258,6 +314,11 @@ while True:
             ships = game.players[player].get_ships()
         for i in ships:
             game_map[i.position].mark_enemy_ship(i)
+            if len(game.players) > 4:
+                game_map[game_map.normalize(i.position + Position(1,0))].mark_enemy_ship(i)
+                game_map[game_map.normalize(i.position + Position(0,1))].mark_enemy_ship(i)
+                game_map[game_map.normalize(i.position + Position(-1,0))].mark_enemy_ship(i)
+                game_map[game_map.normalize(i.position + Position(0,-1))].mark_enemy_ship(i)
             
     # A command queue holds all the commands you will run this turn. You build this list up and submit it at the
     #   end of the turn.
@@ -297,7 +358,8 @@ while True:
             else:
                 haliteScanWidth =  RADAR_DEFAULT
             
-            ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
+            ship_destination[ship.id] = findDynaicHalite(ship, ship_destination, 100, 7)
+            #ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
             #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
         
         elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
@@ -323,7 +385,7 @@ while True:
     ### Resolve movement ###
     ########################
     #logging.info("RESOLVE MOVEMENT!!!!!!!")    
-    #logging.info("Destination list (pre resolve): {}".format(ship_destination))
+    logging.info("Destination list (pre resolve): {}".format(ship_destination))
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
     # If the game is in the first 200 turns and you have enough halite, spawn a ship.

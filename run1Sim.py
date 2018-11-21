@@ -17,7 +17,7 @@ argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 4
 
 start_time = timeit.default_timer()
 
-rng = 10
+rng = 1
 
 for i in range(rng):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)

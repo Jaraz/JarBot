@@ -152,6 +152,24 @@ class GameMap:
         return (Direction.South if target.y > source.y else Direction.North if target.y < source.y else None,
                 Direction.East if target.x > source.x else Direction.West if target.x < source.x else None)
 
+    def return_nearby_enemies(self, source):
+        '''
+        return in a list form which positions have an enemy ship
+        '''
+        north = self[self.normalize(source.directional_offset(Direction.North))]
+        south = self[self.normalize(source.directional_offset(Direction.South))]
+        east  = self[self.normalize(source.directional_offset(Direction.East))]
+        west  = self[self.normalize(source.directional_offset(Direction.West))]
+
+        locList = [north, south, east, west]
+        enemyList = []
+        
+        for loc in locList:
+            if loc.is_enemy():
+                enemyList.append(loc)
+
+        return enemyList
+
     def get_safe_moves(self, source, destination):
         """
         Return the Direction(s) to move closer to the target point, or empty if the points are the same.
@@ -165,9 +183,9 @@ class GameMap:
         for move in unsafeMoves:
             # check if safe
             checkLoc = self.normalize(source.directional_offset(move))
-            logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
+            #logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
             if self[checkLoc].is_enemy():
-                logging.info("loc {} removed".format(checkLoc))
+                #logging.info("loc {} removed".format(checkLoc))
                 unsafeMoves.remove(move)
         return unsafeMoves
 
