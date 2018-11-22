@@ -16,7 +16,6 @@ import timeit
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv  "python MyBot.py" "python oldBot.py"'
 argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
-#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 --seed 1542761116 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --height 64 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
@@ -29,7 +28,7 @@ newBotScores = []
 oldBotScores = []
 seedArray = []
 
-runSims = 25
+runSims = 50
 
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)

@@ -35,6 +35,7 @@ class Game:
             self.players[player] = Player._generate()
         self.me = self.players[self.my_id]
         self.game_map = GameMap._generate()
+        self.haliteHistory = [self.game_map.totalHalite]
 
     def ready(self, name):
         """
@@ -56,6 +57,7 @@ class Game:
             self.players[player]._update(num_ships, num_dropoffs, halite)
 
         self.game_map._update()
+        self.haliteHistory.append(self.game_map.totalHalite)
 
         # Mark cells with ships as unsafe for navigation
         for player in self.players.values():

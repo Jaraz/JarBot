@@ -6,7 +6,7 @@ from .player import Player
 from .positionals import Direction, Position
 from .common import read_input
 import logging
-
+import statistics
 
 class MapCell:
     """A cell on the game map."""
@@ -82,9 +82,15 @@ class GameMap:
         self._cells = cells
         self.totalHalite = 0
         self.haliteRegion = 0
+        self.haliteData = [0] * (self.width * self.height)
         for y in range(self.height):
             for x in range(self.width):
                 self.totalHalite += self[Position(x,y)].halite_amount
+                self.haliteData[(y+1) * x + y] = self[Position(x,y)].halite_amount
+        self.averageHalite = self.totalHalite / (self.width * self.height)
+        self.stdDevHalite = statistics.stdev(self.haliteData)
+        #logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
+
 
     def __getitem__(self, location):
         """
@@ -98,6 +104,58 @@ class GameMap:
         elif isinstance(location, Entity):
             return self._cells[location.position.y][location.position.x]
         return None
+
+    def get_near_stats(self, source, width):
+        '''
+        return avg and stdev of halite around a source position
+        '''
+        locations = self.get_surrounding_cardinals(source, width)
+        halite = []
+        
+        for loc in locations:
+                halite.append(self[loc].halite_amount)
+                
+        return statistics.mean(halite), statistics.stdev(halite)
+    
+    def findDynamicHalite(self, ship, destinations, minHalite, maxWidth):
+        '''
+        returns the location of highest halite near a source, widens 
+        search until minHalite is reached up to timeout from maxWidth
+        :param source: The source from where to search
+        :param destinations: excludes these points
+        :param minHalite: break once this size is found
+        :param maxWidth: cutoff where it will no longer search
+        :return: The location
+        '''
+        maxHalite = 0 
+        finalLocation = ship.position
+    
+        for i in range(1, maxWidth + 1):
+            location_choices = self.get_surrounding_cardinals(ship.position, i)
+            #location_choices = get_surrounding_cardinals2(ship.position, i)
+        
+            #find max halite
+            for x in location_choices:
+                haliteCheck = self[x].halite_amount
+                if haliteCheck > maxHalite and x != ship.position and not (x in destinations.values()):
+                    maxHalite = haliteCheck
+                    finalLocation = self.normalize(x)
+        
+            if maxHalite > minHalite:
+                break
+        return finalLocation
+    
+    
+
+    def get_surrounding_cardinals(self, source, width):
+        '''
+        returns a list of locations around a source
+        '''
+        locations = []
+        for i in range(-width,width+1):
+            for j in range(-width,width+1):
+                locations.append(self.normalize(source + Position(i,j)))
+        return locations
 
     def calculate_distance(self, source, target):
         """
@@ -262,14 +320,6 @@ class GameMap:
                 self.totalHalite += self[Position(x,y)].halite_amount
                 self[Position(x, y)].ship = None
                 self[Position(x, y)].enemyShip = None
-                '''
-                self[Position(x,y)].smoothHalite =(self[Position(x-1,y-1)].halite_amount + \
-                                             self[Position(x-1,y+0)].halite_amount + \
-                                             self[Position(x-1,y+1)].halite_amount + \
-                                             self[Position(x+0,y-1)].halite_amount + \
-                                             self[Position(x+0,y+0)].halite_amount + \
-                                             self[Position(x+0,y+1)].halite_amount + \
-                                             self[Position(x+1,y-1)].halite_amount + \
-                                             self[Position(x+1,y+0)].halite_amount + \
-                                             self[Position(x+1,y+1)].halite_amount) / 9                
-                '''
+                self.haliteData[(y+1) * x + y] = self[Position(x,y)].halite_amount
+        self.averageHalite = self.totalHalite / (self.width * self.height)
+        self.stdDevHalite = statistics.stdev(self.haliteData)
