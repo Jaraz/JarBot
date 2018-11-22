@@ -41,8 +41,6 @@ def getSurroundingHalite(pos, width):
     return total/((width*2+1)*(width*2+1))
 
 
-
-
 def giveShipOrders(ship, currentOrders):
     # build ship status
     global GLOBAL_DEPO
@@ -66,7 +64,7 @@ def giveShipOrders(ship, currentOrders):
         status = "returning"
     elif currentOrders == "exploring":
         status = "exploring"
-    logging.info("Ship {} status is {}".format(ship.id, status))
+    #logging.info("Ship {} status is {}".format(ship.id, status))
     return status
 
 #resolve movement function
@@ -166,10 +164,10 @@ def resolveMovement(ships, destinations, status):
         enemyLocations = game_map.return_nearby_enemies(ship.position)
         for loc in enemyLocations:
             if loc: 
-                logging.info("ship {} at {} looking at enemy loc {} enemyShip {}".format(ship.id, ship.position, loc, loc.enemyShip))
+                #logging.info("ship {} at {} looking at enemy loc {} enemyShip {}".format(ship.id, ship.position, loc, loc.enemyShip))
                 if ship.halite_amount < 200 and loc.enemyShip.halite_amount > 800 and ship.halite_amount > game_map[ship.position].halite_amount * 0.1 and len(game.players) == 2:
                     orderList[ship.id] = game_map.get_unsafe_moves(ship.position, loc.position)[0]
-                    logging.info("ATTACK: Ship {} to {} on order {}".format(ship.id, loc, orderList[ship.id]))
+                    #logging.info("ATTACK: Ship {} to {} on order {}".format(ship.id, loc, orderList[ship.id]))
 
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
@@ -177,60 +175,8 @@ def resolveMovement(ships, destinations, status):
         else:
             finalOrder.append(ship.move(orderList[ship.id]))
         
-    logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
+    #logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
-    
-#return all surrounding cardinals
-def get_surrounding_cardinals2(pos, width):
-    locations = []
-    for i in range(-width,width+1):
-        for j in range(-width,width+1):
-            #locations.append(game_map.normalize(pos) + game_map.normalize(Position(i,j)))
-            locations.append(game_map.normalize(pos + Position(i,j)))
-    return locations
-
-def findDynaicHalite(ship, destinations, minHalite, maxWidth):
-    '''
-    loop until you hit enough halite and then hunt
-    '''
-    maxHalite = 0 
-    finalLocation = ship.position
-
-    for i in range(1, maxWidth + 1):
-        location_choices = get_surrounding_cardinals2(ship.position, i)
-    
-        #find max halite
-        for x in location_choices:
-            haliteCheck = game_map[x].halite_amount
-            if haliteCheck > maxHalite and x != ship.position and not (x in destinations.values()):
-                maxHalite = haliteCheck
-                finalLocation = game_map.normalize(x)
-    
-        if maxHalite > minHalite:
-            break
-    return finalLocation
-    
-
-# version 2
-# returns location of higher halite in radar
-def findHigherHalite2(ship, destinations, width = 1):
-    pos = game_map.normalize(ship.position)
-    maxHalite = 0 
-    location_choices = get_surrounding_cardinals2(pos, width)
-
-    #find max halite
-    finalLocation = pos
-    for x in location_choices:
-        haliteCheck = game_map[x].halite_amount
-        #logging.info("Check it out ! : {}".format(Position(*x)))
-        #logging.info("!!!! ship {}, looking at {}, halite {}".format(ship.id, x, haliteCheck))
-        if haliteCheck > maxHalite and x != pos and not (x in destinations.values()):
-            #logging.info("For {}, halite amt {} at {}".format(ship.id, haliteCheck, x))
-            maxHalite = haliteCheck
-            finalLocation = game_map.normalize(x)
-    #logging.info("For ship {} at {} location_choices are {}, we chose highest halite {}".format(ship.id, pos,location_choices, finalLocation))
-    
-    return finalLocation
     
 
 
@@ -249,8 +195,6 @@ game = hlt.Game()
 shipBuildingTurns = 175 # how many turns to build ships
 collectingStop    = 50 # Ignore halite less than this
 returnHaliteFlag  = 950 # halite to return to base
-totalHalite       = game.game_map.totalHalite
-avgHalite         = totalHalite / (game.game_map.width * game.game_map.height)
 
 #DEPOs
 MAX_DEPO          = 2
@@ -264,7 +208,7 @@ RADAR_WIDE = RADAR_DEFAULT + 2
 RADAR_MAX = RADAR_DEFAULT + 6
 
 #logging.disable(logging.CRITICAL)
-logging.info("map size: {}, max turns: {}, halite: {}".format(game.game_map.width, constants.MAX_TURNS, avgHalite))
+logging.info("map size: {}, max turns: {}".format(game.game_map.width, constants.MAX_TURNS))
 
 ### Logic for ship building turns ###
 if game.game_map.width > 60:
@@ -276,25 +220,43 @@ elif game.game_map.width > 50:
     shipBuildingTurns = 225
 elif game.game_map.width > 40:
     shipBuildingTurns = 200
-elif game.game_map.width < 40 and totalHalite < 160000:
+elif game.game_map.width < 40 and game.game_map.totalHalite < 160000:
     shipBuildingTurns = 155
     collectingStop = 50
 #elif game.game_map.width < 40 and totalHalite > 300000:
 #    shipBuildingTurns = 200
 #    collectingStop = 50
-else:
-    collectingStop = 50
+collectingStop = 50
 
-if avgHalite > 180:
+if game.game_map.averageHalite > 180:
     logging.info("Build more ships!")
     shipBuildingTurns += 25
     collectingStop += 25
 
-if avgHalite > 240:
+if game.game_map.averageHalite > 240:
     DEPO_HALITE_LOOK  = 5
     DEPO_HALITE       = 240
+    
+    
+### 4 player changes ###
+if len(game.players) == 4:
+    if game.game_map.width < 40:
+        shipBuildingTurns = 145
+    elif game.game_map.width < 50:
+        shipBuildingTurns = 180
+    elif game.game_map.width < 57:
+        shipBuildingTurns = 225
+    elif game.game_map.width < 80:
+        shipBuildingTurns = 250
+        RADAR_MAX = 12
+        DEPO_HALITE += 25
+        DEPO_DISTANCE  = 12
+    
 
+nearAvg, nearStd = game.game_map.get_near_stats(game.me.shipyard.position, 5)
+logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 
+#? DEPO_HALITE = avgHalite +10
 
 game.ready("oldBot")
 
@@ -309,6 +271,7 @@ ship_destination = {} # track where ships want to go
 
 # Track ship yield
 totalShipsBuilt = [0]
+haliteChange = 1000
 
 while True:
     # This loop handles each turn of the game. The game object changes every turn, and you refresh that state by
@@ -319,14 +282,18 @@ while True:
     game_map = game.game_map
     ship_destination = {} # reset destinations
     START_TURN_DEPO = GLOBAL_DEPO
+    turns_left = (constants.MAX_TURNS - game.turn_number)
+
+    if game.turn_number > 11:
+        haliteChange = game.haliteHistory[-10] - game_map.totalHalite
+    #logging.info("Total Halite: {} Average: {} Stdev: {}".format(game_map.totalHalite, game_map.averageHalite, game_map.stdDevHalite))
 
     # label map w/ enemy ship locations
     enemyShips = []
-    ships = []
     for player in game.players:
         if player != me.id:
-            ships = game.players[player].get_ships()
-        for i in ships:
+            enemyShips = game.players[player].get_ships()
+        for i in enemyShips:
             game_map[i.position].mark_enemy_ship(i)
             if len(game.players) > 4:
                 game_map[game_map.normalize(i.position + Position(1,0))].mark_enemy_ship(i)
@@ -342,39 +309,25 @@ while True:
         ###########################
         ### Set ship priorities ###
         ###########################
-        if ship.id not in ship_status:
+        if ship.id not in ship_status: # let function know there are no current orders
             ship_status[ship.id] = giveShipOrders(ship, None)
         else:
             ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id])
             
-        # if time running out head home and suicide. Need to add suicide code
-        #logging.info("Ship {} is {} currently at {}".format(ship.id, ship_status[ship.id], ship.position))
-
         ###############################
         ### Assign ship destination ###
         ###############################
+        #targetSize = game_map.averageHalite
+        #if turns_left < 100:
+        #    targetSize = game_map.averageHalite
+        #    collectingStop = 50
         # If ship is low on fuel don't move
         if ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
             ship_destination[ship.id] = ship.position
-            #logging.info("Ship {} is low on fuel and staying still".format(ship.id))
         
         # If ship shouldn't mine any more
-        # in theory you shoudl start with a high threshold and then move lower near end game
         elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
-            # i want the ship to see if its in a halite deadzone and then widen the window
-            # if not in deadzone
-            #logging.info("Ship {} sees {} avg halite".format(ship.id,int(getSurroundingHalite(ship.position,1))))
-            
-            if getSurroundingHalite(ship.position,1) < 100 and game.turn_number < 300:
-                haliteScanWidth =  RADAR_WIDE
-            elif getSurroundingHalite(ship.position,3) < 100:
-                haliteScanWidth =  RADAR_MAX
-            else:
-                haliteScanWidth =  RADAR_DEFAULT
-            
-            ship_destination[ship.id] = findDynaicHalite(ship, ship_destination, 100, 7)
-            #ship_destination[ship.id] = findHigherHalite2(ship, ship_destination, width = haliteScanWidth)
-            #logging.info("Ship {} next move is {}".format(ship.id, ship_destination[ship.id]))
+            ship_destination[ship.id] = game_map.findDynamicHalite(ship, ship_destination, 100, 7)
         
         elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
             # choose closest depo or shipyard
@@ -382,12 +335,11 @@ while True:
             possibleLocations.extend(me.get_dropoffs())
             closestChoice=  game_map.findClosest(ship, possibleLocations)
             ship_destination[ship.id] = closestChoice
-            logging.info("Ship {} is returning home to {}, choices were {}".format(ship.id, closestChoice, possibleLocations))
+            #logging.info("Ship {} is returning home to {}, choices were {}".format(ship.id, closestChoice, possibleLocations))
             #logging.info("Ship {} is returning home this way {}".format(ship.id, me.shipyard.position))
 
-        else:
+        else: # stay still
             ship_destination[ship.id] = ship.position
-            #logging.info("Ship {} has no other choice but to stay still".format(ship.id))
 
         ### COUNTER MEASURES ###
         ### Counter measures check if ship sits on shipyard
@@ -399,18 +351,26 @@ while True:
     ### Resolve movement ###
     ########################
     #logging.info("RESOLVE MOVEMENT!!!!!!!")    
-    logging.info("Destination list (pre resolve): {}".format(ship_destination))
+    #logging.info("Destination list (pre resolve): {}".format(ship_destination))
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
-    # If the game is in the first 200 turns and you have enough halite, spawn a ship.
-    # Don't spawn a ship if you currently have a ship at port, though - the ships will collide.
-    #if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not game_map[me.shipyard].is_occupied and not (me.shipyard.position in finalDestination.values()):
+    # calculate marginal benefit of a new ship
+    numShips = 0
+    for player in game.players:
+        numShips +=len(game.players[player].get_ships())
+    #numShips = len(numShips)
+    recentYield = haliteChange/(numShips+0.001)
+    projectedEarn = (recentYield/30) * (turns_left - 50) 
+    #logging.info("Projected earn: {}".format((projectedEarn)))
+
+    # Ship spawn logic
+    #if projectedEarn >= constants.SHIP_COST and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):
     if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):
         command_queue.append(me.shipyard.spawn())
         totalShipsBuilt.append(totalShipsBuilt[-1] + 1)
 
     minedHalite = max(totalShipsBuilt) * constants.SHIP_COST + me.halite_amount - 5000
-    logging.info("Max ships: {}, Halite mined: {}, shipYieldPerTurn: {}".format(max(totalShipsBuilt), minedHalite, minedHalite/max(totalShipsBuilt)/game.turn_number))
+    #logging.info("Max ships: {}, Halite mined: {}".format(max(totalShipsBuilt), minedHalite))
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)

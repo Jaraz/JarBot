@@ -16,6 +16,7 @@ class MapCell:
         self.ship = None
         self.structure = None
         self.enemyShip = None
+        self.enemyLikelyHood = 0 # [0,1] odds an enemy steps on this spot next turn
 
     @property
     def is_empty(self):
@@ -237,15 +238,17 @@ class GameMap:
         :return: A list of valid (closest) Directions towards your target.
         """
         unsafeMoves = self.get_unsafe_moves(source,destination)
-        
+        finalMoves = unsafeMoves.copy()
+        logging.info("unsafe moves {}".format(unsafeMoves))
         for move in unsafeMoves:
             # check if safe
+            logging.info("checking move {}".format(move))
             checkLoc = self.normalize(source.directional_offset(move))
-            #logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
+            logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
             if self[checkLoc].is_enemy():
-                #logging.info("loc {} removed".format(checkLoc))
-                unsafeMoves.remove(move)
-        return unsafeMoves
+                logging.info("loc {} removed".format(checkLoc))
+                finalMoves.remove(move)
+        return finalMoves
 
     def get_unsafe_moves(self, source, destination):
         """
@@ -320,6 +323,7 @@ class GameMap:
                 self.totalHalite += self[Position(x,y)].halite_amount
                 self[Position(x, y)].ship = None
                 self[Position(x, y)].enemyShip = None
+                self[Position(x, y)].enemyLikelyHood = 0
                 self.haliteData[(y+1) * x + y] = self[Position(x,y)].halite_amount
         self.averageHalite = self.totalHalite / (self.width * self.height)
         self.stdDevHalite = statistics.stdev(self.haliteData)
