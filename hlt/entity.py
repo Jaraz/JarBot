@@ -79,6 +79,13 @@ class Ship(Entity):
         """
         return "{} {} {}".format(commands.MOVE, self.id, commands.STAY_STILL)
 
+    ##########################
+    ### Execution commands ###
+    ##########################
+
+    def execute_mining(self):
+        return self.position
+
     @staticmethod
     def _generate(player_id):
         """

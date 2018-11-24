@@ -5,6 +5,7 @@ import sys
 from .common import read_input
 from . import constants
 from .game_map import GameMap, Player
+from .positionals import Direction, Position
 
 
 class Game:
@@ -36,7 +37,9 @@ class Game:
         self.me = self.players[self.my_id]
         self.game_map = GameMap._generate()
         self.haliteHistory = [self.game_map.totalHalite]
-
+        self.allShips = None
+        self.enemyShips = None
+        
     def ready(self, name):
         """
         Indicate that your bot is ready to play.
@@ -67,6 +70,29 @@ class Game:
             self.game_map[player.shipyard.position].structure = player.shipyard
             for dropoff in player.get_dropoffs():
                 self.game_map[dropoff.position].structure = dropoff
+
+    
+        # Update enemy ships and all ships
+        self.enemyShips = []
+        for player in self.players:
+            for i in self.players[player].get_ships():
+                self.game_map[i.position].occupado = True
+            if player != self.me.id:
+                self.enemyShips.extend(self.players[player].get_ships())
+        for i in self.enemyShips:
+            self.game_map[i.position].mark_enemy_ship(i)
+            logging.info("Enemy identified {}".format(i))
+            
+            # ship info
+            haliteAtEnemy = self.game_map[i.position].halite_amount
+                
+            # guess enemy movement, skip if he is on a lot of halite and empty
+            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite:
+                self.game_map[self.game_map.normalize(i.position + Position(1,0))].mark_enemy_ship(i)
+                self.game_map[self.game_map.normalize(i.position + Position(0,1))].mark_enemy_ship(i)
+                self.game_map[self.game_map.normalize(i.position + Position(-1,0))].mark_enemy_ship(i)
+                self.game_map[self.game_map.normalize(i.position + Position(0,-1))].mark_enemy_ship(i)
+                
 
     @staticmethod
     def end_turn(commands):

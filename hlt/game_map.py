@@ -6,17 +6,29 @@ from .player import Player
 from .positionals import Direction, Position
 from .common import read_input
 import logging
-import statistics
+import numpy as np
+
+def get_wrapped(matrix, startX, startY, width):
+    m, n = matrix.shape
+    rows = []
+    cols = []
+    for i in range(-1,width*2):
+        rows.append(startX-(width-i) % m)
+        cols.append(startY-(width-i) % n)
+    return matrix[rows][:, cols]
+
 
 class MapCell:
     """A cell on the game map."""
     def __init__(self, position, halite_amount):
+        self.occupado = False
         self.position = position
         self.halite_amount = halite_amount
         self.ship = None
         self.structure = None
         self.enemyShip = None
         self.enemyLikelyHood = 0 # [0,1] odds an enemy steps on this spot next turn
+        self.avgHalite = 0
 
     @property
     def is_empty(self):
@@ -84,14 +96,15 @@ class GameMap:
         self.totalHalite = 0
         self.haliteRegion = 0
         self.haliteData = [0] * (self.width * self.height)
+        self.npMap = np.zeros([self.width, self.height], dtype=np.int)
         for y in range(self.height):
             for x in range(self.width):
-                self.totalHalite += self[Position(x,y)].halite_amount
-                self.haliteData[(y+1) * x + y] = self[Position(x,y)].halite_amount
-        self.averageHalite = self.totalHalite / (self.width * self.height)
-        self.stdDevHalite = statistics.stdev(self.haliteData)
-        #logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
-
+                self.npMap[x][y] = self[Position(x,y)].halite_amount
+                
+        self.totalHalite = np.sum(self.npMap)
+        self.averageHalite = np.mean(self.npMap)
+        self.stdDevHalite = np.std(self.npMap)
+        logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
 
     def __getitem__(self, location):
         """
@@ -106,17 +119,68 @@ class GameMap:
             return self._cells[location.position.y][location.position.x]
         return None
 
+    def get_map_split(self, source):
+        '''
+        evenly divide the map into quarters. Return odds for next move
+        '''
+        breakPoint = self.width/2 - 1 # since python starts at 0
+        haliteSplit = {}
+        
+        for x in range(2):
+            for y in range(2):
+                for i in range(breakPoint):
+                    for j in range(breakPoint):
+                        haliteSplit[x,y] = self[self.normalize(source + Position(i,j))].halite_amount
+                
+        return 0
+
+    def fitness_search(self, source, searchWidth, width, destinations):
+        '''
+        Return best fitness score for source within search width
+        :param source: source for search
+        :param searchWidth: find highest score within this box
+        :param width: stats calculated within this range
+        :param destinatinos: ships already being sent here
+        :return: best fitness score
+        '''
+        # get list of search locationss
+        searchLocations = self.get_surrounding_cardinals(source, searchWidth)
+        topScore = 0
+        bestLocation = source
+        
+        for loc in searchLocations:
+            localScore = self.get_fitness_score(loc, width, destinations)
+            if localScore > topScore:
+                topScore = localScore
+                bestLocation = loc
+        
+        return bestLocation
+
+    def get_fitness_score(self, source, width, destinations):
+        '''
+        return a fitness score based on halite in the area
+        TODO LIST: reduce score based on our ships / enemy ships and stdev
+        :param source: the source for the score
+        :param width: how wide to look for the score
+        :param destinations: these points are taken, set score to 0
+        :return: the score
+        '''
+        finalScore = 0
+        # if source is already taken then return 0
+        if source in destinations.values(): 
+            return 0
+        else:
+            avgHalite, stdHalite = self.get_near_stats(source, width)
+            totalHalite = avgHalite * ((width*2+1)*(width*2+1))
+            finalScore = avgHalite - len(self.return_nearby_ships(source, width)) * 20
+        return finalScore
+
     def get_near_stats(self, source, width):
         '''
         return avg and stdev of halite around a source position
-        '''
-        locations = self.get_surrounding_cardinals(source, width)
-        halite = []
-        
-        for loc in locations:
-                halite.append(self[loc].halite_amount)
-                
-        return statistics.mean(halite), statistics.stdev(halite)
+        ''' 
+        subMatrix = get_wrapped(self.npMap, source.x, source.y, width)
+        return np.mean(subMatrix), np.std(subMatrix)
     
     def findDynamicHalite(self, ship, destinations, minHalite, maxWidth):
         '''
@@ -133,7 +197,6 @@ class GameMap:
     
         for i in range(1, maxWidth + 1):
             location_choices = self.get_surrounding_cardinals(ship.position, i)
-            #location_choices = get_surrounding_cardinals2(ship.position, i)
         
             #find max halite
             for x in location_choices:
@@ -146,7 +209,28 @@ class GameMap:
                 break
         return finalLocation
     
-    
+    # returns average halite in area based on width, also returns max halite
+    def getSurroundingHalite(self, pos, width):
+        total = 0
+        for i in range(-width,width+1):
+            for j in range(-width,width+1):
+                total += self[pos + Position(i,j)].halite_amount
+        return total/((width*2+1)*(width*2+1))
+
+    def findDynamicEnemy(self, ship, enemyShips, minHalite, maxWidth):
+        '''
+        return closest enemy ship with minHalite
+        '''
+        targetLoc = ship.position
+        maxHalite = 0
+        for i in range(1, maxWidth):
+            for enemy in enemyShips:
+                if enemy.halite_amount > maxHalite:
+                    maxHalite = enemy.halite_amount
+                    targetLoc = enemy.position
+            if maxHalite > minHalite:
+                break
+        return targetLoc
 
     def get_surrounding_cardinals(self, source, width):
         '''
@@ -158,17 +242,33 @@ class GameMap:
                 locations.append(self.normalize(source + Position(i,j)))
         return locations
 
-    def calculate_distance(self, source, target):
+    def calculate_distance(self, source, target, disType = 'manhattan'):
         """
         Compute the Manhattan distance between two locations.
         Accounts for wrap-around.
         :param source: The source from where to calculate
         :param target: The target to where calculate
+        :param type: What to return, manhattan, x only, y only
         :return: The distance between these items
         """
         source = self.normalize(source)
         target = self.normalize(target)
         resulting_position = abs(source - target)
+        
+        manhattan = min(resulting_position.x, self.width - resulting_position.x) + \
+            min(resulting_position.y, self.height - resulting_position.y)
+            
+        x_only = min(resulting_position.x, self.width - resulting_position.x)
+        
+        y_only = min(resulting_position.y, self.height - resulting_position.y)
+        
+        if disType == 'manhattan':
+            return manhattan
+        elif disType == 'x only':
+            return x_only
+        elif disType == 'y only':
+            return y_only
+        
         return min(resulting_position.x, self.width - resulting_position.x) + \
             min(resulting_position.y, self.height - resulting_position.y)
 
@@ -228,6 +328,18 @@ class GameMap:
                 enemyList.append(loc)
 
         return enemyList
+
+    def return_nearby_ships(self, source, width):
+        '''
+        return in a list form which positions have an enemy ship
+        '''
+        location_choices = self.get_surrounding_cardinals(source, width)
+        shipList = []
+       
+        for loc in location_choices:
+            if self[loc].occupado:
+                shipList.append(loc)
+        return shipList
 
     def get_safe_moves(self, source, destination):
         """
@@ -320,10 +432,10 @@ class GameMap:
 
         for y in range(self.height):
             for x in range(self.width):
-                self.totalHalite += self[Position(x,y)].halite_amount
                 self[Position(x, y)].ship = None
                 self[Position(x, y)].enemyShip = None
                 self[Position(x, y)].enemyLikelyHood = 0
-                self.haliteData[(y+1) * x + y] = self[Position(x,y)].halite_amount
-        self.averageHalite = self.totalHalite / (self.width * self.height)
-        self.stdDevHalite = statistics.stdev(self.haliteData)
+                self.npMap[x][y] = self[Position(x,y)].halite_amount
+        self.totalHalite = np.sum(self.npMap)
+        self.averageHalite = np.mean(self.npMap)
+        self.stdDevHalite = np.std(self.npMap)

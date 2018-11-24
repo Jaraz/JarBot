@@ -71,13 +71,15 @@ def giveShipOrders(ship, currentOrders):
 def resolveMovement(ships, destinations, status):
     nextTurnPosition = {}
     orderList = {}
+    nextList = {}
     finalOrder = []
 
 
     # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
-        #logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
+        nextBest = None
+        logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
         #logging.info("Ship {} first order is {}".format(ship.id, firstOrder))
@@ -86,9 +88,8 @@ def resolveMovement(ships, destinations, status):
         else: 
             random.shuffle(firstOrder)
             order = firstOrder[0]
-            nextBest = None
             if len(firstOrder) > 1:
-                nextBest = firstOrder[1] ### need to fix this 
+                nextList[ship.id] = firstOrder[1] ### need to fix this 
             #logging.info("ship {}, order {}, nextbest {}".format(ship.id, order, nextBest))
         
         orderList[ship.id] = order
@@ -96,79 +97,83 @@ def resolveMovement(ships, destinations, status):
         # where next move takes us
         nextTurnPosition[ship.id] = game_map.normalize(ship.position + Position(*orderList[ship.id]))
     
-    # resolve movement    
+    # resolve movement make 2 passes
     useSecondBest = False
-    for ship in ships:
-        for i in ships:
-            # check if you need a new move
-            # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still + is enemy there
-            #logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
-            if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
-                # first try other unsafe moves, if empty just move so you don't bottleneck
-                #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
-                
-                #logging.info("Ship {} has an issue with {}".format(ship.id,i.id))
-                
-                if nextBest is not None:
-                    nextLocation = game_map.normalize(ship.position + Position(*nextBest))
-                    if nextLocation not in nextTurnPosition.values():
-                        #logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
-                        useSecondBest = True
-
-                # IF second best isn't available we need to switch to something random
-                if useSecondBest == True:
-                        orderList[ship.id] = nextBest
-                else:
-                    possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
-                    #logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
-                    #logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
-                    possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
-
-                    if len(possibilities) == 0:
-                        orderList[ship.id] = Direction.Still
+    for x in range(3): # make 2 pases
+        for ship in ships:
+            for i in ships:
+                # check if you need a new move
+                # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still + is enemy there
+                #logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
+                if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
+                    # first try other unsafe moves, if empty just move so you don't bottleneck
+                    #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
+                    
+                    #logging.info("Ship {} has an issue with {}".format(ship.id,i.id))
+                    
+                    # if you have a second best move
+                    if ship.id in nextList: 
+                        nextLocation = game_map.normalize(ship.position + Position(*nextList[ship.id]))
+                        if nextLocation not in nextTurnPosition.values():
+                            #logging.info("Ship {} will use next best to go {}, danger at {}".format(ship,nextLocation,nextTurnPosition.values()))
+                            useSecondBest = True
+    
+                    # IF second best isn't available we need to switch to something random
+                    if useSecondBest == True:
+                            orderList[ship.id] = nextList[ship.id]
                     else:
-                        newDirection = game_map.get_safe_moves(ship.position, random.choice(possibilities))
-                        #logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
-                        if newDirection == []:
+                        possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
+                        #logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
+                        #logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
+                        possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
+    
+                        if len(possibilities) == 0:
                             orderList[ship.id] = Direction.Still
                         else:
-                            orderList[ship.id] = random.choice(newDirection)
-                            #logging.info("ship {} uses random new direction {}".format(ship.id, orderList[ship.id]))
-                
-                useSecondBest = False
-                # new position
-                nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
-
-        #####################
-        #### MISC CHECKS ####
-        #####################                
-                
-        # check if suicide mission home
-        if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
-            orderList[ship.id] = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
-        elif status[ship.id] == 'returnSuicide':
-            #logging.info("Dropoffs {}, surrounding {}".format(me.get_dropoff_locations(),ship.position.get_surrounding_cardinals()))
-            dropOffTarget = None
-            nextToDrop = False
-            surrounding = ship.position.get_surrounding_cardinals()
-            for i in me.get_dropoff_locations():
-                if i in surrounding:
-                    nextToDrop = True
-                    dropOffTarget = i
-            if nextToDrop:
-                orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
-         
-        
-        ## Check to ATTACK !!!! ##
-        # If you are next to a full ship, and you are low on halite, ATTACK!
-        enemyLocations = game_map.return_nearby_enemies(ship.position)
-        for loc in enemyLocations:
-            if loc: 
-                #logging.info("ship {} at {} looking at enemy loc {} enemyShip {}".format(ship.id, ship.position, loc, loc.enemyShip))
-                if ship.halite_amount < 200 and loc.enemyShip.halite_amount > 800 and ship.halite_amount > game_map[ship.position].halite_amount * 0.1 and len(game.players) == 2:
-                    orderList[ship.id] = game_map.get_unsafe_moves(ship.position, loc.position)[0]
-                    #logging.info("ATTACK: Ship {} to {} on order {}".format(ship.id, loc, orderList[ship.id]))
-
+                            newDirection = game_map.get_safe_moves(ship.position, random.choice(possibilities))
+                            #logging.info("Shio {} picked a new direction {}".format(ship.id, newDirection[0]))
+                            if newDirection == []:
+                                orderList[ship.id] = Direction.Still
+                            else:
+                                orderList[ship.id] = random.choice(newDirection)
+                                #logging.info("ship {} uses random new direction {}".format(ship.id, orderList[ship.id]))
+    
+                    useSecondBest = False
+                    # new position
+                    nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
+    
+            #####################
+            #### MISC CHECKS ####
+            #####################                
+                    
+            # check if suicide mission home
+            if status[ship.id] == 'returnSuicide' and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
+                orderList[ship.id] = game_map.get_unsafe_moves(ship.position, me.shipyard.position)[0]
+            elif status[ship.id] == 'returnSuicide':
+                #logging.info("Dropoffs {}, surrounding {}".format(me.get_dropoff_locations(),ship.position.get_surrounding_cardinals()))
+                dropOffTarget = None
+                nextToDrop = False
+                surrounding = ship.position.get_surrounding_cardinals()
+                for i in me.get_dropoff_locations():
+                    if i in surrounding:
+                        nextToDrop = True
+                        dropOffTarget = i
+                if nextToDrop:
+                    orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
+             
+            
+            ## Check to ATTACK !!!! ##
+            # If you are next to a full ship, and you are low on halite, ATTACK!
+            enemyLocations = game_map.return_nearby_enemies(ship.position)
+            for loc in enemyLocations:
+                if loc: 
+                    #logging.info("ship {} at {} looking at enemy loc {} enemyShip {}".format(ship.id, ship.position, loc, loc.enemyShip))
+                    if ship.halite_amount < 200 and loc.enemyShip.halite_amount > 800 and ship.halite_amount > game_map[ship.position].halite_amount * 0.1 and len(game.players) == 2:
+                        orderList[ship.id] = game_map.get_unsafe_moves(ship.position, loc.position)[0]
+                        #logging.info("ATTACK: Ship {} to {} on order {}".format(ship.id, loc, orderList[ship.id]))
+    
+    # issue final order
+    for ship in ships:
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
             finalOrder.append(ship.make_dropoff())        
@@ -241,7 +246,7 @@ if game.game_map.averageHalite > 240:
 ### 4 player changes ###
 if len(game.players) == 4:
     if game.game_map.width < 40:
-        shipBuildingTurns = 145
+        shipBuildingTurns = 130
     elif game.game_map.width < 50:
         shipBuildingTurns = 180
     elif game.game_map.width < 57:
@@ -295,7 +300,15 @@ while True:
             enemyShips = game.players[player].get_ships()
         for i in enemyShips:
             game_map[i.position].mark_enemy_ship(i)
-            if len(game.players) > 4:
+            logging.info("Enemy identified {}".format(i))
+            
+            # ship info
+            haliteAtEnemy = game_map[i.position].halite_amount
+            haliteOnShip  = i.halite_amount
+            
+            # guess enemy movement, skip if he is on a lot of halite and empty
+            #if len(game.players) > 3 and haliteAtEnemy > game_map.averageHalite and haliteOnShip < 700:
+            if len(game.players) >4:
                 game_map[game_map.normalize(i.position + Position(1,0))].mark_enemy_ship(i)
                 game_map[game_map.normalize(i.position + Position(0,1))].mark_enemy_ship(i)
                 game_map[game_map.normalize(i.position + Position(-1,0))].mark_enemy_ship(i)
