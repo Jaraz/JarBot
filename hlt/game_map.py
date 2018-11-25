@@ -7,6 +7,7 @@ from .positionals import Direction, Position
 from .common import read_input
 import logging
 import numpy as np
+from scipy import optimize
 
 def get_wrapped(matrix, startX, startY, width):
     m, n = matrix.shape
@@ -175,12 +176,42 @@ class GameMap:
             finalScore = avgHalite - len(self.return_nearby_ships(source, width)) * 20
         return finalScore
 
+    def get_ship_surroundings(self, ships, width, minHalite):
+        '''
+        return a list of possible surrounding spots, unique, that pass min Halite threshold
+        '''
+        targets = []
+        for ship in ships:
+            for nearby in self.get_surrounding_cardinals(ship.position, width):
+                if self[nearby].halite_amount > minHalite and nearby not in targets:
+                    targets.append(nearby)
+        return targets
+
     def get_near_stats(self, source, width):
         '''
         return avg and stdev of halite around a source position
         ''' 
         subMatrix = get_wrapped(self.npMap, source.x, source.y, width)
         return np.mean(subMatrix), np.std(subMatrix)
+    
+    def matchShipsToDest(self, ships, destinations):
+        distMatrix = np.zeros([len(ships), len(destinations)])
+        for i in range(len(ships)):
+            for j in range(len(destinations)):
+                distCalc = self.calculate_distance(ships[i].position, destinations[j])
+                if distCalc == 0:
+                    distCalc = 1000
+                distMatrix[i,j] = -self[destinations[j]].halite_amount / (np.sqrt(2 * distCalc))
+            
+        # find closest destination
+        row_ind, col_ind = optimize.linear_sum_assignment(distMatrix)
+        logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
+        
+        # convert to ship
+        orders = {}
+        for i in range(len(ships)):
+            orders[ships[i].id] = destinations[col_ind[i]]
+        return row_ind, col_ind, orders
     
     def findDynamicHalite(self, ship, destinations, minHalite, maxWidth):
         '''
