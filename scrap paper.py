@@ -17,3 +17,12 @@ x > 100
 row_ind, col_ind = optimize.linear_sum_assignment(x)
 print(row_ind)
 print(col_ind)
+
+print(ships)
+shipCoord = np.array([[0,1],[1,3],[2,0],[3,0]])
+test = np.zeros([16,2])
+for i in range(4):
+    for j in range(4)
+        test[i*4+j,j] = 
+
+distance.cdist(coords, coords, 'cityblock')

@@ -35,9 +35,10 @@ TODO
 2) make sure we have optimal allocation of targets and ships
 3) make the bot more aggro in small maps and small 4 player games
 4) Tweak depo building in 4 player games, esp 48 and under maps, maybe only build 1 depo max
-5) 
-6) ???
-7) Profit?
+5) tweak depo in bigger maps like 56x, wider distance
+6) 
+7) ???
+8) Profit?
 '''
 
 
@@ -403,6 +404,10 @@ while True:
     for ship in shipsExploring:
         ship_destination[ship.id] = testOrders[ship.id]
     logging.info("final orders {}".format(ship_destination))
+    
+    # test calc
+    targetRow2, targetCol2, testOrders2 = game_map.matchShipsToDest2(shipsExploring)    
+    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow2, targetCol2, testOrders2))
 
     ########################
     ### Resolve movement ###

@@ -8,6 +8,7 @@ from .common import read_input
 import logging
 import numpy as np
 from scipy import optimize
+from collections import deque
 
 def get_wrapped(matrix, startX, startY, width):
     m, n = matrix.shape
@@ -98,10 +99,16 @@ class GameMap:
         self.haliteRegion = 0
         self.haliteData = [0] * (self.width * self.height)
         self.npMap = np.zeros([self.width, self.height], dtype=np.int)
+        self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
         for y in range(self.height):
             for x in range(self.width):
-                self.npMap[x][y] = self[Position(x,y)].halite_amount
-                
+                self.npMap[y][x] = self[Position(x,y)].halite_amount
+        self.npMapDistance = self.buildDistanceMatrix()
+        logging.info("np map {}".format(self.npMap))
+        logging.info("np dist {}".format(self.npMapDistance))
+        logging.info("test1 {}".format(self.returnDistanceMatrix(Position(0,2))))
+
+
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
@@ -119,6 +126,26 @@ class GameMap:
         elif isinstance(location, Entity):
             return self._cells[location.position.y][location.position.x]
         return None
+
+    def buildDistanceMatrix(self):
+        '''
+        at start of game, create array [x,y] which returns manhattan distance to all points on the map from x,y
+        for use in distance heuristic
+        '''
+        dist = np.zeros((self.width, self.height), dtype=int)
+        
+        for x in range(self.width):
+            for y in range(self.height):
+                min_x = min((x - 0) % self.width, (0 - x) % self.width)
+                min_y = min((y - 0) % self.height, (0 - y) % self.height)
+                dist[x, y] = max(min_x + min_y, 1)
+        return dist
+
+    def returnDistanceMatrix(self, source):
+        '''
+        return distance from source across the entire map
+        '''
+        return np.roll(np.roll(self.npMapDistance,source.x,1), source.y,0)
 
     def get_map_split(self, source):
         '''
@@ -193,6 +220,23 @@ class GameMap:
         ''' 
         subMatrix = get_wrapped(self.npMap, source.x, source.y, width)
         return np.mean(subMatrix), np.std(subMatrix)
+    
+    def matchShipsToDest2(self, ships):
+        distMatrix = np.zeros([len(ships), self.width*self.height])
+        for i in range(len(ships)):
+            h = -self.npMap / np.sqrt(2 * self.returnDistanceMatrix(ships[i].position))
+            #logging.info("h: {}".format(h))
+            distMatrix[i,:] = h.ravel()
+
+        # find closest destination
+        row_ind, col_ind = optimize.linear_sum_assignment(distMatrix)
+        #logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
+        
+        # convert to ship
+        orders = {}
+        for i in range(len(ships)):
+            orders[i] = Position(col_ind[i] % self.width,int(col_ind[i]/self.width))
+        return row_ind, col_ind, orders
     
     def matchShipsToDest(self, ships, destinations):
         distMatrix = np.zeros([len(ships), len(destinations)])
