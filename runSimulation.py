@@ -18,9 +18,9 @@ jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 40 --height 40 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 40 --height 40 "python MyBot.py" "python oldBot.py"'
-#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 "python MyBot.py" "python oldBot.py"'
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 56 --height 56 "python MyBot.py" "python oldBot.py"'
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
+#argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --height 64 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
@@ -32,7 +32,7 @@ newBotScores = []
 oldBotScores = []
 seedArray = []
 
-runSims = 100
+runSims = 48
 
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
@@ -47,7 +47,7 @@ def runSim(i):
 
 if __name__ == '__main__':
     start_time = timeit.default_timer()
-    pool = multiprocessing.Pool(processes = 2)
+    pool = multiprocessing.Pool(processes = 4)
     for newScore, oldScore, seed in pool.map(runSim, range(runSims)):
         newBotScores.append(newScore)
         oldBotScores.append(oldScore)
@@ -56,11 +56,12 @@ if __name__ == '__main__':
     
     newScores = np.array(newBotScores)
     oldScores = np.array(oldBotScores)
+    seedTracker = np.array(seedArray)
     
     scoreDiff = newScores - oldScores
     print("Win % {}".format(sum(scoreDiff>0)/sum(scoreDiff>-1000000)))
     print("Average Score {}".format(np.mean(scoreDiff)))
     print("Median Score {}".format(np.median(scoreDiff)))
     print("Minimum Score {}".format(np.min(newScores)))
-
+    print("Bad seeds {}".format(seedTracker[newScores<1]))
     print((timeit.default_timer() - start_time)/runSims)
