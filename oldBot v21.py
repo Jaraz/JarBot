@@ -34,11 +34,8 @@ TODO
 1) improve depo code to move a bit further after it sees an opportunity
 2) make sure we have optimal allocation of targets and ships
 3) make the bot more aggro in small maps and small 4 player games
-4) Tweak depo building in 4 player games, esp 48 and under maps, maybe only build 1 depo max
-5) tweak depo in bigger maps like 56x, wider distance
-6) 
-7) ???
-8) Profit?
+4) ???
+5) Profit?
 '''
 
 
@@ -94,11 +91,14 @@ def resolveMovement(ships, destinations, status):
     finalOrder = []
 
 
-    # tell me which direction everyone wants to go next turn    
+    # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
+        nextBest = None
+        logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
+        logging.info("Ship {} first order is {}".format(ship.id, firstOrder))
         if not firstOrder: # if no safe moves just stay still
             order = Direction.Still
         else: 
@@ -106,6 +106,7 @@ def resolveMovement(ships, destinations, status):
             order = firstOrder[0]
             if len(firstOrder) > 1:
                 nextList[ship.id] = firstOrder[1] ### need to fix this 
+            logging.info("ship {}, order {}, nextbest {}".format(ship.id, order, nextBest))
         
         orderList[ship.id] = order
         
@@ -230,9 +231,8 @@ if game.game_map.width > 60:
     shipBuildingTurns = 250
     RADAR_MAX = 12
     DEPO_HALITE += 25
-    DEPO_DISTANCE  = 20
+    DEPO_DISTANCE  = 15
     SUICIDE_TURN_FLAG = 7
-    MAX_DEPO = 3
 elif game.game_map.width > 50:
     shipBuildingTurns = 225
 elif game.game_map.width > 39:
@@ -285,7 +285,7 @@ if len(game.players) == 4:
 nearAvg, nearStd = game.game_map.get_near_stats(game.me.shipyard.position, 5)
 logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -351,12 +351,9 @@ while True:
         elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
             targetHalite = 100
            
-            # idea: 1) look very close for micro locations 2 width or less, look for above nearish avg halite
-            # 2) if not found then move towards move halite?
-            
             # look for close target
-            #ship_destination[ship.id] = game_map.findDynamicHalite(ship, ship_destination, targetSize, lookWidth)
-            #logging.info("Ship {} wants to go {}".format(ship.id, ship_destination[ship.id]))
+            ship_destination[ship.id] = game_map.findDynamicHalite(ship, ship_destination, targetSize, lookWidth)
+            logging.info("Ship {} wants to go {}".format(ship.id, ship_destination[ship.id]))
             
         # If ship should return home
         elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
@@ -387,23 +384,6 @@ while True:
         if game_map[me.shipyard.position].is_enemy() and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
             ship_status[ship.id] == "returnSuicide"
             ship_destination[ship.id] = me.shipyard.position
-
-    # Test movement 2.0
-    # ships set to explore
-    liveShips = me.get_ships()
-    liveShipStatus = {}
-    for ship in liveShips:
-        liveShipStatus[ship.id] = ship_status[ship.id]
-    shipsExploring = [me.get_ship(k) for k,v in liveShipStatus.items() if v == 'exploring']
-#    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploring, hChoice = 'linear')    
-#    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
-
-    for ship in shipsExploring:
-        ship_destination[ship.id] = testOrders[ship.id]
-    logging.info("final orders {}".format(ship_destination))
-    
-
 
     ########################
     ### Resolve movement ###

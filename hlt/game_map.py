@@ -221,11 +221,19 @@ class GameMap:
         subMatrix = get_wrapped(self.npMap, source.x, source.y, width)
         return np.mean(subMatrix), np.std(subMatrix)
     
-    def matchShipsToDest2(self, ships):
+    def matchShipsToDest2(self, ships, hChoice = 'sqrt'):
         distMatrix = np.zeros([len(ships), self.width*self.height])
         for i in range(len(ships)):
-            h = -self.npMap / np.sqrt(2 * self.returnDistanceMatrix(ships[i].position))
-            #logging.info("h: {}".format(h))
+            if hChoice == 'sqrt':
+                h = -self.npMap / np.sqrt(2 * self.returnDistanceMatrix(ships[i].position))
+            elif hChoice == 'quad':
+                dist =  self.returnDistanceMatrix(ships[i].position)
+                h = -self.npMap / np.sqrt(dist * dist)
+            elif hChoice == 'linear':
+                dist =  self.returnDistanceMatrix(ships[i].position)
+                h = -self.npMap / np.sqrt(dist)
+            elif hChoice == 'maxHalite':
+                h = -self.npMap         
             distMatrix[i,:] = h.ravel()
 
         # find closest destination
@@ -235,7 +243,7 @@ class GameMap:
         # convert to ship
         orders = {}
         for i in range(len(ships)):
-            orders[i] = Position(col_ind[i] % self.width,int(col_ind[i]/self.width))
+            orders[ships[i].id] = Position(col_ind[i] % self.width,int(col_ind[i]/self.width))
         return row_ind, col_ind, orders
     
     def matchShipsToDest(self, ships, destinations):
@@ -510,7 +518,7 @@ class GameMap:
                 self[Position(x, y)].ship = None
                 self[Position(x, y)].enemyShip = None
                 self[Position(x, y)].enemyLikelyHood = 0
-                self.npMap[x][y] = self[Position(x,y)].halite_amount
+                self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
