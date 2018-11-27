@@ -63,15 +63,18 @@ class Game:
         self.haliteHistory.append(self.game_map.totalHalite)
 
         # Mark cells with ships as unsafe for navigation
+        self.game_map.emptyShipMap()
         for player in self.players.values():
             for ship in player.get_ships():
                 self.game_map[ship.position].mark_unsafe(ship)
+                self.game_map.shipMap[ship.position.y, ship.position.x] = player.id + 1
 
             self.game_map[player.shipyard.position].structure = player.shipyard
             for dropoff in player.get_dropoffs():
                 self.game_map[dropoff.position].structure = dropoff
 
-    
+        logging.info("Ship locations {}".format(self.game_map.shipMap))
+        
         # Update enemy ships and all ships
         self.enemyShips = []
         for player in self.players:

@@ -34,11 +34,8 @@ TODO
 1) improve depo code to move a bit further after it sees an opportunity
 2) make sure we have optimal allocation of targets and ships
 3) make the bot more aggro in small maps and small 4 player games
-4) Tweak depo building in 4 player games, esp 48 and under maps, maybe only build 1 depo max
-5) tweak depo in bigger maps like 56x, wider distance
-6) 
-7) ???
-8) Profit?
+4) ???
+5) Profit?
 '''
 
 
@@ -87,18 +84,21 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     return status
 
 #resolve movement function
-def resolveMovement(ships, destinations, status, attackTargets):
+def resolveMovement(ships, destinations, status):
     nextTurnPosition = {}
     orderList = {}
     nextList = {}
     finalOrder = []
 
 
-    # tell me which direction everyone wants to go next turn    
+    # tell me where everyone wants to go next turn    
     for ship in ships:
         # next move
+        nextBest = None
+        logging.info("Ship {} at {} wants go to {}".format(ship.id, ship.position, destinations[ship.id]))
         #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
+        logging.info("Ship {} first order is {}".format(ship.id, firstOrder))
         if not firstOrder: # if no safe moves just stay still
             order = Direction.Still
         else: 
@@ -106,6 +106,7 @@ def resolveMovement(ships, destinations, status, attackTargets):
             order = firstOrder[0]
             if len(firstOrder) > 1:
                 nextList[ship.id] = firstOrder[1] ### need to fix this 
+            logging.info("ship {}, order {}, nextbest {}".format(ship.id, order, nextBest))
         
         orderList[ship.id] = order
         
@@ -176,21 +177,14 @@ def resolveMovement(ships, destinations, status, attackTargets):
                 if nextToDrop:
                     orderList[ship.id] = game_map.get_unsafe_moves(ship.position, dropOffTarget)[0]        
              
-            ##########################
+            
             ## Check to ATTACK !!!! ##
-            ##########################
             # If you are next to a full ship, and you are low on halite, ATTACK!
             enemyLocations = game_map.return_nearby_enemies(ship.position)
             for loc in enemyLocations:
                 if loc: 
                     #logging.info("ship {} at {} looking at enemy loc {} enemyShip {}".format(ship.id, ship.position, loc, loc.enemyShip))
-                    if ((ship.halite_amount < 200 and \
-                        loc.enemyShip.halite_amount > 600 and \
-                        ship.halite_amount > game_map[ship.position].halite_amount * 0.1 and \
-                        len(game.players) == 2) or status[ship.id] == 'attack') and \
-                        (loc.position.x,loc.position.y) not in attackTargets:
-                        logging.info("ATTACK TEST{}".format((loc.position.x,loc.position.y)))
-                        attackTargets[(loc.position.x,loc.position.y)] = 'targeted'
+                    if (ship.halite_amount < 200 and loc.enemyShip.halite_amount > 600 and ship.halite_amount > game_map[ship.position].halite_amount * 0.1 and len(game.players) == 2) or status[ship.id] == 'attack':
                         orderList[ship.id] = game_map.get_unsafe_moves(ship.position, loc.position)[0]
                         logging.info("ATTACK: Ship {} to {} on order {}".format(ship.id, loc, orderList[ship.id]))
     
@@ -237,12 +231,10 @@ if game.game_map.width > 60:
     shipBuildingTurns = 250
     RADAR_MAX = 12
     DEPO_HALITE += 25
-    DEPO_DISTANCE  = 20
+    DEPO_DISTANCE  = 15
     SUICIDE_TURN_FLAG = 7
-    MAX_DEPO = 3
 elif game.game_map.width > 50:
     shipBuildingTurns = 225
-    DEPO_DISTANCE  = 20
 elif game.game_map.width > 39:
     shipBuildingTurns = 200
     collectingStop= 50
@@ -309,7 +301,6 @@ while True:
     me = game.me
     game_map = game.game_map
     ship_destination = {} # reset destinations
-    attack_targets = {} # make sure we don't double target
     START_TURN_DEPO = GLOBAL_DEPO
     turns_left = (constants.MAX_TURNS - game.turn_number)
     GLOBAL_DEPO_BUILD_OK = True # only build one depo per turn
@@ -360,12 +351,9 @@ while True:
         elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
             targetHalite = 100
            
-            # idea: 1) look very close for micro locations 2 width or less, look for above nearish avg halite
-            # 2) if not found then move towards move halite?
-            
             # look for close target
-            #ship_destination[ship.id] = game_map.findDynamicHalite(ship, ship_destination, targetSize, lookWidth)
-            #logging.info("Ship {} wants to go {}".format(ship.id, ship_destination[ship.id]))
+            ship_destination[ship.id] = game_map.findDynamicHalite(ship, ship_destination, targetSize, lookWidth)
+            logging.info("Ship {} wants to go {}".format(ship.id, ship_destination[ship.id]))
             
         # If ship should return home
         elif ship_status[ship.id] == "returning" or ship_status[ship.id] == "returnSuicide":
@@ -397,27 +385,10 @@ while True:
             ship_status[ship.id] == "returnSuicide"
             ship_destination[ship.id] = me.shipyard.position
 
-    # Test movement 2.0
-    # ships set to explore
-    liveShips = me.get_ships()
-    liveShipStatus = {}
-    for ship in liveShips:
-        liveShipStatus[ship.id] = ship_status[ship.id]
-    shipsExploring = [me.get_ship(k) for k,v in liveShipStatus.items() if v == 'exploring']
-#    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploring, hChoice = 'sqrt')    
-#    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
-
-    for ship in shipsExploring:
-        ship_destination[ship.id] = testOrders[ship.id]
-    logging.info("final orders {}".format(ship_destination))
-    
-
-
     ########################
     ### Resolve movement ###
     ########################
-    command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets)
+    command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status)
 
     # Ship spawn logic
     if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):

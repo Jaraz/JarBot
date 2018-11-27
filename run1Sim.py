@@ -12,9 +12,10 @@ import subprocess
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 --seed 1542910796 "python MyBot.py" "python oldBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 8 --height 8 "python MyBot.py" "python oldBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 --seed 1543318434 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 64 --height 64 --seed 1543092533 "python MyBot.py" "python oldBot.py"'
-argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 64 --height 64 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python MyBot.py"'

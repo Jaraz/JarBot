@@ -47,6 +47,9 @@ TODO
 import logging
 #logging.basicConfig(level=logging.NOTSET)
 
+def shipConstructionLogic():
+    return 0
+
 def giveShipOrders(ship, currentOrders, collectingStop):
     # build ship status
     global GLOBAL_DEPO
@@ -87,7 +90,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     return status
 
 #resolve movement function
-def resolveMovement(ships, destinations, status, attackTargets):
+def resolveMovement(ships, destinations, status, attackTargets, previousDestination):
     nextTurnPosition = {}
     orderList = {}
     nextList = {}
@@ -97,34 +100,41 @@ def resolveMovement(ships, destinations, status, attackTargets):
     # tell me which direction everyone wants to go next turn    
     for ship in ships:
         # next move
-        #firstOrder = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
         firstOrder = game_map.get_safe_moves(ship.position, destinations[ship.id])
-        if not firstOrder: # if no safe moves just stay still
+        if not firstOrder: # if there is no safe move just stay still
             order = Direction.Still
         else: 
             random.shuffle(firstOrder)
             order = firstOrder[0]
             if len(firstOrder) > 1:
-                nextList[ship.id] = firstOrder[1] ### need to fix this 
+                nextList[ship.id] = firstOrder[1] 
         
         orderList[ship.id] = order
         
         # where next move takes us
         nextTurnPosition[ship.id] = game_map.normalize(ship.position + Position(*orderList[ship.id]))
+    logging.info("next turn direction {}".format(nextTurnPosition))
     
+    # Need to make sure no one crashes and we switch ship spots if possible
+    # Need to add ability to let high halite ships move first (let them drop off and get back to work!)
     # resolve movement make 2 passes
+    
+    # ideas
+    # i want to assign 10 ships to a destination, letting high halite ships have priority
+    
     useSecondBest = False
-    for x in range(3): # make 2 pases
+    for x in range(3): # make 3 pases
+        # check for each ship who it might crash with
         for ship in ships:
             for i in ships:
                 # check if you need a new move
                 # do we end up at the same spot + ensure its not ourselfs + don't choose another if sitting still + is enemy there
                 #logging.info("ship {} vs ship {} resolve! Checck1: {} vs {}; check3: {} vs {}".format(ship.id, i.id, nextTurnPosition[ship.id], nextTurnPosition[i.id], ship.position, destinations[ship.id]))
-                if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and ship.id != i.id and ship.position != destinations[ship.id]:
-                    # first try other unsafe moves, if empty just move so you don't bottleneck
-                    #nextBest = game_map.get_unsafe_moves(ship.position, destinations[ship.id])
-                    
-                    logging.info("Ship {} has an issue with {}".format(ship.id,i.id))
+                # let me know this ship is swappign next turn, we need this guy to move. let third ship wait
+                if nextTurnPosition[ship.id] == nextTurnPosition[i.id] and \
+                   ship.id != i.id and \
+                   ship.position != destinations[ship.id]:
+                   # logging.info("Ship {} has an issue with {}".format(ship.id,i.id))
                     
                     # if you have a second best move
                     if ship.id in nextList: 
@@ -136,8 +146,14 @@ def resolveMovement(ships, destinations, status, attackTargets):
                     # IF second best isn't available we need to switch to something random
                     if useSecondBest == True:
                         orderList[ship.id] = nextList[ship.id]
-                    else:
+                    # if conflict ship has not moved in two turns lets go around
+                    elif i.id not in previousDestination: # check if other ship is new
+                        orderList[ship.id] = Direction.Still
+                    # need to change this so ship doesn't go backwards
+                    elif previousDestination[i.id] == nextTurnPosition[i.id]: # we have no next best, lets move to the side, not behind us!!!
+                        # look at whats blocking us, compare to previous turn, if he was trhere before move to the side, if not pause a second
                         possibilities = list(map(game_map.normalize, ship.position.get_surrounding_cardinals()))
+                        
                         #logging.info("Ship {} surrounding cardinals {}".format(ship.id, possibilities))
                         logging.info("ship {} sees possiblities {} based on next turn {}".format(ship.id, possibilities, list(nextTurnPosition.values())))
                         possibilities = [x for x in possibilities if x not in list(nextTurnPosition.values())]
@@ -152,7 +168,8 @@ def resolveMovement(ships, destinations, status, attackTargets):
                             else:
                                 orderList[ship.id] = random.choice(newDirection)
                                 #logging.info("ship {} uses random new direction {}".format(ship.id, orderList[ship.id]))
-                        
+                    else:
+                        orderList[ship.id] = Direction.Still
                     useSecondBest = False
                     # new position
                     nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
@@ -303,6 +320,7 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 ship_status = {} # track what ships want to do
 ship_destination = {} # track where ships want to go
+ship_previous_destination = {} # keep track of past moves
 
 while True:
     game.update_frame()
@@ -339,7 +357,7 @@ while True:
         lookWidth = 15
         if game_map.width > 50:
             lookWidth = 15
-        nearAvg, nearStd = game_map.get_near_stats(ship.position, lookWidth)
+        #nearAvg, nearStd = game_map.get_near_stats(ship.position, lookWidth)
 
         targetSize = 100
 
@@ -348,7 +366,7 @@ while True:
         if game.turn_number < 10 and (game.game_map.width == 40 or game.game_map.width == 32):
             targetSize = nearAvg
         
-        logging.info("Ship {} nAvg P{} nStd {} gAvg {} gStd{}".format(ship.id, nearAvg, nearStd, game_map.averageHalite, game_map.stdDevHalite))
+        #logging.info("Ship {} nAvg P{} nStd {} gAvg {} gStd{}".format(ship.id, nearAvg, nearStd, game_map.averageHalite, game_map.stdDevHalite))
         
         if turns_left < 100 or game_map.averageHalite < 100:
             collectingStop = game_map.averageHalite
@@ -405,7 +423,7 @@ while True:
         liveShipStatus[ship.id] = ship_status[ship.id]
     shipsExploring = [me.get_ship(k) for k,v in liveShipStatus.items() if v == 'exploring']
 #    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploring, hChoice = 'linear')    
+    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploring, hChoice = 'sqrt')    
 #    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
 
     for ship in shipsExploring:
@@ -417,7 +435,8 @@ while True:
     ########################
     ### Resolve movement ###
     ########################
-    command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets)
+    command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets, ship_previous_destination)
+    ship_previous_destination = finalDestination
 
     # Ship spawn logic
     if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):

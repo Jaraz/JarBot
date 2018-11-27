@@ -98,8 +98,12 @@ class GameMap:
         self.totalHalite = 0
         self.haliteRegion = 0
         self.haliteData = [0] * (self.width * self.height)
-        self.npMap = np.zeros([self.width, self.height], dtype=np.int)
+        
+        # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
+        
+        # build numpy map
+        self.npMap = np.zeros([self.width, self.height], dtype=np.int)
         for y in range(self.height):
             for x in range(self.width):
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
@@ -126,6 +130,14 @@ class GameMap:
         elif isinstance(location, Entity):
             return self._cells[location.position.y][location.position.x]
         return None
+    
+    # basic logic if we should keep building ships
+    # should be a function of my ships, enemy ships, my halite, his halite
+    def shipBuild(self):
+        return 0
+    
+    def emptyShipMap(self):
+        self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
 
     def buildDistanceMatrix(self):
         '''
@@ -222,25 +234,37 @@ class GameMap:
         return np.mean(subMatrix), np.std(subMatrix)
     
     def matchShipsToDest2(self, ships, hChoice = 'sqrt'):
+        '''
+        The heart of JarBot
+        need to add penalty when another ship is on a spot already
+        '''
         distMatrix = np.zeros([len(ships), self.width*self.height])
+        
+        # remove taken spots from the solver
+        haliteMap = self.npMap - 1000 * self.shipMap
+        
         for i in range(len(ships)):
             if hChoice == 'sqrt':
-                h = -self.npMap / np.sqrt(2 * self.returnDistanceMatrix(ships[i].position))
+                h = -haliteMap / np.sqrt(self.returnDistanceMatrix(ships[i].position))
+            elif hChoice == 'sqrt2':
+                h = -haliteMap / np.sqrt(2 * self.returnDistanceMatrix(ships[i].position))
+            elif hChoice == 'fourthRoot':
+                h = -haliteMap / np.sqrt(np.sqrt(self.returnDistanceMatrix(ships[i].position)))
             elif hChoice == 'quad':
                 dist =  self.returnDistanceMatrix(ships[i].position)
-                h = -self.npMap / np.sqrt(dist * dist)
+                h = -haliteMap / dist * dist
             elif hChoice == 'linear':
                 dist =  self.returnDistanceMatrix(ships[i].position)
-                h = -self.npMap / np.sqrt(dist)
+                h = -haliteMap / dist
             elif hChoice == 'maxHalite':
-                h = -self.npMap         
+                h = -haliteMap         
             distMatrix[i,:] = h.ravel()
 
         # find closest destination
         row_ind, col_ind = optimize.linear_sum_assignment(distMatrix)
         #logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
         
-        # convert to ship
+        # convert to ship orders
         orders = {}
         for i in range(len(ships)):
             orders[ships[i].id] = Position(col_ind[i] % self.width,int(col_ind[i]/self.width))
