@@ -233,9 +233,103 @@ class GameMap:
         subMatrix = get_wrapped(self.npMap, source.x, source.y, width)
         return np.mean(subMatrix), np.std(subMatrix)
     
+    def findOptimalMoves(self, ships, destinations, dropoffs, status, enemyLocs):
+        '''
+        given a vector of ships and destinations will find optimal moves next turn
+        '''
+        turnMatrix = np.zeros([len(ships), self.width * self.height], dtype=np.int)
+        moveStatus = ["exploring","returning","returnSuicide", "attack"]
+        for i in range(len(ships)):
+            shipMap = np.zeros([self.width, self.height], dtype=np.int)       
+            halite = ships[i].halite_amount
+            shipID = ships[i].id
+            pos = ships[i].position
+            x = ships[i].position.x
+            y = ships[i].position.y
+            
+            # should we move
+            if status[ships[i].id] in moveStatus:
+                distToDest   = self.calculate_distance(pos,destinations[shipID])
+                
+                # logic
+                # 1 - for backwards move
+                # 2 = stay still
+                # halite otherwise
+                # if you are on dropoff you are VIP!
+                
+                # center
+                if pos in dropoffs:
+                    shipMap[y,x] = 1
+                    halite = 10000
+                else:
+                    shipMap[y,x] = 1
+                    
+                
+                
+                left = self.normalize(pos.directional_offset(Direction.West))
+                newDest = self.calculate_distance(left, destinations[shipID])
+                if left in enemyLocs:
+                    shipMap[(y) % self.width,(x-1) % self.height] = 0
+                elif newDest < distToDest: # moves us closer 
+                    shipMap[(y) % self.width,(x-1) % self.height] = halite
+                else:
+                    shipMap[(y) % self.width,(x-1) % self.height] = 2
+                #logging.info("left ship {} map {}".format(ships[i].id, shipMap))
+
+                right = self.normalize(pos.directional_offset(Direction.East))
+                newDest = self.calculate_distance(right, destinations[shipID])
+                if right in enemyLocs:
+                    shipMap[(y) % self.width,(x+1) % self.height] = 0
+                elif newDest < distToDest: # moves us closer 
+                    shipMap[(y) % self.width,(x+1) % self.height] = halite
+                else:
+                    shipMap[(y) % self.width,(x+1) % self.height] = 2
+                #logging.info("right ship {} map {}".format(ships[i].id, shipMap))
+                
+                up = self.normalize(pos.directional_offset(Direction.North))
+                newDest = self.calculate_distance(up, destinations[shipID])
+                if up in enemyLocs:
+                    shipMap[(y-1) % self.width,(x) % self.height] = 0
+                elif newDest < distToDest: # moves us closer 
+                    shipMap[(y-1) % self.width,(x) % self.height] = halite
+                else:
+                    shipMap[(y-1) % self.width,(x) % self.height] = 2
+                #logging.info("up ship {} map {}".format(ships[i].id, shipMap))
+                
+                down = self.normalize(pos.directional_offset(Direction.South))
+                newDest = self.calculate_distance(down, destinations[shipID])
+                if down in enemyLocs:
+                    shipMap[(y+1) % self.width,x % self.height] = 0
+                elif newDest < distToDest: # moves us closer 
+                    shipMap[(y+1) % self.width,x % self.height] = halite
+                else:
+                    shipMap[(y+1) % self.width,x % self.height] = 2
+            # or mine and stay still
+            else:
+                shipMap[y,x] = 100000
+            
+            turnMatrix[i,:] = shipMap.ravel()
+            #logging.info("ship {} map {}".format(ships[i].id, shipMap))
+
+        # solve for correct moves
+        row_ind, col_ind = optimize.linear_sum_assignment(-turnMatrix)
+        #logging.info("turnMatrix {}, row {}, col {}".format(turnMatrix, row_ind, col_ind))
+        
+        # convert to ship orders
+        orders = {}
+        for i in range(len(ships)):
+            pos = ships[i].position
+            nextMove = Position(col_ind[i] % self.width, int(col_ind[i]/self.width))
+            #logging.info("ship {} next move to {}".format(ships[i].id, nextMove))
+            if nextMove == pos:
+                orders[ships[i].id] = Direction.Still
+            else:
+                orders[ships[i].id] = self.get_unsafe_moves(pos, nextMove)[0]
+        return orders
+    
     def matchShipsToDest2(self, ships, hChoice = 'sqrt'):
         '''
-        The heart of JarBot
+        The eyes of JarBot
         need to add penalty when another ship is on a spot already
         '''
         distMatrix = np.zeros([len(ships), self.width*self.height])
