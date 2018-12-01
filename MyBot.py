@@ -60,7 +60,10 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
             turnsLeft > turnStopBuilding and \
             playerShips[0] < playerShips[1]:
             buildShip = True
-    
+        elif playerScores[0] > playerScores[1] and \
+            turnsLeft > turnStopBuilding + 50:
+            buildShip = True
+        
     return buildShip
 
 def giveShipOrders(ship, currentOrders, collectingStop):
@@ -82,6 +85,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = 'build depo'
         GLOBAL_DEPO += 1
         GLOBAL_DEPO_BUILD_OK = False
+    elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
+        status = 'mining'
     elif min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= turns_left - SUICIDE_TURN_FLAG:
         status = "returnSuicide"
     elif currentOrders == "returning":
@@ -116,6 +121,10 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
     enemyLoc = []
     for enemy in game.enemyShips:
         enemyLoc.append(enemy.position)
+    #logging.info("enemyLoc {} and adj {}".format(game.enemyShips, game.adjEnemyShips))    
+    if len(game.players) > 3:
+        enemyLoc.extend(game.adjEnemyShips)
+    
     
     logging.info("ships {} *** dest {} *** dropoffs {}".format(ships, destinations, dropoffs))
     orderList = game_map.findOptimalMoves(ships, destinations, dropoffs, status, enemyLoc)
@@ -350,10 +359,23 @@ while True:
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets, ship_previous_destination)
     ship_previous_destination = finalDestination
 
-    # Ship spawn logic
-    if game.turn_number <= shipBuildingTurns and me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()):
+    ########################
+    ### Ship Build Logic ###
+    ########################
+    buildLogic = False
+    if game.turn_number <= shipBuildingTurns:
+        buildLogic = True
+    else:
+        buildLogic = shipConstructionLogic(game.playerScores, game.shipCountList, game_map.totalHalite, turns_left)
+        if buildLogic and me.halite_amount >= 5000:
+            buildLogic = True
+            logging.info("extra ship!")
+    
+    if me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()) and buildLogic:
         command_queue.append(me.shipyard.spawn())
 
     # Send your moves back to the game environment, ending this turn.
     game.end_turn(command_queue)
+
+
 

@@ -26,6 +26,9 @@ class Player:
         :return: Returns all ship objects in a list
         """
         return list(self._ships.values())
+    
+    def get_ship_count(self):
+        return len(self._ships)
 
     def get_dropoff(self, dropoff_id):
         """

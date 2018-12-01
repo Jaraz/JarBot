@@ -39,6 +39,7 @@ class Game:
         self.haliteHistory = [self.game_map.totalHalite]
         self.allShips = None
         self.enemyShips = None
+        self.shipCountList = None
         
     def ready(self, name):
         """
@@ -77,13 +78,23 @@ class Game:
         
         # Update enemy ships and all ships
         self.enemyShips = []
+        self.playerScores = []
+        self.playerScores.append(self.me.halite_amount)
+        
+        self.shipCountList = []
+        self.shipCountList.append(self.me.get_ship_count())
         for player in self.players:
             for i in self.players[player].get_ships():
                 self.game_map[i.position].occupado = True
             if player != self.me.id:
+                self.playerScores.append(self.players[player].halite_amount)
+                self.shipCountList.append(self.players[player].get_ship_count())
                 self.enemyShips.extend(self.players[player].get_ships())
+        
+        self.adjEnemyShips = []
         for i in self.enemyShips:
             self.game_map[i.position].mark_enemy_ship(i)
+
             #logging.info("Enemy identified {}".format(i))
             
             # ship info
@@ -91,10 +102,21 @@ class Game:
                 
             # guess enemy movement, skip if he is on a lot of halite and empty
             if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite:
-                self.game_map[self.game_map.normalize(i.position + Position(1,0))].mark_enemy_ship(i)
-                self.game_map[self.game_map.normalize(i.position + Position(0,1))].mark_enemy_ship(i)
-                self.game_map[self.game_map.normalize(i.position + Position(-1,0))].mark_enemy_ship(i)
-                self.game_map[self.game_map.normalize(i.position + Position(0,-1))].mark_enemy_ship(i)
+                east = self.game_map.normalize(i.position + Position(1,0))
+                self.game_map[east].mark_enemy_ship(i)
+                self.adjEnemyShips.append(east)
+                
+                south = self.game_map.normalize(i.position + Position(0,1))
+                self.game_map[south].mark_enemy_ship(i)
+                self.adjEnemyShips.append(south)
+                
+                west = self.game_map.normalize(i.position + Position(-1,0))
+                self.game_map[west].mark_enemy_ship(i)
+                self.adjEnemyShips.append(west)
+                
+                north = self.game_map.normalize(i.position + Position(0,-1))
+                self.game_map[north].mark_enemy_ship(i)
+                self.adjEnemyShips.append(north)
                 
 
     @staticmethod
