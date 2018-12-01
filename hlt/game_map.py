@@ -99,6 +99,7 @@ class GameMap:
         self.totalHalite = 0
         self.haliteRegion = 0
         self.haliteData = [0] * (self.width * self.height)
+        self.turnsLeft = 500
         
         # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
@@ -250,8 +251,14 @@ class GameMap:
         issueList = []
         issueFlag = True
         loopCounter = 1
+        maxLoop = 4
+        if self.width > 60:
+            maxLoop = 3
+            if self.turnsLeft <30:
+                maxLoop = 2
+        
 
-        while issueFlag and loopCounter <4:
+        while issueFlag and loopCounter < maxLoop:
             for i in range(len(ships)):
                 shipMap = np.zeros([self.width, self.height], dtype=np.int)       
                 halite = ships[i].halite_amount

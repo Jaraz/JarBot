@@ -57,11 +57,17 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     # 2 player logic
     if len(playerScores) == 2:
         if playerScores[0] > playerScores[1] and \
-            turnsLeft > turnStopBuilding and \
-            playerShips[0] < playerShips[1]:
+            playerShips[0] < playerShips[1] and \
+            (turnsLeft > turnStopBuilding or (turnsLeft > turnStopBuilding-25 and game_map.averageHalite > 130)):
             buildShip = True
         elif playerScores[0] > playerScores[1] and \
-            turnsLeft > turnStopBuilding + 50:
+            turnsLeft > turnStopBuilding + 25 and \
+            game_map.averageHalite > 80:
+            buildShip = True
+        elif playerScores[0] - 3000 < playerScores[1] and \
+            turnsLeft > turnStopBuilding + 25 and \
+            game_map.averageHalite > 100 and \
+            playerShips[0] < playerShips[1] + 4:
             buildShip = True
         
     return buildShip
@@ -171,19 +177,24 @@ logging.info("map size: {}, max turns: {}".format(game.game_map.width, constants
 
 ### Logic for ship building turns ###
 if game.game_map.width > 60:
-    shipBuildingTurns = 250
+    shipBuildingTurns = 150
     RADAR_MAX = 12
     DEPO_HALITE += 25
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 3
-    collectingStop = 70
+    collectingStop = 60
 elif game.game_map.width > 50:
-    shipBuildingTurns = 225
+    shipBuildingTurns = 150
     DEPO_DISTANCE  = 20
-elif game.game_map.width > 39:
-    shipBuildingTurns = 200
+elif game.game_map.width > 41:
+    shipBuildingTurns = 150
     collectingStop= 50
+    DEPO_DISTANCE  = 16
+elif game.game_map.width > 39:
+    shipBuildingTurns = 175
+    collectingStop= 50
+    DEPO_DISTANCE  = 16
 elif game.game_map.width < 40 and game.game_map.totalHalite < 160000:
     shipBuildingTurns = 155
     collectingStop = 50
@@ -251,6 +262,7 @@ while True:
     attack_targets = {} # make sure we don't double target
     START_TURN_DEPO = GLOBAL_DEPO
     turns_left = (constants.MAX_TURNS - game.turn_number)
+    game_map.turnsLeft = turns_left
     GLOBAL_DEPO_BUILD_OK = True # only build one depo per turn
 
     if game.turn_number > 11:
@@ -366,8 +378,8 @@ while True:
     if game.turn_number <= shipBuildingTurns:
         buildLogic = True
     else:
-        buildLogic = shipConstructionLogic(game.playerScores, game.shipCountList, game_map.totalHalite, turns_left)
-        if buildLogic and me.halite_amount >= 5000:
+        logicCheck = shipConstructionLogic(game.playerScores, game.shipCountList, game_map.totalHalite, turns_left)
+        if logicCheck and me.halite_amount >= 5000:
             buildLogic = True
             logging.info("extra ship!")
     
