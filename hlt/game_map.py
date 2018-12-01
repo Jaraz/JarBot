@@ -109,9 +109,9 @@ class GameMap:
             for x in range(self.width):
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.npMapDistance = self.buildDistanceMatrix()
-        logging.info("np map {}".format(self.npMap))
-        logging.info("np dist {}".format(self.npMapDistance))
-        logging.info("test1 {}".format(self.returnDistanceMatrix(Position(0,2))))
+        #logging.info("np map {}".format(self.npMap))
+        #logging.info("np dist {}".format(self.npMapDistance))
+        #logging.info("test1 {}".format(self.returnDistanceMatrix(Position(0,2))))
 
 
         self.totalHalite = np.sum(self.npMap)
@@ -243,119 +243,149 @@ class GameMap:
         shipPosList = []
         for ship in ships:
             shipPosList.append(ship.position)
-            
-        for i in range(len(ships)):
-            shipMap = np.zeros([self.width, self.height], dtype=np.int)       
-            halite = ships[i].halite_amount
-            if halite < 10:
-                halite = 10
-            shipID = ships[i].id
-            pos = ships[i].position
-            x = ships[i].position.x
-            y = ships[i].position.y
-            
-            # should we move
-            if status[ships[i].id] in moveStatus:
-                distToDest   = self.calculate_distance(pos,destinations[shipID])
-                leftOnly = False
-                rightOnly = False
-                upOnly = False
-                downOnly = False
+        
+        issueList = []
+        issueFlag = True
+        loopCounter = 1
+
+        while issueFlag and loopCounter <2:
+            for i in range(len(ships)):
+                shipMap = np.zeros([self.width, self.height], dtype=np.int)       
+                halite = ships[i].halite_amount
+                if halite < 10:
+                    halite = 10
+                shipID = ships[i].id
+                pos = ships[i].position
+                x = ships[i].position.x
+                y = ships[i].position.y
                 
-                # logic
-                # 1 - for backwards move
-                # 2 = stay still
-                # halite otherwise
-                # if you are on dropoff you are VIP!
-                
-                # Need to get ships off dropoffs
-                if pos in dropoffs:
-                    shipMap[y,x] = 1
-                    halite = 10000
-                # encourage to stay if target destination is empty right now
-                elif destinations[shipID] not in shipPosList:
-                    shipMap[y,x] = 6
-                else: 
-                    shipMap[y,x] = 1
+                # should we move
+                if status[ships[i].id] in moveStatus:
+                    distToDest   = self.calculate_distance(pos,destinations[shipID])
+                    leftOnly = False
+                    rightOnly = False
+                    upOnly = False
+                    downOnly = False
                     
-                # is goal directly n,s,e,w?
-                left = self.normalize(pos.directional_offset(Direction.West))
-                leftDist = self.calculate_distance(left, destinations[shipID])                
-                right = self.normalize(pos.directional_offset(Direction.East))
-                rightDist = self.calculate_distance(right, destinations[shipID])                
-                up = self.normalize(pos.directional_offset(Direction.North))
-                upDist = self.calculate_distance(up, destinations[shipID])
-                down = self.normalize(pos.directional_offset(Direction.South))
-                downDist = self.calculate_distance(down, destinations[shipID])
-
-                # Directions
-                if leftDist < distToDest and upDist > distToDest and downDist > distToDest:
-                    leftOnly = True
-                elif upDist < distToDest and rightDist > distToDest and leftDist > distToDest:
-                    upOnly = True
-                elif rightDist < distToDest and upDist > distToDest and downDist > distToDest:
-                    rightOnly = True
-                elif downDist < distToDest and rightDist > distToDest and leftDist > distToDest:
-                    downOnly = True
-
-                # need to add logic to sit still if ship just moved in front
-
-                if status[shipID] == "attack" and left in enemyLocs:
-                    shipMap[(y) % self.width,(x-1) % self.height] = 10000
-                elif left in enemyLocs:
-                    shipMap[(y) % self.width,(x-1) % self.height] = 0
-                elif leftDist < distToDest: # moves us closer 
-                    shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
-                elif upOnly or downOnly:
-                    shipMap[(y) % self.width,(x-1) % self.height] = 3 + random.randint(1,2)
+                    # logic
+                    # 1 - for backwards move
+                    # 2 = stay still
+                    # halite otherwise
+                    # if you are on dropoff you are VIP!
+                    
+                    # Need to get ships off dropoffs
+                    if pos in dropoffs:
+                        shipMap[y,x] = 1
+                        halite = 10000
+                    # needs safety
+                    elif shipID in issueList:
+                        logging.info("ship {} trying to survive".format(shipID))
+                        halite = 10000
+                        shipMap[y,x] = 10000
+                    # encourage to stay if target destination is empty right now
+                    elif destinations[shipID] not in shipPosList:
+                        shipMap[y,x] = 6
+                    else: 
+                        shipMap[y,x] = 1
+                        
+                    # is goal directly n,s,e,w?
+                    left = self.normalize(pos.directional_offset(Direction.West))
+                    leftDist = self.calculate_distance(left, destinations[shipID])                
+                    right = self.normalize(pos.directional_offset(Direction.East))
+                    rightDist = self.calculate_distance(right, destinations[shipID])                
+                    up = self.normalize(pos.directional_offset(Direction.North))
+                    upDist = self.calculate_distance(up, destinations[shipID])
+                    down = self.normalize(pos.directional_offset(Direction.South))
+                    downDist = self.calculate_distance(down, destinations[shipID])
+    
+                    # Directions
+                    if leftDist < distToDest and upDist > distToDest and downDist > distToDest:
+                        leftOnly = True
+                    elif upDist < distToDest and rightDist > distToDest and leftDist > distToDest:
+                        upOnly = True
+                    elif rightDist < distToDest and upDist > distToDest and downDist > distToDest:
+                        rightOnly = True
+                    elif downDist < distToDest and rightDist > distToDest and leftDist > distToDest:
+                        downOnly = True
+    
+                    # need to add logic to sit still if ship just moved in front
+    
+                    if status[shipID] == "attack" and left in enemyLocs:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 10000
+                    elif left in enemyLocs:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 0
+                    elif leftDist < distToDest: # moves us closer 
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
+                    elif shipID in issueList:
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
+                    elif upOnly or downOnly:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 2
+                    #logging.info("left ship {} map {}".format(ships[i].id, shipMap))
+    
+                    if status[shipID] == "attack" and right in enemyLocs:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 10000
+                    elif right in enemyLocs:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 0
+                    elif rightDist < distToDest: # moves us closer 
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
+                    elif upOnly or downOnly:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 2
+                    #logging.info("right ship {} map {}".format(ships[i].id, shipMap))
+                    
+                    if status[shipID] == "attack" and up in enemyLocs:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 10000
+                    elif up in enemyLocs:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 0
+                    elif upDist < distToDest: # moves us closer 
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
+                    elif rightOnly or leftOnly:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 2
+                    #logging.info("up ship {} map {}".format(ships[i].id, shipMap))
+    
+                    if status[shipID] == "attack" and down in enemyLocs:
+                        shipMap[(y+1) % self.width,x % self.height] = 10000
+                    elif down in enemyLocs:
+                        shipMap[(y+1) % self.width,x % self.height] = 0
+                    elif downDist < distToDest: # moves us closer 
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
+                    elif rightOnly or leftOnly:
+                        shipMap[(y+1) % self.width,x % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y+1) % self.width,x % self.height] = 2
+                # or mine and stay still
                 else:
-                    shipMap[(y) % self.width,(x-1) % self.height] = 2
-                #logging.info("left ship {} map {}".format(ships[i].id, shipMap))
-
-                if status[shipID] == "attack" and right in enemyLocs:
-                    shipMap[(y) % self.width,(x+1) % self.height] = 10000
-                elif right in enemyLocs:
-                    shipMap[(y) % self.width,(x+1) % self.height] = 0
-                elif rightDist < distToDest: # moves us closer 
-                    shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
-                elif upOnly or downOnly:
-                    shipMap[(y) % self.width,(x+1) % self.height] = 3 + random.randint(1,2)
-                else:
-                    shipMap[(y) % self.width,(x+1) % self.height] = 2
-                #logging.info("right ship {} map {}".format(ships[i].id, shipMap))
+                    shipMap[y,x] = 100000
                 
-                if status[shipID] == "attack" and up in enemyLocs:
-                    shipMap[(y-1) % self.width,(x) % self.height] = 10000
-                elif up in enemyLocs:
-                    shipMap[(y-1) % self.width,(x) % self.height] = 0
-                elif upDist < distToDest: # moves us closer 
-                    shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
-                elif rightOnly or leftOnly:
-                    shipMap[(y-1) % self.width,(x) % self.height] = 3 + random.randint(1,2)
-                else:
-                    shipMap[(y-1) % self.width,(x) % self.height] = 2
-                #logging.info("up ship {} map {}".format(ships[i].id, shipMap))
-
-                if status[shipID] == "attack" and down in enemyLocs:
-                    shipMap[(y+1) % self.width,x % self.height] = 10000
-                elif down in enemyLocs:
-                    shipMap[(y+1) % self.width,x % self.height] = 0
-                elif downDist < distToDest: # moves us closer 
-                    shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
-                elif rightOnly or leftOnly:
-                    shipMap[(y+1) % self.width,x % self.height] = 3 + random.randint(1,2)
-                else:
-                    shipMap[(y+1) % self.width,x % self.height] = 2
-            # or mine and stay still
-            else:
-                shipMap[y,x] = 100000
+                turnMatrix[i,:] = shipMap.ravel()
+                #logging.info("ship {} map {}".format(ships[i].id, shipMap))
+    
+            # solve for correct moves
+            row_ind, col_ind = optimize.linear_sum_assignment(-turnMatrix)
+            #logging.info("row {}, col {}".format(row_ind, col_ind))
             
-            turnMatrix[i,:] = shipMap.ravel()
-            #logging.info("ship {} map {}".format(ships[i].id, shipMap))
-
-        # solve for correct moves
-        row_ind, col_ind = optimize.linear_sum_assignment(-turnMatrix)
-        logging.info("turnMatrix {}, row {}, col {}".format(turnMatrix, row_ind, col_ind))
+            # look for issues
+            issueFlag = False
+            aroundList = self.get_surrounding_cardinals(Position(0,0),1)
+            for i in range(len(ships)):
+                if col_ind[i] == 0 and ships[i].position not in aroundList:
+                    issueList.append(ships[i].id)
+                    issueFlag = True
+                    #logging.info("ship {} in danger".format(ships[i].id))
+            
+            loopCounter += 1
+                
         
         # convert to ship orders
         orders = {}

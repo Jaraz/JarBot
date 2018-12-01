@@ -73,7 +73,7 @@ class Game:
             for dropoff in player.get_dropoffs():
                 self.game_map[dropoff.position].structure = dropoff
 
-        logging.info("Ship locations {}".format(self.game_map.shipMap))
+        #logging.info("Ship locations {}".format(self.game_map.shipMap))
         
         # Update enemy ships and all ships
         self.enemyShips = []
@@ -84,7 +84,7 @@ class Game:
                 self.enemyShips.extend(self.players[player].get_ships())
         for i in self.enemyShips:
             self.game_map[i.position].mark_enemy_ship(i)
-            logging.info("Enemy identified {}".format(i))
+            #logging.info("Enemy identified {}".format(i))
             
             # ship info
             haliteAtEnemy = self.game_map[i.position].halite_amount

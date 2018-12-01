@@ -99,7 +99,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "exploring"
     else:
         status = 'exploring'
-    logging.info("ship {} status is {}".format(ship.id, status))
+    #logging.info("ship {} status is {}".format(ship.id, status))
     return status
 
 #resolve movement function
@@ -168,6 +168,7 @@ if game.game_map.width > 60:
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 3
+    collectingStop = 70
 elif game.game_map.width > 50:
     shipBuildingTurns = 225
     DEPO_DISTANCE  = 20
