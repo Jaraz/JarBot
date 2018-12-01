@@ -9,14 +9,11 @@ import numpy as np
 from scipy import optimize
 from scipy.spatial import distance
 
-def neighbors(node):
-    moves = [[1,0],[0,1],[-1,0],[0,-1]]
-    results = []
-    for move in moves:
-        results.append([move[0] + node[0],move[1] + node[1]])
-    return results
+a = np.array([[4, 1, 1, 2, 0, 0, 4],
+              [3, 4, 3, 1, 4, 0, 4],
+              [1, 4, 3, 1, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0],
+              [0, 4, 4, 0, 4, 0, 3]])
 
-nodes = []
-for i in range(8):
-    for j in range(8):
-        nodes.append([i,j])
+test = a[:, ~np.all(a == 0, axis = 0)]
+print(test)

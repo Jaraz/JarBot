@@ -119,6 +119,9 @@ class GameMap:
         self.stdDevHalite = np.std(self.npMap)
         logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
 
+        # setup row column labels to keep track of positions later
+        
+
     def __getitem__(self, location):
         """
         Getter for position object or entity objects within the game map
@@ -248,7 +251,7 @@ class GameMap:
         issueFlag = True
         loopCounter = 1
 
-        while issueFlag and loopCounter <2:
+        while issueFlag and loopCounter <4:
             for i in range(len(ships)):
                 shipMap = np.zeros([self.width, self.height], dtype=np.int)       
                 halite = ships[i].halite_amount
@@ -391,7 +394,20 @@ class GameMap:
         orders = {}
         for i in range(len(ships)):
             pos = ships[i].position
-            nextMove = Position(col_ind[i] % self.width, int(col_ind[i]/self.width))
+            
+            crashLand = False
+            dropOffTarget = None
+            # help crash at the end
+            if status[ships[i].id] == "returnSuicide":
+                surrounding = ships[i].position.get_surrounding_cardinals()
+                for j in dropoffs:
+                        if j in surrounding:
+                            crashLand = True
+                            dropOffTarget = j
+            if crashLand == False:
+                nextMove = Position(col_ind[i] % self.width, int(col_ind[i]/self.width))
+            else:
+                nextMove = dropOffTarget
             #logging.info("ship {} next move to {}".format(ships[i].id, nextMove))
             if nextMove == pos:
                 orders[ships[i].id] = Direction.Still
@@ -404,7 +420,7 @@ class GameMap:
         The eyes of JarBot
         need to add penalty when another ship is on a spot already
         '''
-        distMatrix = np.zeros([len(ships), self.width*self.height])
+        distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         
         # remove taken spots from the solver
         haliteMap = self.npMap - 1000 * self.shipMap
