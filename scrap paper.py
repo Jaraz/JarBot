@@ -15,5 +15,11 @@ a = np.array([[4, 1, 1, 2, 0, 0, 4],
               [0, 0, 0, 0, 0, 0, 0],
               [0, 4, 4, 0, 4, 0, 3]])
 
-test = a[:, ~np.all(a == 0, axis = 0)]
-print(test)
+q = np.array([2,4,0,5,8,0,5])
+b = np.random.randint(10,size=[5,7])
+b[a==0]=0
+print(b)
+q = q[q!=0]
+print(q)
+#test = a[:, ~np.all(a == 0, axis = 0)]
+#print(test)

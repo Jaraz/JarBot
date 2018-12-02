@@ -13,6 +13,7 @@ from hlt import constants
 # This library contains direction metadata to better interface with the game.
 from hlt.positionals import Direction
 from hlt.positionals import Position
+import timeit
 
 # This library allows you to generate random numbers.
 # import random
@@ -132,7 +133,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
         enemyLoc.extend(game.adjEnemyShips)
     
     
-    logging.info("ships {} *** dest {} *** dropoffs {}".format(ships, destinations, dropoffs))
+    #logging.info("ships {} *** dest {} *** dropoffs {}".format(ships, destinations, dropoffs))
     orderList = game_map.findOptimalMoves(ships, destinations, dropoffs, status, enemyLoc)
 
     # issue final order
@@ -145,7 +146,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
             finalOrder.append(ship.move(orderList[ship.id]))
         nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
         
-    logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
+    #logging.info("order list {}, next turn pos{}".format(orderList, nextTurnPosition))
     return finalOrder, nextTurnPosition
 
 
@@ -182,7 +183,7 @@ if game.game_map.width > 60:
     DEPO_HALITE += 25
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
-    MAX_DEPO = 3
+    MAX_DEPO = 4
     collectingStop = 60
 elif game.game_map.width > 50:
     shipBuildingTurns = 150
@@ -255,7 +256,9 @@ ship_destination = {} # track where ships want to go
 ship_previous_destination = {} # keep track of past moves
 
 while True:
+    start_time = timeit.default_timer()
     game.update_frame()
+    logging.info("updateFrame {}".format(timeit.default_timer() - start_time))
     me = game.me
     game_map = game.game_map
     ship_destination = {} # reset destinations
@@ -350,6 +353,8 @@ while True:
 
     # Test movement 2.0
     # ships set to explore
+    start_time = timeit.default_timer()
+
     liveShips = me.get_ships()
     liveShipStatus = {}
     for ship in liveShips:
@@ -361,15 +366,18 @@ while True:
 
     for ship in shipsExploring:
         ship_destination[ship.id] = testOrders[ship.id]
-    logging.info("final orders {}".format(ship_destination))
+    logging.info("choose destinations {}".format(timeit.default_timer() - start_time))
+    #logging.info("final orders {}".format(ship_destination))
     
 
 
     ########################
     ### Resolve movement ###
     ########################
+    start_time = timeit.default_timer()
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets, ship_previous_destination)
     ship_previous_destination = finalDestination
+    logging.info("resolve destinations {}".format(timeit.default_timer() - start_time))
 
     ########################
     ### Ship Build Logic ###
