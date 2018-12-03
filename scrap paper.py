@@ -21,5 +21,6 @@ b[a==0]=0
 print(b)
 q = q[q!=0]
 print(q)
-#test = a[:, ~np.all(a == 0, axis = 0)]
-#print(test)
+meanRes = a.mean(axis=0)
+test = a[:,meanRes>1]
+print(test)

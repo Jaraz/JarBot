@@ -395,10 +395,15 @@ while True:
                 ship_order_refreshrate[ship.id] = True
     else:
         shipsExploringFinal = shipsExploring
+        
+    if game_map.width > 60:
+        minHaliteSize = -10
+    else:
+        minHaliteSize = 0
     
     #logging.info("final {}".format(shipsExploringFinal))
 #    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, hChoice = 'sqrt')    
+    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, minHaliteSize, hChoice = 'sqrt')    
 #    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
 
     for ship in shipsExploring:

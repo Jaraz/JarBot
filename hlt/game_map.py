@@ -479,7 +479,7 @@ class GameMap:
                             dropOffTarget = j
             if crashLand == False:
                 nextMove = Position(matrixLabelsFinal[col_ind[i]] % self.width, int(matrixLabelsFinal[col_ind[i]]/self.width))
-                logging.info("ship {} to {}".format(ships[i].id, nextMove))
+                #logging.info("ship {} to {}".format(ships[i].id, nextMove))
             else:
                 nextMove = dropOffTarget
             #logging.info("ship {} next move to {}".format(ships[i].id, nextMove))
@@ -489,10 +489,11 @@ class GameMap:
                 orders[ships[i].id] = self.get_unsafe_moves(pos, nextMove)[0]
         return orders
     
-    def matchShipsToDest2(self, ships, hChoice = 'sqrt'):
+    def matchShipsToDest2(self, ships, minHalite= 0, hChoice = 'sqrt'):
         '''
         The eyes of JarBot
         need to add penalty when another ship is on a spot already
+        halite excluded form search if its below minHalite
         '''
         distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         
@@ -518,17 +519,34 @@ class GameMap:
                 h = -haliteMap         
             distMatrix[i,:] = h.ravel()
 
+        if self.width >2 and len(distMatrix)>0:
+            # shrink targets
+            matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
+            columnHaliteMean = distMatrix.mean(axis=0)
+            #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
+            #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
+            #logging.info("mean {}".format(columnHaliteMean))
+            trueFalseFlag = columnHaliteMean < minHalite
+            matrixLabelsFinal = matrixLabels[trueFalseFlag]
+            #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
+            #logging.info("mlabel reduced {} - len {}".format(matrixLabelsFinal, len(matrixLabelsFinal)))
+                
+            solveMatrix = distMatrix[:,trueFalseFlag]
+            #logging.info("dist {} - len {}".format(solveMatrix, solveMatrix.shape))
+        else:
+            solveMatrix = distMatrix
+            matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
+            matrixLabelsFinal = matrixLabels
+
         # find closest destination
-        start_time = timeit.default_timer()
         distMatrix = distMatrix.astype(np.int, copy=False)
-        row_ind, col_ind = optimize.linear_sum_assignment(distMatrix)
-        logging.info("linear sum assignment time {}".format(timeit.default_timer() - start_time))
+        row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
         #logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
         
         # convert to ship orders
         orders = {}
         for i in range(len(ships)):
-            orders[ships[i].id] = Position(col_ind[i] % self.width,int(col_ind[i]/self.width))
+            orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
         return row_ind, col_ind, orders
     
     def matchShipsToDest(self, ships, destinations):
