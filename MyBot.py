@@ -188,10 +188,12 @@ if game.game_map.width > 60:
 elif game.game_map.width > 50:
     shipBuildingTurns = 150
     DEPO_DISTANCE  = 20
+    MAX_DEPO = 3
 elif game.game_map.width > 41:
     shipBuildingTurns = 150
     collectingStop= 50
     DEPO_DISTANCE  = 16
+    MAX_DEPO = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 175
     collectingStop= 50
@@ -253,7 +255,9 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 
 ship_status = {} # track what ships want to do
 ship_destination = {} # track where ships want to go
-ship_previous_destination = {} # keep track of past moves
+ship_previous_destination = {} # keep track of past 
+ship_previous_status = {}
+ship_order_refreshrate = {}
 
 while True:
     start_time = timeit.default_timer()
@@ -357,15 +361,52 @@ while True:
 
     liveShips = me.get_ships()
     liveShipStatus = {}
+    shipsExploringFinal = []
+    
     for ship in liveShips:
         liveShipStatus[ship.id] = ship_status[ship.id]
+        if ship.id not in ship_order_refreshrate:
+            ship_order_refreshrate[ship.id] = False
+            
     shipsExploring = [me.get_ship(k) for k,v in liveShipStatus.items() if v == 'exploring']
+    #logging.info("ship refresh {}".format(ship_order_refreshrate))
+    for ship in ship_order_refreshrate:
+        if ship_order_refreshrate[ship] == True:
+            #logging.info("ship {} set to false".format(ship))
+            ship_order_refreshrate[ship] = False
+        else:
+            #logging.info("ship {} set to true".format(ship))
+            ship_order_refreshrate[ship] = True
+    
+    #if turns_left < 400:
+    #    print("hello world")
+    
+    if game_map.width > 70:
+        for ship in shipsExploring:
+            #logging.info("ship {}".format(ship))
+            if ship.id not in ship_previous_status:
+                shipsExploringFinal.append(ship)
+                ship_order_refreshrate[ship.id] = True
+            elif ship_previous_status[ship.id] != 'exploring':
+                shipsExploringFinal.append(ship)
+                ship_order_refreshrate[ship.id] = True
+            elif ship_order_refreshrate[ship.id] == True:
+                shipsExploringFinal.append(ship)   
+                ship_order_refreshrate[ship.id] = True
+    else:
+        shipsExploringFinal = shipsExploring
+    
+    #logging.info("final {}".format(shipsExploringFinal))
 #    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploring, hChoice = 'sqrt')    
+    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, hChoice = 'sqrt')    
 #    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
 
     for ship in shipsExploring:
-        ship_destination[ship.id] = testOrders[ship.id]
+        if ship.id in testOrders:
+            ship_destination[ship.id] = testOrders[ship.id]
+        else:
+            ship_destination[ship.id] = ship_previous_destination[ship.id]
+    #logging.info("ship destiantions {} ---- {}".format(testOrders, ship_destination))
     logging.info("choose destinations {}".format(timeit.default_timer() - start_time))
     #logging.info("final orders {}".format(ship_destination))
     
@@ -376,7 +417,8 @@ while True:
     ########################
     start_time = timeit.default_timer()
     command_queue, finalDestination = resolveMovement(me.get_ships(), ship_destination, ship_status, attack_targets, ship_previous_destination)
-    ship_previous_destination = finalDestination
+    ship_previous_destination = ship_destination
+    ship_previous_status = ship_status
     logging.info("resolve destinations {}".format(timeit.default_timer() - start_time))
 
     ########################

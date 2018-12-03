@@ -294,18 +294,20 @@ class GameMap:
         for ship in ships:
             shipPosList.append(ship.position)
         
-        issueList = []
         issueFlag = True
         loopCounter = 1
-        maxLoop = 2
+        issueList = []
+        maxLoop = 5
         if self.width > 60:
-            maxLoop = 2
+            maxLoop = 3
             if self.turnsLeft <30:
-                maxLoop = 2
+                maxLoop = 3
         
 
         while issueFlag and loopCounter < maxLoop:
             logging.info("loop {}".format(loopCounter))
+            logging.info("issue list {}".format(issueList))
+
             for i in range(len(ships)):
                 shipMap = np.zeros([self.width, self.height], dtype=np.int)       
                 halite = ships[i].halite_amount
@@ -440,19 +442,23 @@ class GameMap:
             
             solveMatrix = turnMatrix[:, ~np.all(turnMatrix == 0, axis = 0)]
             matrixLabelsFinal = matrixLabels[turnColumnSum!=0]
-            #logging.info("turncol {} \n matrixLabel {} \n turnMatrix {} \n solveMatrix {}".format(turnColumnSum, matrixLabelsFinal, turnMatrix, solveMatrix))
+            #logging.info("matrixLabel {}".format(matrixLabelsFinal))
             
+            #logging.info("solve matrix {}".format(solveMatrix))
             row_ind, col_ind = optimize.linear_sum_assignment(-solveMatrix)
-            #logging.info("row {}, col {}".format(row_ind, col_ind))
+            #logging.info("row ind {} ---- col_ind {}".format(row_ind, col_ind))
             
-            # look for issues
+            # check each position to make sure solution is possible if not you have an issue
+            
+            #logging.info("around list {}".format(aroundList))
             issueFlag = False
-            aroundList = self.get_surrounding_cardinals(Position(0,0),1)
             for i in range(len(ships)):
-                if col_ind[i] == 0 and ships[i].position not in aroundList:
+                posCheck = Position(matrixLabelsFinal[col_ind[i]] % self.width, int(matrixLabelsFinal[col_ind[i]]/self.width))
+                aroundList = self.get_surrounding_cardinals(posCheck,1)
+                if ships[i].position not in aroundList:
                     issueList.append(ships[i].id)
                     issueFlag = True
-                    #logging.info("ship {} in danger".format(ships[i].id))
+                    logging.info("ship {} in danger".format(ships[i].id))
             
             loopCounter += 1
                 
@@ -471,10 +477,9 @@ class GameMap:
                         if j in surrounding:
                             crashLand = True
                             dropOffTarget = j
-            if status[ships[i].id] == "mining":
-                nextMove = ships[i].position
-            elif crashLand == False:
+            if crashLand == False:
                 nextMove = Position(matrixLabelsFinal[col_ind[i]] % self.width, int(matrixLabelsFinal[col_ind[i]]/self.width))
+                logging.info("ship {} to {}".format(ships[i].id, nextMove))
             else:
                 nextMove = dropOffTarget
             #logging.info("ship {} next move to {}".format(ships[i].id, nextMove))
