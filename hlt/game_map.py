@@ -498,8 +498,10 @@ class GameMap:
         distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         
         # remove taken spots from the solver
-        haliteMap = self.npMap - 1000 * self.shipMap
-        
+        tempMap = self.shipMap.copy()
+        tempMap[self.shipMap==2]=0
+        haliteMap = self.npMap - 1000 * tempMap
+
         for i in range(len(ships)):
             #dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] 
             #dist[dist==0] = 1
@@ -617,6 +619,10 @@ class GameMap:
             if maxHalite > minHalite:
                 break
         return targetLoc
+    
+    def get_normalized_cardinals(self, source):
+        surroundings = source.get_surrounding_cardinals()
+        return [self.normalize(pos) for pos in surroundings]
 
     def get_surrounding_cardinals(self, source, width):
         '''

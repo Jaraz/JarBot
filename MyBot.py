@@ -33,11 +33,9 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 '''
 TODO
 1) improve depo code to move a bit further after it sees an opportunity
-2) make sure we have optimal allocation of targets and ships
-3) make the bot more aggro in small maps and small 4 player games
-4) Tweak depo building in 4 player games, esp 48 and under maps, maybe only build 1 depo max
-5) tweak depo in bigger maps like 56x, wider distance
-6) 
+2) have our relatively full ships retreat when empty enemy ship goes near
+3) setup attack code for idle ships
+4) 
 7) ???
 8) Profit?
 '''
@@ -57,14 +55,19 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     
     # 2 player logic
     if len(playerScores) == 2:
+        # if i'm in the lead but i have less ships, lets build more!
         if playerScores[0] > playerScores[1] and \
             playerShips[0] < playerShips[1] and \
             (turnsLeft > turnStopBuilding or (turnsLeft > turnStopBuilding-25 and game_map.averageHalite > 130)):
             buildShip = True
+            
+        # i'm ahead but theres a lot of halite left, lets build!
         elif playerScores[0] > playerScores[1] and \
             turnsLeft > turnStopBuilding + 25 and \
             game_map.averageHalite > 80:
             buildShip = True
+            
+        # i'm behind and i'm down on ships so need to build!
         elif playerScores[0] - 3000 < playerScores[1] and \
             turnsLeft > turnStopBuilding + 25 and \
             game_map.averageHalite > 100 and \
@@ -79,6 +82,17 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     global GLOBAL_DEPO_BUILD_OK
     turns_left = (constants.MAX_TURNS - game.turn_number)
     #logging.info("Ship {} was {}".format(ship, currentOrders))
+
+    # enemy locations, look if they are next to you
+    runFlag = False
+    attackFlag = False
+    surroundings = game_map.get_normalized_cardinals(ship.position)
+    for enemyShip in game.enemyShips:
+        if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700:
+            logging.info("ship {} runs!!!".format(ship.id))
+            runFlag = True
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<150 and len(game.players)==2:
+            attackFlag = True
 
     status = None
     if currentOrders is None: #new ship
@@ -100,12 +114,12 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "returning"
         if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
             status = "exploring"
-    elif ship.halite_amount >= returnHaliteFlag:
+    elif ship.halite_amount >= returnHaliteFlag  or runFlag == True:
         status = "returning"
     elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
         status = 'mining'
     #create attack squad near end
-    elif ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48:
+    elif (ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48) or attackFlag == True:
         status = 'attack'
     elif currentOrders == "exploring":
         status = "exploring"

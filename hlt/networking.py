@@ -90,6 +90,7 @@ class Game:
                 self.playerScores.append(self.players[player].halite_amount)
                 self.shipCountList.append(self.players[player].get_ship_count())
                 self.enemyShips.extend(self.players[player].get_ships())
+        logging.info("player scores".format(self.playerScores))
         
         self.adjEnemyShips = []
         for i in self.enemyShips:
