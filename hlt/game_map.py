@@ -458,7 +458,7 @@ class GameMap:
                 if ships[i].position not in aroundList:
                     issueList.append(ships[i].id)
                     issueFlag = True
-                    logging.info("ship {} in danger".format(ships[i].id))
+                    #logging.info("ship {} in danger".format(ships[i].id))
             
             loopCounter += 1
                 
@@ -521,7 +521,7 @@ class GameMap:
                 h = -haliteMap         
             distMatrix[i,:] = h.ravel()
 
-        if self.width >2 and len(distMatrix)>0:
+        if self.width >60 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
             columnHaliteMean = distMatrix.mean(axis=0)

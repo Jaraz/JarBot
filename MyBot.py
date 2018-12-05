@@ -93,6 +93,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             runFlag = True
         elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<150 and len(game.players)==2:
             attackFlag = True
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
+            attackFlag = True
 
     status = None
     if currentOrders is None: #new ship
@@ -239,11 +241,14 @@ if game.game_map.averageHalite > 240:
 if len(game.players) == 4:
     if game.game_map.width < 40:
         shipBuildingTurns = 130
-        MAX_DEPO = 1
+        MAX_DEPO = 2
         collectingStop= 100
+        DEPO_HALITE -= 25
     elif game.game_map.width < 42:
         shipBuildingTurns = 150
         collectingStop= 100
+        DEPO_HALITE -= 15
+        MAX_DEPO = 2
     elif game.game_map.width < 50:
         shipBuildingTurns = 180
     elif game.game_map.width < 57:
