@@ -543,7 +543,7 @@ class GameMap:
         # find closest destination
         distMatrix = distMatrix.astype(np.int, copy=False)
         row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
-        #logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
+        logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
         
         # convert to ship orders
         orders = {}

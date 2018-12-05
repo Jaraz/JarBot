@@ -102,7 +102,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
          game_map.getSurroundingHalite(ship.position, DEPO_HALITE_LOOK) > DEPO_HALITE and \
          me.halite_amount >= (GLOBAL_DEPO + 1 - START_TURN_DEPO) * constants.DROPOFF_COST and \
          min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= DEPO_DISTANCE and \
-         GLOBAL_DEPO_BUILD_OK == True:
+         GLOBAL_DEPO_BUILD_OK == True and \
+         ship.position not in game.return_all_drop_locations():
         status = 'build depo'
         GLOBAL_DEPO += 1
         GLOBAL_DEPO_BUILD_OK = False
@@ -177,7 +178,7 @@ collectingStop    = 50 # Ignore halite less than this
 returnHaliteFlag  = 950 # halite to return to base
 
 #DEPOs
-MAX_DEPO          = 2
+MAX_DEPO          = 3
 DEPO_HALITE_LOOK  = 5
 DEPO_HALITE       = 125
 DEPO_DISTANCE     = 10

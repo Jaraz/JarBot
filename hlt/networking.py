@@ -48,6 +48,15 @@ class Game:
         """
         send_commands([name])
 
+    def return_all_drop_locations(self):
+        '''
+        returns dropoff location for all players
+        '''
+        dropLocs = []
+        for player in self.players:
+            dropLocs.extend(self.players[player].get_all_drop_locations())
+        return dropLocs
+
     def update_frame(self):
         """
         Updates the game object's state.
