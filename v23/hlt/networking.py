@@ -111,8 +111,7 @@ class Game:
             haliteAtEnemy = self.game_map[i.position].halite_amount
                 
             # guess enemy movement, skip if he is on a lot of halite and empty
-
-            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite - 40:
+            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)
@@ -128,7 +127,7 @@ class Game:
                 north = self.game_map.normalize(i.position + Position(0,-1))
                 self.game_map[north].mark_enemy_ship(i)
                 self.adjEnemyShips.append(north)
-
+                
 
     @staticmethod
     def end_turn(commands):
