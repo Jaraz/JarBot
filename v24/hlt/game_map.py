@@ -525,22 +525,20 @@ class GameMap:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
             columnHaliteMean = distMatrix.mean(axis=0)
-            #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
-            #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
-            #logging.info("mean {}".format(columnHaliteMean))
+            logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
+            logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
+            logging.info("mean {}".format(columnHaliteMean))
             trueFalseFlag = columnHaliteMean < minHalite # filter out destinations that i don't care about
-        
-            # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
                 trueFalseFlag = columnHaliteMean < minHalite + 5
                 if sum(trueFalseFlag) < len(ships):
-                    trueFalseFlag = columnHaliteMean < 0
+                    trueFalseFlag = columnHaliteMean < minHalite + 3
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
-            #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
-            #logging.info("mlabel reduced {} - len {}".format(matrixLabelsFinal, len(matrixLabelsFinal)))
+            logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
+            logging.info("mlabel reduced {} - len {}".format(matrixLabelsFinal, len(matrixLabelsFinal)))
                 
             solveMatrix = distMatrix[:,trueFalseFlag]
-            #logging.info("dist {} - len {}".format(solveMatrix, solveMatrix.shape))
+            logging.info("dist {} - len {}".format(solveMatrix, solveMatrix.shape))
         else:
             solveMatrix = distMatrix
             matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
@@ -549,11 +547,12 @@ class GameMap:
         # find closest destination
         distMatrix = distMatrix.astype(np.int, copy=False)
         row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
-        #logging.info("row {}, col {}, colLen".format(distMatrix, row_ind, col_ind, len(col_ind)))
+        logging.info("row {}, col {}, colLen".format(distMatrix, row_ind, col_ind, len(col_ind)))
         
         # convert to ship orders
         orders = {}
         for i in range(len(ships)):
+            logging.info("ship {} colInd {} labels {}".format(ships[i].id, col_ind[i], matrixLabelsFinal[col_ind[i]]))
             orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
         return row_ind, col_ind, orders
     

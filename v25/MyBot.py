@@ -34,7 +34,7 @@ cargo hold orders should shorten at the start and lengthen as the game goes on
 TODO
 1) improve depo code to move a bit further after it sees an opportunity
 2) need to scan area around the home base, if low halite we need a depo early on 
-3) Need a smart way to do 4player ship construction
+3) 
 4) 
 7) ???
 8) Profit?
@@ -60,10 +60,10 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
         scoreCompare = min(playerScores[1:3])
     
     # 2 player logic
-    if len(playerScores) == 2 or (game_map.width > 60 and len(playerScores) == 4):
+    if len(playerScores) == 2 or len(playerScores) == 4:
         # if i'm in the lead but i have less ships, lets build more!
-        if playerScores[0] > scoreCompare and \
-            playerShips[0] < playerShips[1] and \
+        if playerScores[0] > scoreCompare + 3000 and \
+            playerShips[0] < playerShips[1] + 4 and \
             (turnsLeft > turnStopBuilding or (turnsLeft > turnStopBuilding-25 and game_map.averageHalite > 130)):
             buildShip = True
             
@@ -97,10 +97,10 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700:
             logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
-        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<150 and len(game.players)==2:
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.35)>600 and ship.halite_amount<150 and len(game.players)==2:
             attackFlag = True
-        #elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
-        #    attackFlag = True
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
+            attackFlag = True
 
     status = None
     if currentOrders is None: #new ship
@@ -218,7 +218,7 @@ elif game.game_map.width > 41:
     DEPO_DISTANCE  = 16
     MAX_DEPO = 3
 elif game.game_map.width > 39:
-    shipBuildingTurns = 175
+    shipBuildingTurns = 150
     collectingStop= 50
     DEPO_DISTANCE  = 16
 elif game.game_map.width < 40 and game.game_map.totalHalite < 160000:
@@ -246,23 +246,23 @@ if game.game_map.averageHalite > 240:
 ### 4 player changes ###
 if len(game.players) == 4:
     if game.game_map.width < 40:
-        shipBuildingTurns = 130
+        shipBuildingTurns = 110
         MAX_DEPO = 2
         collectingStop= 100
         DEPO_HALITE -= 25
     elif game.game_map.width < 42:
-        shipBuildingTurns = 150
+        shipBuildingTurns = 130
         collectingStop= 100
         DEPO_HALITE -= 15
         MAX_DEPO = 2
     elif game.game_map.width < 50:
-        shipBuildingTurns = 180
+        shipBuildingTurns = 150
     elif game.game_map.width < 57:
-        shipBuildingTurns = 225
+        shipBuildingTurns = 150
     elif game.game_map.width < 80:
         shipBuildingTurns = 150
         RADAR_MAX = 12
-        DEPO_HALITE += 5
+        DEPO_HALITE += 0
         DEPO_DISTANCE  = 17
     
 if len(game.players) == 4:
@@ -277,7 +277,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
