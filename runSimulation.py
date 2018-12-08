@@ -20,7 +20,7 @@ jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 --seed 1543318434 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python myBot.py"'
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --height 64 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v25 & python MyBot.py"'
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v26 & python MyBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 400 --width 32 --height 32 "python MyBot.py" "python oldBot.py" '
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --height 64 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v23 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v23 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v23 & python MyBot.py"'
@@ -32,8 +32,9 @@ argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --h
 newBotScores = []
 oldBotScores = []
 seedArray = []
+lineSplitArray = []
 
-runSims = 12
+runSims = 100
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
     
@@ -43,15 +44,16 @@ def runSim(i):
     player1 = int(results.split("[info] Player 0")[1].split()[6])
     player2 = int(results.split("[info] Player 1")[1].split()[6])
     
-    return player1, player2, seed
+    return player1, player2, seed, lineSplit
 
 if __name__ == '__main__':
     start_time = timeit.default_timer()
     pool = multiprocessing.Pool(processes = 4)
-    for newScore, oldScore, seed in pool.map(runSim, range(runSims)):
+    for newScore, oldScore, seed, linesplt in pool.map(runSim, range(runSims)):
         newBotScores.append(newScore)
         oldBotScores.append(oldScore)
         seedArray.append(seed)
+        lineSplitArray.append(linesplt)
     #newBotScores, oldBotScores = map(runSim, range(runSims))
     
     newScores = np.array(newBotScores)

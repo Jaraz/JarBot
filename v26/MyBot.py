@@ -22,9 +22,6 @@ GLOBAL_DEPO = 0
 START_TURN_DEPO = 0
 SUICIDE_TURN_FLAG = 6
 GLOBAL_DEPO_BUILD_OK = True
-SAVE_UP_FOR_DEPO = False
-DEPO_ONE_SHIP_AT_A_TIME = False
-DEPO_BUILD_THIS_TURN = False
 
 '''
 To add later
@@ -38,9 +35,7 @@ TODO
 1) improve depo code to move a bit further after it sees an opportunity
 2) need to scan area around the home base, if low halite we need a depo early on 
 3) Need a smart way to do 4player ship construction
-4) Ways to optimize player scores, perhaps combine attacking to algorithm?
-5) Want to incorporate percent mined into algorithm
-6) low halite maps maybe don't build so many depos?
+4) 
 7) ???
 8) Profit?
 '''
@@ -91,9 +86,6 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     # build ship status
     global GLOBAL_DEPO
     global GLOBAL_DEPO_BUILD_OK
-    global SAVE_UP_FOR_DEPO
-    global DEPO_ONE_SHIP_AT_A_TIME
-    
     turns_left = (constants.MAX_TURNS - game.turn_number)
     #logging.info("Ship {} was {}".format(ship, currentOrders))
 
@@ -113,18 +105,16 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     status = None
     if currentOrders is None: #new ship
         status = "exploring"
-    elif currentOrders == 'build depo':
-        status = 'build depo'
     elif GLOBAL_DEPO < MAX_DEPO and \
          game.turn_number > shipBuildingTurns and \
          game_map.getSurroundingHalite(ship.position, DEPO_HALITE_LOOK) > DEPO_HALITE and \
+         me.halite_amount >= (GLOBAL_DEPO + 1 - START_TURN_DEPO) * constants.DROPOFF_COST - ship.halite_amount and \
          min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= DEPO_DISTANCE and \
          GLOBAL_DEPO_BUILD_OK == True and \
-         ship.position not in game.return_all_drop_locations() and \
-         DEPO_ONE_SHIP_AT_A_TIME == False:
+         ship.position not in game.return_all_drop_locations():
         status = 'build depo'
-        SAVE_UP_FOR_DEPO = True
-        DEPO_ONE_SHIP_AT_A_TIME = True
+        GLOBAL_DEPO += 1
+        GLOBAL_DEPO_BUILD_OK = False
     elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
         status = 'mining'
     elif min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= turns_left - SUICIDE_TURN_FLAG:
@@ -149,12 +139,6 @@ def giveShipOrders(ship, currentOrders, collectingStop):
 
 #resolve movement function
 def resolveMovement(ships, destinations, status, attackTargets, previousDestination):
-    global GLOBAL_DEPO
-    global GLOBAL_DEPO_BUILD_OK
-    global SAVE_UP_FOR_DEPO
-    global DEPO_ONE_SHIP_AT_A_TIME
-    global DEPO_BUILD_THIS_TURN
-    
     nextTurnPosition = {}
     orderList = {}
     finalOrder = []
@@ -180,19 +164,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
 
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
-            # if we have enough halite
-            if me.halite_amount >= ((GLOBAL_DEPO + 1 - START_TURN_DEPO) * constants.DROPOFF_COST - ship.halite_amount) :
-                logging.info("ship {} w/ {} building a depo".format(ship.id, ship.halite_amount))
-                finalOrder.append(ship.make_dropoff())        
-                GLOBAL_DEPO += 1
-                GLOBAL_DEPO_BUILD_OK = False
-                SAVE_UP_FOR_DEPO = False
-                DEPO_ONE_SHIP_AT_A_TIME = False
-                DEPO_BUILD_THIS_TURN = True
-            else:
-                logging.info("depo ship {} order {}".format(ship.id, orderList[ship.id]))
-                finalOrder.append(ship.move(orderList[ship.id]))
-
+            finalOrder.append(ship.make_dropoff())        
         else:
             finalOrder.append(ship.move(orderList[ship.id]))
         nextTurnPosition[ship.id] = game_map.normalize(ship.position.directional_offset(orderList[ship.id]))
@@ -237,9 +209,9 @@ if game.game_map.width > 60:
     MAX_DEPO = 4
     collectingStop = 60
 elif game.game_map.width > 50:
-    shipBuildingTurns = 100
+    shipBuildingTurns = 150
     DEPO_DISTANCE  = 20
-    MAX_DEPO = 4
+    MAX_DEPO = 3
 elif game.game_map.width > 41:
     shipBuildingTurns = 150
     collectingStop= 50
@@ -305,7 +277,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -331,7 +303,6 @@ while True:
     turns_left = (constants.MAX_TURNS - game.turn_number)
     game_map.turnsLeft = turns_left
     GLOBAL_DEPO_BUILD_OK = True # only build one depo per turn
-    DEPO_BUILD_THIS_TURN == False
 
     if game.turn_number > 11:
         haliteChange = game.haliteHistory[-10] - game_map.totalHalite
@@ -374,11 +345,6 @@ while True:
         
         if ship_status[ship.id] == 'mining':
             ship_destination[ship.id] = ship.execute_mining()
-            
-        elif ship_status[ship.id] == 'build depo':
-            # want ship to move towards highest avg halite if it isn't ready to build
-            ship_destination[ship.id] = game_map.findHighestSmoothHalite(ship)
-            logging.info("ship {} should head to {}".format(ship.id, game_map.findHighestSmoothHalite(ship)))
         
         # If ship should explore now
         elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
@@ -421,9 +387,8 @@ while True:
             ship_status[ship.id] == "returnSuicide"
             ship_destination[ship.id] = me.shipyard.position
 
-    ###########################
-    ### Order Explore Ships ###
-    ###########################
+    # Test movement 2.0
+    # ships set to explore
     start_time = timeit.default_timer()
 
     liveShips = me.get_ships()
@@ -432,15 +397,39 @@ while True:
     
     for ship in liveShips:
         liveShipStatus[ship.id] = ship_status[ship.id]
+        if ship.id not in ship_order_refreshrate:
+            ship_order_refreshrate[ship.id] = False
             
     shipsExploring = [me.get_ship(k) for k,v in liveShipStatus.items() if v == 'exploring']
-
+    #logging.info("ship refresh {}".format(ship_order_refreshrate))
+    for ship in ship_order_refreshrate:
+        if ship_order_refreshrate[ship] == True:
+            #logging.info("ship {} set to false".format(ship))
+            ship_order_refreshrate[ship] = False
+        else:
+            #logging.info("ship {} set to true".format(ship))
+            ship_order_refreshrate[ship] = True
     
-    shipsExploringFinal = shipsExploring
+    #if turns_left < 400:
+    #    print("hello world")
+    
+    if game_map.width > 70:
+        for ship in shipsExploring:
+            #logging.info("ship {}".format(ship))
+            if ship.id not in ship_previous_status:
+                shipsExploringFinal.append(ship)
+                ship_order_refreshrate[ship.id] = True
+            elif ship_previous_status[ship.id] != 'exploring':
+                shipsExploringFinal.append(ship)
+                ship_order_refreshrate[ship.id] = True
+            elif ship_order_refreshrate[ship.id] == True:
+                shipsExploringFinal.append(ship)   
+                ship_order_refreshrate[ship.id] = True
+    else:
+        shipsExploringFinal = shipsExploring
         
-    # reduce the big matrix
     if game_map.width > 60:
-        minHaliteSize = -11
+        minHaliteSize = -10
     else:
         minHaliteSize = 0
     
@@ -469,7 +458,6 @@ while True:
     ship_previous_status = ship_status
     logging.info("resolve destinations {}".format(timeit.default_timer() - start_time))
 
-
     ########################
     ### Ship Build Logic ###
     ########################
@@ -481,12 +469,6 @@ while True:
         if logicCheck and me.halite_amount >= 5000:
             buildLogic = True
             logging.info("extra ship!")
-        elif logicCheck and DEPO_BUILD_THIS_TURN == True:
-            if me.halite_amount >= 5000:
-                buildLogic = True
-        elif logicCheck and SAVE_UP_FOR_DEPO == False:
-            buildLogic = True
-            logging.info("extra ship!")            
     
     if me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()) and buildLogic:
         command_queue.append(me.shipyard.spawn())

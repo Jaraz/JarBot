@@ -8,7 +8,6 @@ from .common import read_input
 import logging
 import numpy as np
 from scipy import optimize
-from scipy import ndimage, misc
 from collections import deque
 import random
 import timeit
@@ -112,13 +111,9 @@ class GameMap:
             for x in range(self.width):
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.npMapDistance = self.buildDistanceMatrix()
-        
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 5, mode = 'wrap')
-        
         #logging.info("np map {}".format(self.npMap))
-        #logging.info("smooth map {}".format(self.smoothMap))
-        
-        
+        #logging.info("np dist {}".format(self.npMapDistance))
+        #logging.info("test1 {}".format(self.returnDistanceMatrix(Position(0,2))))
 
 
         self.totalHalite = np.sum(self.npMap)
@@ -156,7 +151,7 @@ class GameMap:
             for x in range(self.width):
                 self.matrixID[y][x] = matrixCount
                 matrixCount += 1
-        #logging.info("matrix count {}".format(self.matrixID))
+        logging.info("matrix count {}".format(self.matrixID))
         
         # setup row column labels to keep track of positions later
         
@@ -230,6 +225,47 @@ class GameMap:
                 
         return 0
 
+    def fitness_search(self, source, searchWidth, width, destinations):
+        '''
+        Return best fitness score for source within search width
+        :param source: source for search
+        :param searchWidth: find highest score within this box
+        :param width: stats calculated within this range
+        :param destinatinos: ships already being sent here
+        :return: best fitness score
+        '''
+        # get list of search locationss
+        searchLocations = self.get_surrounding_cardinals(source, searchWidth)
+        topScore = 0
+        bestLocation = source
+        
+        for loc in searchLocations:
+            localScore = self.get_fitness_score(loc, width, destinations)
+            if localScore > topScore:
+                topScore = localScore
+                bestLocation = loc
+        
+        return bestLocation
+
+    def get_fitness_score(self, source, width, destinations):
+        '''
+        return a fitness score based on halite in the area
+        TODO LIST: reduce score based on our ships / enemy ships and stdev
+        :param source: the source for the score
+        :param width: how wide to look for the score
+        :param destinations: these points are taken, set score to 0
+        :return: the score
+        '''
+        finalScore = 0
+        # if source is already taken then return 0
+        if source in destinations.values(): 
+            return 0
+        else:
+            avgHalite, stdHalite = self.get_near_stats(source, width)
+            totalHalite = avgHalite * ((width*2+1)*(width*2+1))
+            finalScore = avgHalite - len(self.return_nearby_ships(source, width)) * 20
+        return finalScore
+
     def get_ship_surroundings(self, ships, width, minHalite):
         '''
         return a list of possible surrounding spots, unique, that pass min Halite threshold
@@ -253,7 +289,7 @@ class GameMap:
         given a vector of ships and destinations will find optimal moves next turn
         '''
         turnMatrix = np.zeros([len(ships), self.width * self.height], dtype=np.int)
-        moveStatus = ["exploring","returning","returnSuicide", "attack", "build depo"]
+        moveStatus = ["exploring","returning","returnSuicide", "attack"]
         shipPosList = []
         for ship in ships:
             shipPosList.append(ship.position)
@@ -305,8 +341,6 @@ class GameMap:
                         logging.info("ship {} trying to survive".format(shipID))
                         halite = 10000
                         shipMap[y,x] = 10000
-                    elif status[shipID] == 'build depo' and pos == destinations[shipID]:
-                        shipMap[y,x] = 100000
                     # encourage to stay if target destination is empty right now
                     elif destinations[shipID] not in shipPosList:
                         shipMap[y,x] = 6
@@ -466,11 +500,7 @@ class GameMap:
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
         tempMap[self.shipMap==2]=0
-        if max(self.shipMap.flatten())==4:
-            tempMap[self.shipMap==3]=0
-            tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
-        ### FIX THIS ####
 
         for i in range(len(ships)):
             #dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] 
@@ -545,21 +575,6 @@ class GameMap:
         for i in range(len(ships)):
             orders[ships[i].id] = destinations[col_ind[i]]
         return row_ind, col_ind, orders
-    
-    def findHighestSmoothHalite(self, ship, maxWidth=2):
-        maxHalite = self.smoothMap[ship.position.y,ship.position.x]
-        finalLocation = ship.position
-        
-        for i in range(1, maxWidth+1):
-            location_choices = self.get_surrounding_cardinals(ship.position, i)
-        
-            #find max halite
-            for x in location_choices:
-                haliteCheck = self.smoothMap[x.y,x.x]
-                if haliteCheck > maxHalite and x != ship.position:
-                    maxHalite = haliteCheck
-                    finalLocation = self.normalize(x)
-        return finalLocation
     
     def findDynamicHalite(self, ship, destinations, minHalite, maxWidth):
         '''
@@ -1006,5 +1021,3 @@ class GameMap:
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
-
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 5, mode = 'wrap')
