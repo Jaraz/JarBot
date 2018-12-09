@@ -34,7 +34,7 @@ oldBotScores = []
 seedArray = []
 lineSplitArray = []
 
-runSims = 60
+runSims = 20
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
     

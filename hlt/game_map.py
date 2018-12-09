@@ -498,7 +498,7 @@ class GameMap:
             tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
         
-        if self.turnsLeft < 300:
+        if self.turnsLeft < 300 and max(self.shipMap.flatten())==4:
             haliteMap = haliteMap * (1 + self.inspirationBonus*2)
         
 
