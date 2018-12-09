@@ -67,8 +67,8 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
         shipCompare = playerShips[1]
     else:
         bestPlayer = np.argmax(playerScores[1:3])
-        scoreCompare = playerScores[bestPlayer+1]
-        shipCompare = playerShips[bestPlayer+1]
+        scoreCompare = playerScores[bestPlayer]
+        shipCompare = playerShips[bestPlayer]
     
     # 2 player logic
     if len(playerScores) == 2 or (game_map.width > 50 and len(playerScores) == 4):
@@ -113,7 +113,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700:
             logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
-        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<250 and len(game.players)==2:
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<150 and len(game.players)==2:
             attackFlag = True
         #elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
         #    attackFlag = True
@@ -200,8 +200,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
         ### BUILD DEPO ###
         if status[ship.id] == 'build depo':
             # if we have enough halite
-            if me.halite_amount >= ((GLOBAL_DEPO + 1 - START_TURN_DEPO) * constants.DROPOFF_COST - ship.halite_amount) and \
-                ship.position not in game.return_all_drop_locations():
+            if me.halite_amount >= ((GLOBAL_DEPO + 1 - START_TURN_DEPO) * constants.DROPOFF_COST - ship.halite_amount) :
                 logging.info("ship {} w/ {} building a depo".format(ship.id, ship.halite_amount))
                 finalOrder.append(ship.make_dropoff())        
                 GLOBAL_DEPO += 1
@@ -337,7 +336,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

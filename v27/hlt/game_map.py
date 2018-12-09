@@ -105,11 +105,9 @@ class GameMap:
         
         # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
-        self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
-        self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         
         # build numpy map
-        self.npMap = np.zeros([self.width, self.height], dtype=np.int) 
+        self.npMap = np.zeros([self.width, self.height], dtype=np.int)
         for y in range(self.height):
             for x in range(self.width):
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
@@ -146,12 +144,9 @@ class GameMap:
                 startPos = Position(y,x)
                 self.distanceMatrix[y][x] = self.calcDistanceMatrix(startPos)
         
-        # distances to dropoff locations
-        self.dropDistances = np.ones([6, self.width, self.height]) * 200
-        
-        self.distanceMatrixNonZero = self.distanceMatrix.copy()
+        self.distanceMatrixNonZero = np.sqrt(self.distanceMatrix.copy())
         self.distanceMatrixNonZero[self.distanceMatrixNonZero==0] = 1
-        #self.distanceMatrixNonZero = 1/self.distanceMatrixNonZero
+        self.distanceMatrixNonZero = 1/self.distanceMatrixNonZero
         #logging.info("distanceMatrix {}".format(self.distanceMatrix))
         
         # count space for each part of matrix
@@ -184,30 +179,8 @@ class GameMap:
     def shipBuild(self):
         return 0
     
-    def updateInspirationMatrix(self):
-        for x in range(self.width):
-            for y in range(self.height):
-                dist = self.distanceMatrixNonZero[y][x].copy()
-                dist[dist>4]=0
-                dist[dist>0]=1
-                temp = dist * self.shipFlag
-                if temp.sum()>1:
-                    self.inspirationBonus[x][y] = 1
-                else:
-                    self.inspirationBonus[x][y] = 0
-    
-    
-    def updateDropDistances(self, locations):
-        logging.info("locs {}".format(locations))
-        for i in range(len(locations)):
-            loc = locations[i]
-            self.dropDistances[i] = self.distanceMatrix[loc.y][loc.x]
-        logging.info("drops {}".format(self.dropDistances))
-    
     def emptyShipMap(self):
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
-        self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
-        self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
 
     def buildDistanceMatrix(self):
         '''
@@ -497,18 +470,13 @@ class GameMap:
             tempMap[self.shipMap==3]=0
             tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
-        
-        if self.turnsLeft < 300:
-            haliteMap = haliteMap * (1 + self.inspirationBonus*2)
-        
-
-        depoDist = self.dropDistances.min(0)
+        ### FIX THIS ####
 
         for i in range(len(ships)):
-            dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
+            #dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] 
             #dist[dist==0] = 1
             if hChoice == 'sqrt':
-                h = -haliteMap / np.sqrt(dist)
+                h = -haliteMap * self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] 
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -1038,7 +1006,5 @@ class GameMap:
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
-        
-        # update drop distance matrices
 
         self.smoothMap = ndimage.uniform_filter(self.npMap, size = 5, mode = 'wrap')

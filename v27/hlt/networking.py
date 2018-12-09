@@ -83,18 +83,7 @@ class Game:
             for dropoff in player.get_dropoffs():
                 self.game_map[dropoff.position].structure = dropoff
 
-        #flag for enemy ships
-        self.game_map.shipFlag[self.game_map.shipMap==1]=0
-        self.game_map.shipFlag[self.game_map.shipMap==2]=1
-        self.game_map.shipFlag[self.game_map.shipMap==3]=1
-        self.game_map.shipFlag[self.game_map.shipMap==4]=1
-        
-        self.game_map.updateInspirationMatrix()
-        
-        
-        logging.info("Ship locations {}".format(self.game_map.shipMap))
-        logging.info("Enemy flag {}".format(self.game_map.shipFlag))
-        logging.info("Inspiration {}".format(self.game_map.inspirationBonus))
+        #logging.info("Ship locations {}".format(self.game_map.shipMap))
         
         # Update enemy ships and all ships
         self.enemyShips = []
@@ -140,8 +129,6 @@ class Game:
                 self.game_map[north].mark_enemy_ship(i)
                 self.adjEnemyShips.append(north)
 
-        # update drop distances
-        self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
 
     @staticmethod
     def end_turn(commands):
