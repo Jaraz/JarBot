@@ -114,8 +114,7 @@ class Game:
         
         self.adjEnemyShips = []
         for i in self.enemyShips:
-            if i.position not in self.players[self.my_id].get_all_drop_locations():
-                self.game_map[i.position].mark_enemy_ship(i)
+            self.game_map[i.position].mark_enemy_ship(i)
 
             #logging.info("Enemy identified {}".format(i))
             
@@ -123,11 +122,8 @@ class Game:
             haliteAtEnemy = self.game_map[i.position].halite_amount
                 
             # guess enemy movement, skip if he is on a lot of halite and empty
-            dropLocations = self.players[self.my_id].get_all_drop_locations()
-            dropSurrounding = []
-            for j in dropLocations:
-                dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,2))
-            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
+
+            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)

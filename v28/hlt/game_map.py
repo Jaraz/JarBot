@@ -202,7 +202,7 @@ class GameMap:
         for i in range(len(locations)):
             loc = locations[i]
             self.dropDistances[i] = self.distanceMatrix[loc.y][loc.x]
-        #logging.info("drops {}".format(self.dropDistances))
+        logging.info("drops {}".format(self.dropDistances))
     
     def emptyShipMap(self):
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
@@ -498,29 +498,17 @@ class GameMap:
             tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
         
-        #if self.turnsLeft < 300 and max(self.shipMap.flatten())==4:
-        #    haliteMap = haliteMap * (1 + self.inspirationBonus*2)
+        if self.turnsLeft < 300 and max(self.shipMap.flatten())==4:
+            haliteMap = haliteMap * (1 + self.inspirationBonus*2)
         
-        haliteMap[haliteMap<1] = 1
 
-        miningSpeed = self.inspirationBonus.copy()
-        miningSpeed = miningSpeed.astype(np.float)
-        miningSpeed[miningSpeed<1] = np.log(.75)
-        miningSpeed[miningSpeed>.99] = np.log(.25)
-        miningTurns = np.log(50/haliteMap) / miningSpeed
-        miningTurns[miningTurns<0] = np.log(1/50) / miningSpeed[miningTurns<0]
-        #logging.info("Mining turns {}".format(miningTurns))
         depoDist = self.dropDistances.min(0)
-        haliteMap = haliteMap - 50
-        haliteMap[haliteMap<50] = 1
 
         for i in range(len(ships)):
             dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
             #dist[dist==0] = 1
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
-            elif hChoice == 'hpt':
-                h = -haliteMap / (dist*2 + miningTurns)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -533,7 +521,6 @@ class GameMap:
                 h = -haliteMap / (dist * dist / np.sqrt(dist))
             elif hChoice == 'maxHalite':
                 h = -haliteMap         
-            #logging.info("h: {}".format(h))
             distMatrix[i,:] = h.ravel()
 
         if self.width >60 and len(distMatrix)>0:
@@ -542,12 +529,12 @@ class GameMap:
             columnHaliteMean = distMatrix.mean(axis=0)
             #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
-            #logging.info("mean {}".format(columnHaliteMean.tolist()))
+            #logging.info("mean {}".format(columnHaliteMean))
             trueFalseFlag = columnHaliteMean < minHalite # filter out destinations that i don't care about
         
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
-                trueFalseFlag = columnHaliteMean < minHalite + 1
+                trueFalseFlag = columnHaliteMean < minHalite + 5
                 if sum(trueFalseFlag) < len(ships):
                     trueFalseFlag = columnHaliteMean < 0
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
@@ -562,7 +549,7 @@ class GameMap:
             matrixLabelsFinal = matrixLabels
 
         # find closest destination
-        #distMatrix = distMatrix.astype(np.int, copy=False)
+        distMatrix = distMatrix.astype(np.int, copy=False)
         row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
         #logging.info("row {}, col {}, colLen".format(distMatrix, row_ind, col_ind, len(col_ind)))
         
@@ -570,7 +557,6 @@ class GameMap:
         orders = {}
         for i in range(len(ships)):
             orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
-        logging.info("orders {}".format(orders))
         return row_ind, col_ind, orders
     
     def matchShipsToDest(self, ships, destinations):

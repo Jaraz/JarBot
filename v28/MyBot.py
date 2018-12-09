@@ -275,7 +275,7 @@ elif game.game_map.width > 39:
     MAX_DEPO = 2
     if game.game_map.totalHalite < 210000:
         MAX_DEPO = 1
-elif game.game_map.width < 40 and game.game_map.totalHalite < 170000:
+elif game.game_map.width < 40 and game.game_map.totalHalite < 160000:
     shipBuildingTurns = 125
     collectingStop = 50
     MAX_DEPO = 1    
@@ -338,7 +338,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -473,13 +473,13 @@ while True:
         
     # reduce the big matrix
     if game_map.width > 60:
-        minHaliteSize = -2
+        minHaliteSize = -11
     else:
         minHaliteSize = 0
     
     #logging.info("final {}".format(shipsExploringFinal))
 #    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, minHaliteSize, hChoice = 'hpt')    
+    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, minHaliteSize, hChoice = 'sqrt')    
 #    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
 
     for ship in shipsExploring:
