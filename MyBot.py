@@ -66,12 +66,12 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
         scoreCompare = playerScores[1]
         shipCompare = playerShips[1]
     else:
-        bestPlayer = np.argmax(playerScores[1:3])
-        scoreCompare = playerScores[bestPlayer+1]
-        shipCompare = playerShips[bestPlayer+1]
+        #bestPlayer = np.argmax(playerScores[1:3])
+        scoreCompare = np.mean(playerScores[1:3])
+        shipCompare = np.mean(playerShips[1:3])
     
     # 2 player logic
-    if len(playerScores) == 2 or (game_map.width > 39 and len(playerScores) == 4):
+    if len(playerScores) == 2 or (game_map.width > 31 and len(playerScores) == 4):
         # if i'm in the lead but i have less ships, lets build more!
         if playerScores[0] > scoreCompare and \
             playerShips[0] < shipCompare and \
@@ -302,15 +302,15 @@ if game.game_map.averageHalite > 240:
 ### 4 player changes ###
 if len(game.players) == 4:
     if game.game_map.width < 40:
-        shipBuildingTurns = 130
+        shipBuildingTurns = 120
         MAX_DEPO = 2
-        collectingStop= 100
+        collectingStop= 75
         DEPO_HALITE -= 25
         if game.game_map.totalHalite < 210000:
             MAX_DEPO = 1
     elif game.game_map.width < 42:
         shipBuildingTurns = 125
-        collectingStop= 100
+        collectingStop= 75
         DEPO_HALITE -= 15
         MAX_DEPO = 2
         if game.game_map.totalHalite < 210000:
@@ -327,7 +327,7 @@ if len(game.players) == 4:
         DEPO_DISTANCE  = 17
     
 if len(game.players) == 4:
-    SUICIDE_TURN_FLAG = 12
+    SUICIDE_TURN_FLAG = 13
 
 nearAvg, nearStd = game.game_map.get_near_stats(game.me.shipyard.position, 5)
 logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
@@ -473,7 +473,7 @@ while True:
         
     # reduce the big matrix
     if game_map.width > 60:
-        minHaliteSize = -2
+        minHaliteSize = -2.5
     else:
         minHaliteSize = 0
     
