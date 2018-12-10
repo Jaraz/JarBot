@@ -126,10 +126,8 @@ class Game:
             dropLocations = self.players[self.my_id].get_all_drop_locations()
             dropSurrounding = []
             for j in dropLocations:
-                dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
-            logging.info("drop locations {}".format(dropSurrounding))
-            #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
-            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding:
+                dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,2))
+            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)

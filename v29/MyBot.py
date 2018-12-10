@@ -61,9 +61,6 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     turnStopBuilding = 150
     buildShip = False
     
-    if game_map.width == 40:
-        turnStopBuilding = 100
-    
     # choose enemy to watch (obv in 2 player game)
     if len(playerScores)==2:
         scoreCompare = playerScores[1]
@@ -158,7 +155,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
         status = 'mining'
     #create attack squad near end
-    elif (ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48 and len(game.players)==2) or attackFlag == True:
+    elif (ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48) or attackFlag == True:
         status = 'attack'
     elif currentOrders == "exploring":
         status = "exploring"
@@ -276,7 +273,7 @@ elif game.game_map.width > 39:
     collectingStop= 50
     DEPO_DISTANCE  = 16
     MAX_DEPO = 2
-    if game.game_map.totalHalite < 250000:
+    if game.game_map.totalHalite < 210000:
         MAX_DEPO = 1
 elif game.game_map.width < 40 and game.game_map.totalHalite < 170000:
     shipBuildingTurns = 125
@@ -330,7 +327,7 @@ if len(game.players) == 4:
         DEPO_DISTANCE  = 17
     
 if len(game.players) == 4:
-    SUICIDE_TURN_FLAG = 14
+    SUICIDE_TURN_FLAG = 13
 
 nearAvg, nearStd = game.game_map.get_near_stats(game.me.shipyard.position, 5)
 logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
@@ -341,7 +338,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
