@@ -549,7 +549,7 @@ class GameMap:
             if sum(trueFalseFlag) < len(ships):
                 trueFalseFlag = columnHaliteMean < minHalite + 1
                 if sum(trueFalseFlag) < len(ships):
-                    trueFalseFlag = columnHaliteMean < 50
+                    trueFalseFlag = columnHaliteMean < 0
                     if sum(trueFalseFlag) < len(ships):
                         trueFalseFlag = columnHaliteMean < 50
             matrixLabelsFinal = matrixLabels[trueFalseFlag]

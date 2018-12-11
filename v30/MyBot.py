@@ -236,7 +236,7 @@ game = hlt.Game()
 ### Settings ###
 ################
 shipBuildingTurns = 175 # how many turns to build ships
-collectingStop    = 100 # Ignore halite less than this
+collectingStop    = 50 # Ignore halite less than this
 returnHaliteFlag  = 950 # halite to return to base
 
 #DEPOs
@@ -261,32 +261,32 @@ if game.game_map.width > 60:
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 5
-    collectingStop = 75
+    collectingStop = 60
 elif game.game_map.width > 50:
     shipBuildingTurns = 100
     DEPO_DISTANCE  = 20
     MAX_DEPO = 4
 elif game.game_map.width > 41:
     shipBuildingTurns = 150
-    collectingStop= 100
+    collectingStop= 50
     DEPO_DISTANCE  = 16
     MAX_DEPO = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 120
-    collectingStop= 100
+    collectingStop= 50
     DEPO_DISTANCE  = 16
     MAX_DEPO = 2
     if game.game_map.totalHalite < 250000:
         MAX_DEPO = 1
 elif game.game_map.width < 40 and game.game_map.totalHalite < 170000:
     shipBuildingTurns = 125
-    collectingStop = 100
+    collectingStop = 50
     MAX_DEPO = 1    
 elif game.game_map.width < 40 and game.game_map.averageHalite > 250:
-    collectingStop = 100
+    collectingStop = 50
     shipBuildingTurns = 125
 else:
-    shipBuildingTurns = 100
+    shipBuildingTurns = 125
     collectingStop= 50
 #elif game.game_map.width < 40 and totalHalite > 300000:
 #    shipBuildingTurns = 200
@@ -307,13 +307,13 @@ if len(game.players) == 4:
     if game.game_map.width < 40:
         shipBuildingTurns = 120
         MAX_DEPO = 2
-        collectingStop= 100
+        collectingStop= 75
         DEPO_HALITE -= 25
         if game.game_map.totalHalite < 210000:
             MAX_DEPO = 1
     elif game.game_map.width < 42:
         shipBuildingTurns = 125
-        collectingStop= 100
+        collectingStop= 75
         DEPO_HALITE -= 15
         MAX_DEPO = 2
         if game.game_map.totalHalite < 210000:
@@ -341,7 +341,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -478,7 +478,7 @@ while True:
     if game_map.width > 60:
         minHaliteSize = -2.5
     else:
-        minHaliteSize = 50
+        minHaliteSize = 0
     
     #logging.info("final {}".format(shipsExploringFinal))
 #    logging.info("Ship exp {}".format(shipsExploring))

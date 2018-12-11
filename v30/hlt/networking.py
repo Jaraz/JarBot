@@ -103,18 +103,16 @@ class Game:
         
         self.shipCountList = []
         self.shipCountList.append(self.me.get_ship_count())
-        
         for player in self.players:
             for i in self.players[player].get_ships():
                 self.game_map[i.position].occupado = True
             if player != self.me.id:
                 self.playerScores.append(self.players[player].halite_amount)
                 self.shipCountList.append(self.players[player].get_ship_count())
-                self.enemyShips.extend([i for i in self.players[player].get_ships() if i.position not in self.players[self.my_id].get_all_drop_locations()])
+                self.enemyShips.extend(self.players[player].get_ships())
         logging.info("player scores".format(self.playerScores))
         
         self.adjEnemyShips = []
-        
         for i in self.enemyShips:
             if i.position not in self.players[self.my_id].get_all_drop_locations():
                 self.game_map[i.position].mark_enemy_ship(i)
@@ -131,7 +129,7 @@ class Game:
                 dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
             logging.info("drop locations {}".format(dropSurrounding))
             #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
-            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
+            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)
