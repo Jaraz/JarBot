@@ -482,7 +482,7 @@ class GameMap:
                 orders[ships[i].id] = self.get_unsafe_moves(pos, nextMove)[0]
         return orders
     
-    def matchShipsToDest2(self, ships, minHalite= 0, hChoice = 'sqrt', collectingStop=50):
+    def matchShipsToDest2(self, ships, minHalite= 0, hChoice = 'sqrt'):
         '''
         The eyes of JarBot
         need to add penalty when another ship is on a spot already
@@ -507,12 +507,12 @@ class GameMap:
         miningSpeed = miningSpeed.astype(np.float)
         miningSpeed[miningSpeed<1] = np.log(.75)
         miningSpeed[miningSpeed>.99] = np.log(.25)
-        miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
-        miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
+        miningTurns = np.log(50/haliteMap) / miningSpeed
+        miningTurns[miningTurns<0] = np.log(1/50) / miningSpeed[miningTurns<0]
         #logging.info("Mining turns {}".format(miningTurns))
         depoDist = self.dropDistances.min(0)
-        haliteMap = haliteMap - collectingStop
-        haliteMap[haliteMap<collectingStop] = 1
+        haliteMap = haliteMap - 50
+        haliteMap[haliteMap<50] = 1
 
         for i in range(len(ships)):
             dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
@@ -547,8 +547,11 @@ class GameMap:
         
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
-                trueFalseFlag = columnHaliteMean < collectingStop
-
+                trueFalseFlag = columnHaliteMean < minHalite + 1
+                if sum(trueFalseFlag) < len(ships):
+                    trueFalseFlag = columnHaliteMean < 50
+                    if sum(trueFalseFlag) < len(ships):
+                        trueFalseFlag = columnHaliteMean < 50
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
             #logging.info("mlabel reduced {} - len {}".format(matrixLabelsFinal, len(matrixLabelsFinal)))
