@@ -129,7 +129,7 @@ class Game:
             dropSurrounding = []
             for j in dropLocations:
                 dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
-            #logging.info("drop locations {}".format(dropSurrounding))
+            logging.info("drop locations {}".format(dropSurrounding))
             #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
             if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
                 east = self.game_map.normalize(i.position + Position(1,0))

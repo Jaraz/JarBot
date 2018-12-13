@@ -270,7 +270,7 @@ if game.game_map.width > 60:
     MAX_DEPO = 5
     collectingStop = 75
 elif game.game_map.width > 50:
-    shipBuildingTurns = 125
+    shipBuildingTurns = 100
     DEPO_DISTANCE  = 20
     MAX_DEPO = 4
     collectingStop = 75
@@ -281,7 +281,7 @@ elif game.game_map.width > 41:
     MAX_DEPO = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 120
-    collectingStop= 90
+    collectingStop= 100
     DEPO_DISTANCE  = 16
     MAX_DEPO = 2
     if game.game_map.totalHalite < 250000:
@@ -351,7 +351,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

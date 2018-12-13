@@ -290,11 +290,9 @@ class GameMap:
         issueList = []
         maxLoop = 5
         if self.width > 60:
-            maxLoop = 4
-            if max(self.shipMap.flatten())==4:
-                maxLoop = 5
+            maxLoop = 3
             if self.turnsLeft <30:
-                maxLoop = 5
+                maxLoop = 3
         
 
         while issueFlag and loopCounter < maxLoop:
@@ -362,67 +360,58 @@ class GameMap:
                     elif downDist < distToDest and rightDist > distToDest and leftDist > distToDest:
                         downOnly = True
     
-                    # try to reduce movement costs (if possible)
-                    northHalite = int(10 - self.npMap[(y) % self.width,(x-1) % self.height]/100)
-                    southHalite = int(10 - self.npMap[(y) % self.width,(x+1) % self.height]/100)
-                    westHalite = int(10 - self.npMap[(y-1) % self.width,(x) % self.height]/100)
-                    eastHalite = int(10 - self.npMap[(y+1) % self.width,x % self.height]/100)
-                    
-                    
-                    # NORTH
+                    # need to add logic to sit still if ship just moved in front
+    
                     if status[shipID] == "attack" and left in enemyLocs:
                         shipMap[(y) % self.width,(x-1) % self.height] = 10000
                     elif left in enemyLocs:
                         shipMap[(y) % self.width,(x-1) % self.height] = 0
                     elif leftDist < distToDest: # moves us closer 
-                        shipMap[(y) % self.width,(x-1) % self.height] = halite + northHalite #random.randint(1,2) 
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
                     elif shipID in issueList:
-                        shipMap[(y) % self.width,(x-1) % self.height] = halite + northHalite # random.randint(1,2) 
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
                     elif upOnly or downOnly:
                         shipMap[(y) % self.width,(x-1) % self.height] = 3 + random.randint(1,2)
                     else:
                         shipMap[(y) % self.width,(x-1) % self.height] = 2
                     #logging.info("left ship {} map {}".format(ships[i].id, shipMap))
     
-                    # SOUTH
                     if status[shipID] == "attack" and right in enemyLocs:
                         shipMap[(y) % self.width,(x+1) % self.height] = 10000
                     elif right in enemyLocs:
                         shipMap[(y) % self.width,(x+1) % self.height] = 0
                     elif rightDist < distToDest: # moves us closer 
-                        shipMap[(y) % self.width,(x+1) % self.height] = halite + southHalite #random.randint(1,2)
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
                     elif shipID in issueList:
-                        shipMap[(y) % self.width,(x+1) % self.height] = halite + southHalite # random.randint(1,2)
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
                     elif upOnly or downOnly:
                         shipMap[(y) % self.width,(x+1) % self.height] = 3 + random.randint(1,2)
                     else:
                         shipMap[(y) % self.width,(x+1) % self.height] = 2
                     #logging.info("right ship {} map {}".format(ships[i].id, shipMap))
                     
-                    # WEST
                     if status[shipID] == "attack" and up in enemyLocs:
                         shipMap[(y-1) % self.width,(x) % self.height] = 10000
                     elif up in enemyLocs:
                         shipMap[(y-1) % self.width,(x) % self.height] = 0
                     elif upDist < distToDest: # moves us closer 
-                        shipMap[(y-1) % self.width,(x) % self.height] = halite + westHalite #random.randint(1,2)
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
                     elif shipID in issueList:
-                        shipMap[(y-1) % self.width,(x) % self.height] = halite + westHalite # random.randint(1,2)
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
                     elif rightOnly or leftOnly:
                         shipMap[(y-1) % self.width,(x) % self.height] = 3 + random.randint(1,2)
                     else:
                         shipMap[(y-1) % self.width,(x) % self.height] = 2
                     #logging.info("up ship {} map {}".format(ships[i].id, shipMap))
     
-                    # EAST
                     if status[shipID] == "attack" and down in enemyLocs:
                         shipMap[(y+1) % self.width,x % self.height] = 10000
                     elif down in enemyLocs:
                         shipMap[(y+1) % self.width,x % self.height] = 0
                     elif downDist < distToDest: # moves us closer 
-                        shipMap[(y+1) % self.width,x % self.height] = halite + eastHalite #random.randint(1,2)
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
                     elif shipID in issueList:
-                        shipMap[(y+1) % self.width,x % self.height] = halite + eastHalite #random.randint(1,2)
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
                     elif rightOnly or leftOnly:
                         shipMap[(y+1) % self.width,x % self.height] = 3 + random.randint(1,2)
                     else:
@@ -1062,7 +1051,6 @@ class GameMap:
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
-        logging.info('avg halite {}'.format(self.averageHalite))
         
         # update drop distance matrices
 
