@@ -43,9 +43,8 @@ TODO
 3) Need a smart way to do 4player ship construction
 4) Ways to optimize player scores, perhaps combine attacking to algorithm?
 5) Want to incorporate percent mined into algorithm
-6) 
-7) 
-8) ???
+6) low halite maps maybe don't build so many depos?
+7) ???
 8) Profit?
 '''
 
@@ -123,8 +122,6 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     for enemyShip in game.enemyShips:
         if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700:
             logging.info("ship {} runs!!!".format(ship.id))
-            runFlag = True
-        elif ship.halite_amount > 600 and len(game.players)==4 and turns_left < 100:
             runFlag = True
         elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>600 and ship.halite_amount<250 and len(game.players)==2:
             attackFlag = True
@@ -278,9 +275,9 @@ elif game.game_map.width > 50:
     MAX_DEPO = 4
     collectingStop = 75
 elif game.game_map.width > 41:
-    shipBuildingTurns = 125
-    collectingStop= 90
-    DEPO_DISTANCE  = 15
+    shipBuildingTurns = 150
+    collectingStop= 100
+    DEPO_DISTANCE  = 16
     MAX_DEPO = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 120
@@ -354,7 +351,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("oldBot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

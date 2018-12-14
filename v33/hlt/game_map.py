@@ -363,17 +363,12 @@ class GameMap:
                         downOnly = True
     
                     # try to reduce movement costs (if possible)
-                    if status[shipID] == 'returnSuicide' or status[shipID] == 'returning':
-                        northHalite = int(10 - self.npMap[(y) % self.width,(x-1) % self.height]/100)
-                        southHalite = int(10 - self.npMap[(y) % self.width,(x+1) % self.height]/100)
-                        westHalite = int(10 - self.npMap[(y-1) % self.width,(x) % self.height]/100)
-                        eastHalite = int(10 - self.npMap[(y+1) % self.width,x % self.height]/100)
-                    else:
-                        northHalite = random.randint(1,2)
-                        southHalite = random.randint(1,2)
-                        westHalite = random.randint(1,2)
-                        eastHalite = random.randint(1,2)
-                        
+                    northHalite = int(10 - self.npMap[(y) % self.width,(x-1) % self.height]/100)
+                    southHalite = int(10 - self.npMap[(y) % self.width,(x+1) % self.height]/100)
+                    westHalite = int(10 - self.npMap[(y-1) % self.width,(x) % self.height]/100)
+                    eastHalite = int(10 - self.npMap[(y+1) % self.width,x % self.height]/100)
+                    
+                    
                     # NORTH
                     if status[shipID] == "attack" and left in enemyLocs:
                         shipMap[(y) % self.width,(x-1) % self.height] = 10000
@@ -513,14 +508,12 @@ class GameMap:
             tempMap[self.shipMap==3]=0
             tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
-        finalMap = haliteMap.copy()
         
         #if self.turnsLeft < 300 and max(self.shipMap.flatten())==4:
         #    haliteMap = haliteMap * (1 + self.inspirationBonus*2)
         
         haliteMap[haliteMap<1] = 1
 
-        # taking into account mining speed
         miningSpeed = self.inspirationBonus.copy()
         miningSpeed = miningSpeed.astype(np.float)
         miningSpeed[miningSpeed<1] = np.log(.75)
@@ -533,15 +526,12 @@ class GameMap:
         haliteMap[haliteMap<collectingStop] = 1
 
         for i in range(len(ships)):
-            finalMap = haliteMap.copy()
             dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
-            finalMap[haliteMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
-            #haliteMap[haliteMap<collectingStop] = 1
             #dist[dist==0] = 1
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -finalMap / (dist*2 + miningTurns)
+                h = -haliteMap / (dist*2 + miningTurns)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -569,8 +559,6 @@ class GameMap:
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
                 trueFalseFlag = columnHaliteMean < collectingStop
-                if len(trueFalseFlag) < len(ships):
-                    trueFalseFlag = columnHaliteMean < 10000
 
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
