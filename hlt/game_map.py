@@ -562,7 +562,10 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -finalMap / (dist+1)
+                if self.smoothMap[shipY,shipX] < 40 and self.width > 70:
+                    h = -finalMap / np.sqrt(dist+1)
+                else:
+                    h = -finalMap / (dist+1)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -588,11 +591,16 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             #trueFalseFlag = columnHaliteMean < np.percentile(columnHaliteMean, 85, interpolation='higher') # filter out destinations that i don't care about
-            trueFalseFlag = self.npMap.ravel() > np.percentile(self.npMap, 20, interpolation='lower')
+            trueFalseFlag = self.npMap.ravel() > 50
+            if self.averageHalite < 50:
+                trueFalseFlag = self.npMap.ravel() > self.averageHalite
+            #trueFalseFlag = self.npMap.ravel() > np.percentile(self.npMap, 30, interpolation='lower')
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
-                trueFalseFlag = columnHaliteMean < 10000
+                trueFalseFlag = self.npMap.ravel() > 25
+                if sum(trueFalseFlag) < len(ships):
+                    trueFalseFlag = columnHaliteMean < 10000
 
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
