@@ -329,6 +329,8 @@ class GameMap:
                     if pos in dropoffs:
                         shipMap[y,x] = 1
                         halite = 10000
+                    elif destinations[shipID] == pos:
+                        shipMap[y,x] = halite
                     # needs safety
                     elif shipID in issueList:
                         logging.info("ship {} trying to survive".format(shipID))
@@ -505,13 +507,14 @@ class GameMap:
         halite excluded form search if its below minHalite
         '''
         distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
+        distResults = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        tempMap[self.shipMap==2]=0
-        if max(self.shipMap.flatten())==4:
-            tempMap[self.shipMap==3]=0
-            tempMap[self.shipMap==4]=0
+        #tempMap[self.shipMap==2]=0
+        #if max(self.shipMap.flatten())==4:
+            #tempMap[self.shipMap==3]=0
+            #tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
         finalMap = haliteMap.copy()
         
@@ -523,25 +526,43 @@ class GameMap:
         # taking into account mining speed
         miningSpeed = self.inspirationBonus.copy()
         miningSpeed = miningSpeed.astype(np.float)
-        miningSpeed[miningSpeed<1] = np.log(.75)
-        miningSpeed[miningSpeed>.99] = np.log(.25)
-        miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
-        miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
+        miningSpeed[miningSpeed<1] = .25
+        miningSpeed[miningSpeed>.99] = .75
+        #logging.info("mining speed {}".format(miningSpeed))
+        #miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
+        #miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
         #logging.info("Mining turns {}".format(miningTurns))
         depoDist = self.dropDistances.min(0)
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
 
         for i in range(len(ships)):
+            shipX = ships[i].position.x
+            shipY = ships[i].position.y
+            dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
+            
             finalMap = haliteMap.copy()
-            dist = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
-            finalMap[haliteMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
+            finalMap = finalMap.astype(np.float)
+            # if above minimum threshold then lets include it
+            if self.npMap[shipY,shipX] > collectingStop:
+                # add costs to other squares
+                #logging.info("ship {} sees {}".format(ships[i].id, self.npMap[shipY,shipX]))
+                finalMap -= dist * self.smoothMap[shipY, shipX] * 0.1
+                finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 + self.smoothMap[shipY, shipX] * 0.1
+                finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 + self.smoothMap[shipY, shipX] * 0.1
+                finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 + self.smoothMap[shipY, shipX] * 0.1
+                finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 + self.smoothMap[shipY, shipX] * 0.1
+                finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
+            finalMap *= miningSpeed
+            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             #haliteMap[haliteMap<collectingStop] = 1
+            #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
+            
             #dist[dist==0] = 1
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -finalMap / (dist*2 + miningTurns)
+                h = -finalMap / (dist+1)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -554,23 +575,24 @@ class GameMap:
                 h = -haliteMap / (dist * dist / np.sqrt(dist))
             elif hChoice == 'maxHalite':
                 h = -haliteMap         
-            #logging.info("h: {}".format(h))
+            #logging.info("ship {} h: {}".format(ships[i].id, h))
             distMatrix[i,:] = h.ravel()
+            distResults[i,:] = dist.ravel()
 
         if self.width >60 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
-            columnHaliteMean = distMatrix.mean(axis=0)
+            columnHaliteMean = distMatrix.mean(0)
+            
             #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
-            trueFalseFlag = columnHaliteMean < minHalite # filter out destinations that i don't care about
-        
+            #trueFalseFlag = columnHaliteMean < np.percentile(columnHaliteMean, 85, interpolation='higher') # filter out destinations that i don't care about
+            trueFalseFlag = self.npMap.ravel() > np.percentile(self.npMap, 10, interpolation='lower')
+            #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
-                trueFalseFlag = columnHaliteMean < collectingStop
-                if len(trueFalseFlag) < len(ships):
-                    trueFalseFlag = columnHaliteMean < 10000
+                trueFalseFlag = columnHaliteMean < 10000
 
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
@@ -614,7 +636,7 @@ class GameMap:
             orders[ships[i].id] = destinations[col_ind[i]]
         return row_ind, col_ind, orders
     
-    def findHighestSmoothHalite(self, ship, maxWidth=2):
+    def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=2):
         maxHalite = self.smoothMap[ship.position.y,ship.position.x]
         finalLocation = ship.position
         
@@ -624,7 +646,7 @@ class GameMap:
             #find max halite
             for x in location_choices:
                 haliteCheck = self.smoothMap[x.y,x.x]
-                if haliteCheck > maxHalite and x != ship.position:
+                if haliteCheck > maxHalite and x != ship.position and x not in drops and min([self.calculate_distance(ship.position, j) for j in drops]) >= depoDist:
                     maxHalite = haliteCheck
                     finalLocation = self.normalize(x)
         return finalLocation

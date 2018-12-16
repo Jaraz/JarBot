@@ -165,16 +165,17 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             status = "exploring"
     elif ship.halite_amount >= returnHaliteFlag  or runFlag == True:
         status = "returning"
-    elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
-        status = 'mining'
+    #elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
+    #    status = 'mining'
     #create attack squad near end
-    elif (ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48 and len(game.players)==2) or attackFlag == True:
+    #elif (ship.halite_amount < 50 and game_map.averageHalite < 50 and game_map.width < 48 and len(game.players)==2) or attackFlag == True:
+    elif attackFlag == True:
         status = 'attack'
     elif currentOrders == "exploring":
         status = "exploring"
     else:
         status = 'exploring'
-    #logging.info("ship {} status is {}".format(ship.id, status))
+    #logging.info("ship {} status is {}".format(ship.id, status)
     return status
 
 #resolve movement function
@@ -271,34 +272,34 @@ if game.game_map.width > 60:
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 5
-    collectingStop = 75
+    collectingStop = 1
 elif game.game_map.width > 50:
     shipBuildingTurns = 125
     DEPO_DISTANCE  = 20
     MAX_DEPO = 4
-    collectingStop = 75
+    collectingStop = 1
 elif game.game_map.width > 41:
     shipBuildingTurns = 125
-    collectingStop= 90
+    collectingStop= 1
     DEPO_DISTANCE  = 15
     MAX_DEPO = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 120
-    collectingStop= 90
+    collectingStop= 1
     DEPO_DISTANCE  = 16
     MAX_DEPO = 2
     if game.game_map.totalHalite < 250000:
         MAX_DEPO = 1
 elif game.game_map.width < 40 and game.game_map.totalHalite < 170000:
     shipBuildingTurns = 125
-    collectingStop = 75
+    collectingStop = 1
     MAX_DEPO = 1    
 elif game.game_map.width < 40 and game.game_map.averageHalite > 250:
-    collectingStop = 75
+    collectingStop = 1
     shipBuildingTurns = 110
 else:
     shipBuildingTurns = 100
-    collectingStop= 50
+    collectingStop= 1
 #elif game.game_map.width < 40 and totalHalite > 300000:
 #    shipBuildingTurns = 200
 #    collectingStop = 50
@@ -318,25 +319,25 @@ if len(game.players) == 4:
     if game.game_map.width < 40:
         shipBuildingTurns = 120
         MAX_DEPO = 1
-        collectingStop= 75
+        collectingStop= 1
         DEPO_HALITE -= 25
         if game.game_map.totalHalite < 200000:
             MAX_DEPO = 0
     elif game.game_map.width < 42:
         shipBuildingTurns = 125
-        collectingStop= 100
+        collectingStop= 1
         DEPO_HALITE -= 15
         MAX_DEPO = 2
         if game.game_map.totalHalite < 210000:
             MAX_DEPO = 1
     elif game.game_map.width < 50:
-        shipBuildingTurns = 125
+        shipBuildingTurns = 1
         MAX_DEPO = 2        
     elif game.game_map.width < 57:
-        shipBuildingTurns = 125
+        shipBuildingTurns = 1
         MAX_DEPO = 4
     elif game.game_map.width < 80:
-        shipBuildingTurns = 125
+        shipBuildingTurns = 1
         RADAR_MAX = 12
         DEPO_HALITE += 5
         DEPO_DISTANCE  = 17
@@ -418,16 +419,21 @@ while True:
         
         #logging.info("Ship {} nAvg P{} nStd {} gAvg {} gStd{}".format(ship.id, nearAvg, nearStd, game_map.averageHalite, game_map.stdDevHalite))
         
-        if turns_left < 125 or game_map.averageHalite < 100:
-            collectingStop = game_map.averageHalite
+        #if turns_left < 125 or game_map.averageHalite < 100:
+        #if collectingStop > game_map.averageHalite:
+        #    collectingStop = game_map.averageHalite
         
         if ship_status[ship.id] == 'mining':
             ship_destination[ship.id] = ship.execute_mining()
             
         elif ship_status[ship.id] == 'build depo':
             # want ship to move towards highest avg halite if it isn't ready to build
-            ship_destination[ship.id] = game_map.findHighestSmoothHalite(ship)
-            logging.info("ship {} should head to {}".format(ship.id, game_map.findHighestSmoothHalite(ship)))
+            if game_map.width < 60:
+                allDrops = game.return_all_drop_locations()
+                ship_destination[ship.id] = game_map.findHighestSmoothHalite(ship, allDrops, DEPO_DISTANCE)
+            else:
+                ship_destination[ship.id] = ship.position
+            #logging.info("ship {} should head to {}".format(ship.id, game_map.findHighestSmoothHalite(ship)))
         
         # If ship should explore now
         elif (game_map[ship.position].halite_amount < collectingStop or ship.is_full) and ship_status[ship.id] == "exploring":
