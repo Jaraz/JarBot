@@ -588,7 +588,7 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             #trueFalseFlag = columnHaliteMean < np.percentile(columnHaliteMean, 85, interpolation='higher') # filter out destinations that i don't care about
-            trueFalseFlag = self.npMap.ravel() > np.percentile(self.npMap, 10, interpolation='lower')
+            trueFalseFlag = self.npMap.ravel() > np.percentile(self.npMap, 20, interpolation='lower')
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
