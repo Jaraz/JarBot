@@ -48,6 +48,15 @@ class Game:
         """
         send_commands([name])
 
+    def return_all_drop_locations(self):
+        '''
+        returns dropoff location for all players
+        '''
+        dropLocs = []
+        for player in self.players:
+            dropLocs.extend(self.players[player].get_all_drop_locations())
+        return dropLocs
+
     def update_frame(self):
         """
         Updates the game object's state.
@@ -74,7 +83,18 @@ class Game:
             for dropoff in player.get_dropoffs():
                 self.game_map[dropoff.position].structure = dropoff
 
+        #flag for enemy ships
+        self.game_map.shipFlag[self.game_map.shipMap==1]=0
+        self.game_map.shipFlag[self.game_map.shipMap==2]=1
+        self.game_map.shipFlag[self.game_map.shipMap==3]=1
+        self.game_map.shipFlag[self.game_map.shipMap==4]=1
+        
+        self.game_map.updateInspirationMatrix()
+        
+        
         #logging.info("Ship locations {}".format(self.game_map.shipMap))
+        #logging.info("Enemy flag {}".format(self.game_map.shipFlag))
+        #logging.info("Inspiration {}".format(self.game_map.inspirationBonus))
         
         # Update enemy ships and all ships
         self.enemyShips = []
@@ -83,17 +103,21 @@ class Game:
         
         self.shipCountList = []
         self.shipCountList.append(self.me.get_ship_count())
+        
         for player in self.players:
             for i in self.players[player].get_ships():
                 self.game_map[i.position].occupado = True
             if player != self.me.id:
                 self.playerScores.append(self.players[player].halite_amount)
                 self.shipCountList.append(self.players[player].get_ship_count())
-                self.enemyShips.extend(self.players[player].get_ships())
+                self.enemyShips.extend([i for i in self.players[player].get_ships() if i.position not in self.players[self.my_id].get_all_drop_locations()])
+        logging.info("player scores".format(self.playerScores))
         
         self.adjEnemyShips = []
+        
         for i in self.enemyShips:
-            self.game_map[i.position].mark_enemy_ship(i)
+            if i.position not in self.players[self.my_id].get_all_drop_locations():
+                self.game_map[i.position].mark_enemy_ship(i)
 
             #logging.info("Enemy identified {}".format(i))
             
@@ -101,7 +125,13 @@ class Game:
             haliteAtEnemy = self.game_map[i.position].halite_amount
                 
             # guess enemy movement, skip if he is on a lot of halite and empty
-            if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite:
+            dropLocations = self.players[self.my_id].get_all_drop_locations()
+            dropSurrounding = []
+            for j in dropLocations:
+                dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
+            #logging.info("drop locations {}".format(dropSurrounding))
+            #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
+            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)
@@ -117,7 +147,9 @@ class Game:
                 north = self.game_map.normalize(i.position + Position(0,-1))
                 self.game_map[north].mark_enemy_ship(i)
                 self.adjEnemyShips.append(north)
-                
+
+        # update drop distances
+        self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
 
     @staticmethod
     def end_turn(commands):
