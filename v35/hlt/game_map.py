@@ -562,7 +562,10 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -finalMap / (dist+1)
+                if self.smoothMap[shipY,shipX] < 40 and self.width > 70:
+                    h = -finalMap / np.sqrt(dist+1)
+                else:
+                    h = -finalMap / (dist+1)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -579,9 +582,9 @@ class GameMap:
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
 
-        if self.width >55 and len(distMatrix)>0:
+        if self.width >60 and len(distMatrix)>0:
             # shrink targets
-            matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
+            matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
             columnHaliteMean = distMatrix.mean(0)
             
             #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))

@@ -74,22 +74,14 @@ class Game:
 
         # Mark cells with ships as unsafe for navigation
         self.game_map.emptyShipMap()
-        # first populate with your own ships
-        for ship in self.me.get_ships():
-            self.game_map[ship.position].mark_unsafe(ship)
-            self.game_map.shipMap[ship.position.y, ship.position.x] = 1
-        
-        playerCount = 2
         for player in self.players.values():
-            if player != self.me.id:
-                for ship in player.get_ships():
-                    self.game_map[ship.position].mark_unsafe(ship)
-                    self.game_map.shipMap[ship.position.y, ship.position.x] = playerCount
-    
-                self.game_map[player.shipyard.position].structure = player.shipyard
-                for dropoff in player.get_dropoffs():
-                    self.game_map[dropoff.position].structure = dropoff
-                playerCount += 1
+            for ship in player.get_ships():
+                self.game_map[ship.position].mark_unsafe(ship)
+                self.game_map.shipMap[ship.position.y, ship.position.x] = player.id + 1
+
+            self.game_map[player.shipyard.position].structure = player.shipyard
+            for dropoff in player.get_dropoffs():
+                self.game_map[dropoff.position].structure = dropoff
 
         #flag for enemy ships
         self.game_map.shipFlag[self.game_map.shipMap==1]=0
