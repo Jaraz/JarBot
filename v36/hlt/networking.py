@@ -81,7 +81,7 @@ class Game:
         
         playerCount = 2
         for player in self.players.values():
-            if player.id != self.me.id:
+            if player != self.me.id:
                 for ship in player.get_ships():
                     self.game_map[ship.position].mark_unsafe(ship)
                     self.game_map.shipMap[ship.position.y, ship.position.x] = playerCount
