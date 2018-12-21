@@ -579,7 +579,7 @@ class GameMap:
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
 
-        if self.width >60 and len(distMatrix)>0:
+        if self.width >55 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.mean(0)

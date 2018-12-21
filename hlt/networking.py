@@ -158,6 +158,10 @@ class Game:
 
         # update drop distances
         self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
+        
+        # update dropoff bonus matrix
+        self.game_map.updateDropOffMatrix(self.players[self.my_id].get_dropoffs(), 7)
+        #logging.info("drop it {}".format(self.game_map.dropOffBonus.tolist()))
 
     @staticmethod
     def end_turn(commands):

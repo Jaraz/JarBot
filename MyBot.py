@@ -62,6 +62,7 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     turnStopBuilding = 100
     buildShip = False
     minHaliteToKeepGoing = 60 
+    shipLead = 10
     
     
     if game_map.width == 40:
@@ -71,6 +72,9 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     if game_map.width == 64:
         minHaliteToKeepGoing = 40
         
+    if len(playerScores)==2 and game_map.width > 64:
+        shipLead = 15
+    
     if len(playerScores)==4:
         turnStopBuilding = 140
         minHaliteToKeepGoing = 80
@@ -104,7 +108,7 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
         # i'm ahead but theres a lot of halite left, lets build!
         elif playerScores[0] > scoreCompare and \
             turnsLeft > turnStopBuilding +10 and \
-            playerShips[0] < shipCompare + 10  and \
+            playerShips[0] < shipCompare + shipLead  and \
             game_map.averageHalite > minHaliteToKeepGoing:
             buildShip = True
             
@@ -156,6 +160,15 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "exploring"
     elif currentOrders == 'build depo':
         status = 'build depo'
+#    elif FIRST_DEPO_BUILT == False and \
+#         game.turn_number > shipBuildingTurns and \
+#         GLOBAL_DEPO_BUILD_OK == True and \
+#         ship.position not in game.return_all_drop_locations() and \
+#         FIRST_DEPO_BUILT == False:
+#        status = 'build depo'
+#        SAVE_UP_FOR_DEPO = True
+#        DEPO_ONE_SHIP_AT_A_TIME = True         
+         
     elif GLOBAL_DEPO < MAX_DEPO and \
          game.turn_number > shipBuildingTurns and \
          game_map.getSurroundingHalite(ship.position, DEPO_HALITE_LOOK) > DEPO_HALITE and \
@@ -188,7 +201,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "exploring"
     else:
         status = 'exploring'
-    #logging.info("ship {} status is {}".format(ship.id, status)
+    #logging.info("ship {} status is {}".format(ship.id, status))
     return status
 
 #resolve movement function
@@ -237,7 +250,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
                 SAVE_UP_FOR_DEPO = False
                 DEPO_ONE_SHIP_AT_A_TIME = False
                 DEPO_BUILD_THIS_TURN = True
-                WAIT_TO_BUILD_DEPOT = 15
+                WAIT_TO_BUILD_DEPOT = 25
                 if FIRST_DEPO_BUILT == False:
                     FIRST_DEPO_BUILT = True
             else:   
@@ -260,7 +273,7 @@ game = hlt.Game()
 ################
 ### Settings ###
 ################
-shipBuildingTurns = 100 # how many turns to build ships
+shipBuildingTurns = 110 # how many turns to build ships
 collectingStop    = 80 # Ignore halite less than this
 returnHaliteFlag  = 950 # halite to return to base
 
@@ -268,7 +281,7 @@ returnHaliteFlag  = 950 # halite to return to base
 MAX_DEPO          = 3
 DEPO_HALITE_LOOK  = 5
 DEPO_HALITE       = 100
-DEPO_DISTANCE     = 10
+DEPO_DISTANCE     = 14
 
 #default is 1, 3, 7
 RADAR_DEFAULT = 1
@@ -285,7 +298,7 @@ if game.game_map.width > 60:
     DEPO_HALITE += 0
     DEPO_DISTANCE  = 20
     SUICIDE_TURN_FLAG = 7
-    MAX_DEPO = 5
+    MAX_DEPO = 6
     collectingStop = 1
     WAIT_TO_BUILD_DEPOT = 35
 elif game.game_map.width > 50:
@@ -298,6 +311,8 @@ elif game.game_map.width > 41:
     collectingStop= 1
     DEPO_DISTANCE  = 15
     MAX_DEPO = 3
+    if game.game_map.totalHalite < 200000:
+        MAX_DEPO = 1
 elif game.game_map.width > 39:
     shipBuildingTurns = 100
     collectingStop= 1
@@ -306,10 +321,16 @@ elif game.game_map.width > 39:
     MAX_DEPO = 2
     if game.game_map.totalHalite < 200000:
         MAX_DEPO = 1
-elif game.game_map.width < 40 and game.game_map.totalHalite < 170000:
+elif game.game_map.width < 40 and game.game_map.totalHalite < 210000:
     shipBuildingTurns = 100
     collectingStop = 1
     MAX_DEPO = 1    
+    DEPO_DISTANCE  = 15
+elif game.game_map.width < 40 and game.game_map.totalHalite < 270000:
+    shipBuildingTurns = 100
+    collectingStop = 1
+    MAX_DEPO = 2
+    DEPO_DISTANCE  = 15
 elif game.game_map.width < 40 and game.game_map.averageHalite > 250:
     collectingStop = 1
     shipBuildingTurns = 100
@@ -325,9 +346,9 @@ if game.game_map.averageHalite > 180:
     #shipBuildingTurns += 25
     #collectingStop += 25
 
-if game.game_map.averageHalite > 240:
-    DEPO_HALITE_LOOK  = 5
-    DEPO_HALITE       = 160
+#if game.game_map.averageHalite > 240:
+#    DEPO_HALITE_LOOK  = 5
+#    DEPO_HALITE       = 160
     
     
 ### 4 player changes ###
@@ -340,22 +361,24 @@ if len(game.players) == 4:
         if game.game_map.totalHalite < 200000:
             MAX_DEPO = 0
     elif game.game_map.width < 42:
-        shipBuildingTurns = 100
+        shipBuildingTurns = 120
         collectingStop= 1
-        DEPO_HALITE -= 15
+        DEPO_HALITE -= 10
         MAX_DEPO = 2
         if game.game_map.totalHalite < 225000:
             MAX_DEPO = 1
     elif game.game_map.width < 50:
-        DEPO_HALITE -= 15
-        shipBuildingTurns = 50
+        DEPO_HALITE -= 10
+        shipBuildingTurns = 100
         MAX_DEPO = 2        
+        if game.game_map.totalHalite < 260000:
+            MAX_DEPO = 1
     elif game.game_map.width < 57:
-        DEPO_HALITE -= 15
-        shipBuildingTurns = 50
+        DEPO_HALITE -= 10
+        shipBuildingTurns = 75
         MAX_DEPO = 4
     elif game.game_map.width < 80:
-        shipBuildingTurns = 50
+        shipBuildingTurns = 75
         RADAR_MAX = 12
         DEPO_HALITE -= 10
         DEPO_DISTANCE  = 17
@@ -418,6 +441,7 @@ while True:
         else:
             ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id], collectingStop)
             
+        
         ###############################
         ### Assign ship destination ###
         ###############################
@@ -493,6 +517,20 @@ while True:
         if game_map[me.shipyard.position].is_enemy() and (me.shipyard.position in ship.position.get_surrounding_cardinals()):
             ship_status[ship.id] == "returnSuicide"
             ship_destination[ship.id] = me.shipyard.position
+
+
+    ### Check if depo ship was killed ###
+    shipAlive = False
+    if SAVE_UP_FOR_DEPO == True:
+        for ship in me.get_ships():
+            if ship_status[ship.id] == 'build depo':
+                shipAlive = True
+    
+    if SAVE_UP_FOR_DEPO == True and shipAlive == False:
+        SAVE_UP_FOR_DEPO = False
+        DEPO_ONE_SHIP_AT_A_TIME = False
+                
+    
 
     ###########################
     ### Order Explore Ships ###
