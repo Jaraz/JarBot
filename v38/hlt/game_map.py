@@ -5,7 +5,6 @@ from .entity import Entity, Shipyard, Ship, Dropoff
 from .player import Player
 from .positionals import Direction, Position
 from .common import read_input
-from .dropCalc import dropCalc
 import logging
 import numpy as np
 from scipy import optimize
@@ -118,13 +117,12 @@ class GameMap:
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.npMapDistance = self.buildDistanceMatrix()
         
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 3, mode = 'wrap')
+        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 5, mode = 'wrap')
         
         #logging.info("np map {}".format(self.npMap))
         #logging.info("smooth map {}".format(self.smoothMap))
         
-        # init drop calc
-        self.dropCalc = dropCalc(5, self.npMap, self.smoothMap, 400)        
+        
 
 
         self.totalHalite = np.sum(self.npMap)
@@ -183,7 +181,10 @@ class GameMap:
             return self._cells[location.position.y][location.position.x]
         return None
     
-    
+    # basic logic if we should keep building ships
+    # should be a function of my ships, enemy ships, my halite, his halite
+    def shipBuild(self):
+        return 0
     '''    
     def updateOptimalDrops(self, distance):
         cutOff = np.percentile(self.smoothMap,)
@@ -220,7 +221,7 @@ class GameMap:
         logging.info("locs {}".format(locations))
         for i in range(len(locations)):
             loc = locations[i]
-            self.dropDistances[i] = self.distanceMatrix[loc.x][loc.y]
+            self.dropDistances[i] = self.distanceMatrix[loc.y][loc.x]
         #logging.info("drops {}".format(self.dropDistances))
     
     def emptyShipMap(self):
@@ -261,6 +262,31 @@ class GameMap:
         results = np.roll(np.roll(self.npMapDistance,source.x,1), source.y,0)
         return results
 
+    def get_map_split(self, source):
+        '''
+        evenly divide the map into quarters. Return odds for next move
+        '''
+        breakPoint = self.width/2 - 1 # since python starts at 0
+        haliteSplit = {}
+        
+        for x in range(2):
+            for y in range(2):
+                for i in range(breakPoint):
+                    for j in range(breakPoint):
+                        haliteSplit[x,y] = self[self.normalize(source + Position(i,j))].halite_amount
+                
+        return 0
+
+    def get_ship_surroundings(self, ships, width, minHalite):
+        '''
+        return a list of possible surrounding spots, unique, that pass min Halite threshold
+        '''
+        targets = []
+        for ship in ships:
+            for nearby in self.get_surrounding_cardinals(ship.position, width):
+                if self[nearby].halite_amount > minHalite and nearby not in targets:
+                    targets.append(nearby)
+        return targets
 
     def get_near_stats(self, source, width):
         '''
@@ -286,7 +312,7 @@ class GameMap:
         if self.width > 60:
             maxLoop = 4
             if max(self.shipMap.flatten())==4:
-                maxLoop = 5
+                maxLoop = 4
             if self.turnsLeft <30:
                 maxLoop = 5
         
@@ -528,16 +554,6 @@ class GameMap:
         #miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
         #logging.info("Mining turns {}".format(miningTurns))
         depoDist = self.dropDistances.min(0)
-        if self.width > 60:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.15
-        elif self.width > 55:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.20
-        elif self.width > 45:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.25
-        else:
-            depoBonus = 0
-        #logging.info("depo dist {}".format(depoDist))
-        #logging.info("depo bonus {}".format(depoDist.max() - depoDist))
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
 
@@ -551,7 +567,6 @@ class GameMap:
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
-            finalMap += depoBonus
             finalMap *= miningSpeed
             # if above minimum threshold then lets include it
             if self.npMap[shipY,shipX] > collectingStop:
@@ -606,9 +621,9 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > 65
+                trueFalseFlag = self.npMap.ravel() > 70
                 if sum(trueFalseFlag) > 3500:
-                    trueFalseFlag = self.npMap.ravel() > 90
+                    trueFalseFlag = self.npMap.ravel() > 100
             else:
                 trueFalseFlag = self.npMap.ravel() > 50
                 
@@ -644,29 +659,66 @@ class GameMap:
         logging.info("orders {}".format(orders))
         return row_ind, col_ind, orders
     
-    def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=12):
+    def matchShipsToDest(self, ships, destinations):
+        distMatrix = np.zeros([len(ships), len(destinations)])
+        for i in range(len(ships)):
+            for j in range(len(destinations)):
+                distCalc = self.calculate_distance(ships[i].position, destinations[j])
+                if distCalc == 0:
+                    distCalc = 1000
+                distMatrix[i,j] = -self[destinations[j]].halite_amount / (np.sqrt(2 * distCalc))
+            
+        # find closest destination
+        row_ind, col_ind = optimize.linear_sum_assignment(distMatrix)
+        logging.info("distMatrix {}, row {}, col {}".format(distMatrix, row_ind, col_ind))
+        
+        # convert to ship
+        orders = {}
+        for i in range(len(ships)):
+            orders[ships[i].id] = destinations[col_ind[i]]
+        return row_ind, col_ind, orders
+    
+    def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=4):
         maxHalite = self.smoothMap[ship.position.y,ship.position.x]
         finalLocation = ship.position
         
-        if min([self.calculate_distance(ship.position, j) for j in drops]) < depoDist or self.dropCalc.inMaxZone(ship.position)==False:
-            logging.info("ship {} has a problem".format(ship.id))
-            maxHalite = -50
+        for i in range(1, maxWidth+1):
+            location_choices = self.get_surrounding_cardinals(ship.position, i)
         
-
-        location_choices = self.get_surrounding_cardinals(ship.position, maxWidth)
-        
-        #find max halite
-        for x in location_choices:
-            haliteCheck = self.smoothMap[x.y,x.x]
-            if haliteCheck > maxHalite + 50 and x != ship.position and \
-                x not in drops and \
-                min([self.calculate_distance(x, j) for j in drops]) >= depoDist and \
-                self.dropCalc.inMaxZone(x):
-                maxHalite = haliteCheck
-                finalLocation = self.normalize(x)
-                logging.info("ship build location at".format(x))
+            #find max halite
+            for x in location_choices:
+                haliteCheck = self.smoothMap[x.y,x.x]
+                if haliteCheck > maxHalite and x != ship.position and x not in drops and min([self.calculate_distance(x, j) for j in drops]) >= depoDist:
+                    maxHalite = haliteCheck
+                    finalLocation = self.normalize(x)
         return finalLocation
     
+    def findDynamicHalite(self, ship, destinations, minHalite, maxWidth):
+        '''
+        returns the location of highest halite near a source, widens 
+        search until minHalite is reached up to timeout from maxWidth
+        :param source: The source from where to search
+        :param destinations: excludes these points
+        :param minHalite: break once this size is found
+        :param maxWidth: cutoff where it will no longer search
+        :return: The location
+        '''
+        maxHalite = 0 
+        finalLocation = ship.position
+    
+        for i in range(1, maxWidth + 1):
+            location_choices = self.get_surrounding_cardinals(ship.position, i)
+        
+            #find max halite
+            for x in location_choices:
+                haliteCheck = self[x].halite_amount
+                if haliteCheck > maxHalite and x != ship.position and not (x in destinations.values()):
+                    maxHalite = haliteCheck
+                    finalLocation = self.normalize(x)
+        
+            if maxHalite > minHalite:
+                break
+        return finalLocation
     
     # returns average halite in area based on width, also returns max halite
     def getSurroundingHalite(self, pos, width):
@@ -866,7 +918,189 @@ class GameMap:
 
         return Direction.Still
 
+    def findOptimalMoves_old(self, ships, destinations, dropoffs, status, enemyLocs):
+        '''
+        given a vector of ships and destinations will find optimal moves next turn
+        '''
+        turnMatrix = np.zeros([len(ships), self.width * self.height], dtype=np.int)
+        moveStatus = ["exploring","returning","returnSuicide", "attack"]
+        shipPosList = []
+        for ship in ships:
+            shipPosList.append(ship.position)
+        
+        issueList = []
+        issueFlag = True
+        loopCounter = 1
+        maxLoop = 4
+        if self.width > 60:
+            maxLoop = 3
+            if self.turnsLeft <30:
+                maxLoop = 2
+        
 
+        while issueFlag and loopCounter < maxLoop:
+            for i in range(len(ships)):
+                shipMap = np.zeros([self.width, self.height], dtype=np.int)       
+                halite = ships[i].halite_amount
+                if halite < 10:
+                    halite = 10
+                shipID = ships[i].id
+                pos = ships[i].position
+                x = ships[i].position.x
+                y = ships[i].position.y
+                
+                # should we move
+                if status[ships[i].id] in moveStatus:
+                    distToDest   = self.calculate_distance(pos,destinations[shipID])
+                    leftOnly = False
+                    rightOnly = False
+                    upOnly = False
+                    downOnly = False
+                    
+                    # logic
+                    # 1 - for backwards move
+                    # 2 = stay still
+                    # halite otherwise
+                    # if you are on dropoff you are VIP!
+                    
+                    # Need to get ships off dropoffs
+                    if pos in dropoffs:
+                        shipMap[y,x] = 1
+                        halite = 10000
+                    # needs safety
+                    elif shipID in issueList:
+                        logging.info("ship {} trying to survive".format(shipID))
+                        halite = 10000
+                        shipMap[y,x] = 10000
+                    # encourage to stay if target destination is empty right now
+                    elif destinations[shipID] not in shipPosList:
+                        shipMap[y,x] = 6
+                    else: 
+                        shipMap[y,x] = 1
+                        
+                    # is goal directly n,s,e,w?
+                    left = self.normalize(pos.directional_offset(Direction.West))
+                    right = self.normalize(pos.directional_offset(Direction.East))
+                    up = self.normalize(pos.directional_offset(Direction.North))
+                    down = self.normalize(pos.directional_offset(Direction.South))
+                    leftDist = self.calculate_distance(left, destinations[shipID])                
+                    rightDist = self.calculate_distance(right, destinations[shipID])                
+                    upDist = self.calculate_distance(up, destinations[shipID])
+                    downDist = self.calculate_distance(down, destinations[shipID])
+    
+                    # Directions
+                    if leftDist < distToDest and upDist > distToDest and downDist > distToDest:
+                        leftOnly = True
+                    elif upDist < distToDest and rightDist > distToDest and leftDist > distToDest:
+                        upOnly = True
+                    elif rightDist < distToDest and upDist > distToDest and downDist > distToDest:
+                        rightOnly = True
+                    elif downDist < distToDest and rightDist > distToDest and leftDist > distToDest:
+                        downOnly = True
+    
+                    # need to add logic to sit still if ship just moved in front
+    
+                    if status[shipID] == "attack" and left in enemyLocs:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 10000
+                    elif left in enemyLocs:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 0
+                    elif leftDist < distToDest: # moves us closer 
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
+                    elif shipID in issueList:
+                        shipMap[(y) % self.width,(x-1) % self.height] = halite + random.randint(1,2) 
+                    elif upOnly or downOnly:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y) % self.width,(x-1) % self.height] = 2
+                    #logging.info("left ship {} map {}".format(ships[i].id, shipMap))
+    
+                    if status[shipID] == "attack" and right in enemyLocs:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 10000
+                    elif right in enemyLocs:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 0
+                    elif rightDist < distToDest: # moves us closer 
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y) % self.width,(x+1) % self.height] = halite + random.randint(1,2)
+                    elif upOnly or downOnly:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y) % self.width,(x+1) % self.height] = 2
+                    #logging.info("right ship {} map {}".format(ships[i].id, shipMap))
+                    
+                    if status[shipID] == "attack" and up in enemyLocs:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 10000
+                    elif up in enemyLocs:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 0
+                    elif upDist < distToDest: # moves us closer 
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y-1) % self.width,(x) % self.height] = halite + random.randint(1,2)
+                    elif rightOnly or leftOnly:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y-1) % self.width,(x) % self.height] = 2
+                    #logging.info("up ship {} map {}".format(ships[i].id, shipMap))
+    
+                    if status[shipID] == "attack" and down in enemyLocs:
+                        shipMap[(y+1) % self.width,x % self.height] = 10000
+                    elif down in enemyLocs:
+                        shipMap[(y+1) % self.width,x % self.height] = 0
+                    elif downDist < distToDest: # moves us closer 
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
+                    elif shipID in issueList:
+                        shipMap[(y+1) % self.width,x % self.height] = halite + random.randint(1,2)
+                    elif rightOnly or leftOnly:
+                        shipMap[(y+1) % self.width,x % self.height] = 3 + random.randint(1,2)
+                    else:
+                        shipMap[(y+1) % self.width,x % self.height] = 2
+                # or mine and stay still
+                else:
+                    shipMap[y,x] = 100000
+                
+                turnMatrix[i,:] = shipMap.ravel()
+                #logging.info("ship {} map {}".format(ships[i].id, shipMap))
+    
+            # solve for correct moves
+            row_ind, col_ind = optimize.linear_sum_assignment(-turnMatrix)
+            #logging.info("row {}, col {}".format(row_ind, col_ind))
+            
+            # look for issues
+            issueFlag = False
+            aroundList = self.get_surrounding_cardinals(Position(0,0),1)
+            for i in range(len(ships)):
+                if col_ind[i] == 0 and ships[i].position not in aroundList:
+                    issueList.append(ships[i].id)
+                    issueFlag = True
+                    #logging.info("ship {} in danger".format(ships[i].id))
+            
+            loopCounter += 1
+                
+        
+        # convert to ship orders
+        orders = {}
+        for i in range(len(ships)):
+            pos = ships[i].position
+            
+            crashLand = False
+            dropOffTarget = None
+            # help crash at the end
+            if status[ships[i].id] == "returnSuicide":
+                surrounding = ships[i].position.get_surrounding_cardinals()
+                for j in dropoffs:
+                        if j in surrounding:
+                            crashLand = True
+                            dropOffTarget = j
+            if crashLand == False:
+                nextMove = Position(col_ind[i] % self.width, int(col_ind[i]/self.width))
+            else:
+                nextMove = dropOffTarget
+            #logging.info("ship {} next move to {}".format(ships[i].id, nextMove))
+            if nextMove == pos:
+                orders[ships[i].id] = Direction.Still
+            else:
+                orders[ships[i].id] = self.get_unsafe_moves(pos, nextMove)[0]
+        return orders
 
     @staticmethod
     def _generate():
@@ -908,6 +1142,4 @@ class GameMap:
         
         # update drop distance matrices
 
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 3, mode = 'wrap')
-        self.dropCalc.updateMap(self.npMap, self.smoothMap)
-        self.dropCalc.identifyBestDrops()
+        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 5, mode = 'wrap')

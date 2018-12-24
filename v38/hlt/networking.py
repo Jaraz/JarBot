@@ -139,7 +139,7 @@ class Game:
                 dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
             #logging.info("drop locations {}".format(dropSurrounding))
             #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
-            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
+            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 110:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)
@@ -157,8 +157,7 @@ class Game:
                 self.adjEnemyShips.append(north)
 
         # update drop distances
-        #self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
-        self.game_map.updateDropDistances(self.players[self.my_id].get_dropoff_locations())
+        self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
         
         # update dropoff bonus matrix
         self.game_map.updateDropOffMatrix(self.players[self.my_id].get_dropoffs(), 7)
