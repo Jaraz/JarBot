@@ -16,12 +16,13 @@ class dropCalc:
     """
     Class which identifies the best dropoff locations
     """
-    def __init__(self, maxDrops, haliteMap, smoothMap, minHalite):
+    def __init__(self, maxDrops, haliteMap, smoothMap, minHalite, percentile):
         self.maxDrops = maxDrops
         self.haliteMap = haliteMap
         self.smoothMap = smoothMap
         self.length = len(self.haliteMap)
         self.minHalite =  minHalite
+        self.percentileFlag = percentile
 
     def updateMap(self, haliteMap, smoothMap):
         self.haliteMap = haliteMap
@@ -30,11 +31,14 @@ class dropCalc:
     def updateMinHalite(self, minHalite):
         self.minHalite = minHalite
         
+    def updatePercentile(self, percentile):
+        self.percentileFlag = percentile
+        
     def identifyBestDrops(self):
         self.filteredMap = ndimage.maximum_filter(self.smoothMap, size = self.length / 4, mode = 'wrap')
         self.peakMaxima = peak_local_max(self.smoothMap, min_distance = 1)
         self.maxZones = self.filteredMap.copy()
-        self.maxZones[self.filteredMap < np.percentile(self.filteredMap, 75)]=0
+        self.maxZones[self.filteredMap < np.percentile(self.filteredMap, self.percentileFlag)]=0
         self.maxZones[self.maxZones<self.minHalite] = 0
         #logging.info("raw map\n {}".format(self.haliteMap))
         #logging.info("filter map\n {}".format(self.filteredMap))

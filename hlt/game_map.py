@@ -118,13 +118,15 @@ class GameMap:
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.npMapDistance = self.buildDistanceMatrix()
         
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 3, mode = 'wrap')
+        
+        self.smoothSize = 3
+        self.smoothMap = ndimage.uniform_filter(self.npMap, size = self.smoothSize, mode = 'wrap')
         
         #logging.info("np map {}".format(self.npMap))
         #logging.info("smooth map {}".format(self.smoothMap))
         
         # init drop calc
-        self.dropCalc = dropCalc(5, self.npMap, self.smoothMap, 400)        
+        self.dropCalc = dropCalc(5, self.npMap, self.smoothMap, 400, 75)        
 
 
         self.totalHalite = np.sum(self.npMap)
@@ -192,6 +194,9 @@ class GameMap:
         
         return 0
     '''
+    def updateSmoothSize(self, smoothSize):
+        self.smoothSize = smoothSize
+    
     def updateInspirationMatrix(self):
         for x in range(self.width):
             for y in range(self.height):
@@ -203,6 +208,14 @@ class GameMap:
                     self.inspirationBonus[x][y] = 1
                 else:
                     self.inspirationBonus[x][y] = 0
+    
+    def returnFriendlyCount(self, pos, width):
+        countMap = self.shipMap.copy()
+        dist = self.distanceMatrixNonZero[pos.x][pos.y]
+        
+        countMap[self.shipMap>1] = 0
+        countMap[dist > width] = 0
+        return np.sum(countMap)-1
     
     def updateDropOffMatrix(self, drops, bonusDist):
         for drop in drops:
@@ -908,6 +921,6 @@ class GameMap:
         
         # update drop distance matrices
 
-        self.smoothMap = ndimage.uniform_filter(self.npMap, size = 3, mode = 'wrap')
+        self.smoothMap = ndimage.uniform_filter(self.npMap, size = self.smoothSize, mode = 'wrap')
         self.dropCalc.updateMap(self.npMap, self.smoothMap)
         self.dropCalc.identifyBestDrops()

@@ -30,6 +30,7 @@ WAIT_TO_BUILD_DEPOT = 15
 FIRST_DEPO_BUILT = False
 BUILD_DEPO_TIMER = 0
 
+
 '''
 To add later
 fix when ships get stuck
@@ -79,6 +80,8 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     if len(playerScores)==4:
         turnStopBuilding = 140
         minHaliteToKeepGoing = 80
+        if game_map.width == 32:
+            minHaliteToKeepGoing = 90
         if game_map.width == 64:
             minHaliteToKeepGoing = 65
     
@@ -133,6 +136,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     global ATTACK_CURRENT_HALITE
     global ATTACK_TARGET_HALITE
     global BUILD_DEPO_TIMER
+    global DEPO_MIN_SHIPS
     
     turns_left = (constants.MAX_TURNS - game.turn_number)
     #logging.info("Ship {} was {}".format(ship, currentOrders))
@@ -160,6 +164,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         okToBuildDepo = True
 
     #logging.info("ship {} in max zone {}".format(ship.id, game_map.dropCalc.inMaxZone(ship.position)))
+    logging.info("ship {} friendly count {}".format(ship.id, game_map.returnFriendlyCount(ship.position, 7)))
 
     status = None
     if currentOrders is None: #new ship
@@ -177,7 +182,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
 #        DEPO_ONE_SHIP_AT_A_TIME = True         
          
     elif GLOBAL_DEPO < MAX_DEPO and \
-         min(GLOBAL_DEPO+1,2) * 12 < game.me.get_ship_count() and \
+         min(GLOBAL_DEPO+1,2) * 11 < game.me.get_ship_count() and \
          game.turn_number > shipBuildingTurns and \
          game_map.dropCalc.inMaxZone(ship.position) and \
          min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= DEPO_DISTANCE-6 and \
@@ -185,7 +190,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
          ship.position not in game.return_all_drop_locations() and \
          DEPO_ONE_SHIP_AT_A_TIME == False and\
          okToBuildDepo == True and \
-         turns_left > 75:
+         turns_left > 75 and \
+         game_map.returnFriendlyCount(ship.position, 7) > DEPO_MIN_SHIPS:
         status = 'build depo'
         SAVE_UP_FOR_DEPO = True
         DEPO_ONE_SHIP_AT_A_TIME = True
@@ -292,6 +298,8 @@ shipBuildingTurns = 90 # how many turns to build ships
 collectingStop    = 80 # Ignore halite less than this
 returnHaliteFlag  = 950 # halite to return to base
 DEPO_DISTANCE_DELTA = 0
+DEPO_PERCENTILE = 75
+DEPO_MIN_SHIPS = 4
 
 #DEPOs
 MAX_DEPO          = 3
@@ -325,14 +333,19 @@ if game.game_map.width > 60:
     collectingStop = 1
     DEPO_HALITE_LOOK  = 3
     DEPO_HALITE = 140
-    DEPO_MIN_HALITE   = 350
+    DEPO_MIN_HALITE = 300
+    DEPO_PERCENTILE = 66
+    game.game_map.updateSmoothSize(5)
+    DEPO_MIN_SHIPS = 2
 elif game.game_map.width > 50:
     shipBuildingTurns = 80
     DEPO_DISTANCE  = 11
     DEPO_DISTANCE_DELTA = 6
-    MAX_DEPO = 5
+    MAX_DEPO = 4
     collectingStop = 1
-    DEPO_MIN_HALITE   = 350
+    DEPO_MIN_HALITE  = 325
+    DEPO_PERCENTILE = 66
+    game.game_map.updateSmoothSize(5)
 elif game.game_map.width > 41:
     shipBuildingTurns = 80
     collectingStop= 1
@@ -343,6 +356,7 @@ elif game.game_map.width > 41:
     DEPO_DISTANCE  = 11
     DEPO_DISTANCE_DELTA = 6
     DEPO_MIN_HALITE   = 350
+    DEPO_MIN_SHIPS = 3
 elif game.game_map.width > 39:
     shipBuildingTurns = 80
     collectingStop= 1
@@ -375,7 +389,10 @@ if game.game_map.width < 40:
     DEPO_DISTANCE  = 9
     DEPO_DISTANCE_DELTA = 3
     DEPO_MIN_HALITE   = 350
+    DEPO_MIN_SHIPS = 1
 
+if game.game_map.width < 55:
+    DEPO_MIN_SHIPS = 0
     
 #elif game.game_map.width < 40 and totalHalite > 300000:
 #    shipBuildingTurns = 200
@@ -464,6 +481,7 @@ while True:
     GLOBAL_DEPO_BUILD_OK = True # only build one depo per turn
     DEPO_BUILD_THIS_TURN = False
     game_map.dropCalc.updateMinHalite(DEPO_MIN_HALITE)
+    game_map.dropCalc.updatePercentile(DEPO_PERCENTILE)
 
     if game.turn_number > 11:
         haliteChange = game.haliteHistory[-10] - game_map.totalHalite
