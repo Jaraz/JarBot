@@ -539,7 +539,7 @@ class GameMap:
         '''
         The eyes of JarBot
         need to add penalty when another ship is on a spot already
-        halite excluded form search if its below minHalite
+        halite excluded form search if its below minHalite 
         '''
         distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         distResults = np.zeros([len(ships), self.width*self.height], dtype=np.int)
