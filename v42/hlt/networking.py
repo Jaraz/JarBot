@@ -99,8 +99,8 @@ class Game:
         self.game_map.shipFlag[self.game_map.shipMap==3]=1
         self.game_map.shipFlag[self.game_map.shipMap==4]=1
         
-        self.game_map.updateInspirationMatrix()
         if len(self.players.values())==2:
+            self.game_map.updateInspirationMatrix()
             self.game_map.updateNegInspirationMatrix()
         else:
             self.game_map.enemyShipCount = self.game_map.shipMap.copy()
