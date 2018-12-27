@@ -111,11 +111,6 @@ class GameMap:
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.dropOffBonus = np.zeros([self.width, self.height], dtype=np.int)
         
-        # negative inspiration check for 2 player
-        # updated once per turn, telling me all cells currently getting the bonus
-        self.negInspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
-        self.negShipMap = np.zeros([self.width, self.height], dtype=np.int)
-        
         # build numpy map
         self.npMap = np.zeros([self.width, self.height], dtype=np.int) 
         for y in range(self.height):
@@ -174,9 +169,6 @@ class GameMap:
                 matrixCount += 1
         #logging.info("matrix count {}".format(self.matrixID))
         
-        # negative inspiration variables
-        self.shiftShipTensor = np.zeros([self.width, self.height, self.width, self.height], dtype=np.int)
-        
         # setup row column labels to keep track of positions later
         
 
@@ -205,34 +197,18 @@ class GameMap:
     def updateSmoothSize(self, smoothSize):
         self.smoothSize = smoothSize
     
-    def updateNegativeInspiration(self):
-        return 0
-    
     def updateInspirationMatrix(self):
-        dist = self.distanceMatrixNonZero.copy()
-        dist[dist>4] = 0
-        dist[dist>0] = 1
-
-        self.enemyShipCount = np.einsum('ijkl,lk',dist,self.shipFlag)
-        res = self.enemyShipCount.copy()
-        res[res<=1] = 0
-        res[res>1] = 1
-        self.inspirationBonus = res
-        logging.info("inspiration \n{}".format(self.inspirationBonus))
-        
-    def updateNegInspirationMatrix(self):
-        dist = self.distanceMatrixNonZero.copy()
-        dist[dist>4] = 0
-        dist[dist>0] = 1
-        ships = self.shipMap.copy()
-        ships[ships>1] = 0
-        self.friendlyShipCount = np.einsum('ijkl,lk',dist,ships)
-        res = self.friendlyShipCount.copy()
-        res[res<=1] = 0
-        res[res>1] = 1
-        self.negInspirationBonus = res
-        logging.info("Neg inspiration \n{}".format(self.negInspirationBonus))
-        
+        for x in range(self.width):
+            for y in range(self.height):
+                dist = self.distanceMatrixNonZero[y][x].copy()
+                dist[dist>4]=0
+                dist[dist>0]=1
+                temp = dist * self.shipFlag
+                if temp.sum()>1:
+                    self.inspirationBonus[x][y] = 1
+                else:
+                    self.inspirationBonus[x][y] = 0
+    
     def returnFriendlyCount(self, pos, width):
         countMap = self.shipMap.copy()
         dist = self.distanceMatrixNonZero[pos.x][pos.y]
@@ -578,50 +554,10 @@ class GameMap:
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
 
-        #distInsp = self.distanceMatrixNonZero.copy()
-        #distInsp[distInsp>4] = 0
-        #distInsp[distInsp>0] = 1
-        
-        #calculate what the enemy is getting from inspiration bonus
-        #currentNegInspBonus = np.sum(self.negInspirationBonus * self.npMap * self.shipFlag) * 0.5
-        #logging.info("Current neg bonus {}".format(currentNegInspBonus))
-        
-        '''
-        distForNegInsp = self.distanceMatrixNonZero.copy()
-        distForNegInsp[distForNegInsp>4] = 0
-        distForNegInsp[distForNegInsp>0] = 1
-        shipsForNegInsp = self.shipMap.copy()
-        shipsForNegInsp[shipsForNegInsp>1] = 0
-        negShipCount = np.einsum('ijkl,lk',distForNegInsp,shipsForNegInsp)
-        
-        #logging.info("Neg delta sum {} \n {}".format(np.sum(negDelta), negDelta))
-        shipTest = self.shipFlag.copy()
-        shipTest[self.npMap<100] = 0
-        '''
         for i in range(len(ships)):
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
-            
-            #negShipFlag = negShipCount.copy()
-            #logging.info("Ship {} negShipFlag0 {}".format(ships[i].id, negShipFlag))
-            #nearbyDist = dist.copy()
-            #nearbyDist[nearbyDist>4]=0
-            #nearbyDist[nearbyDist>1]=1
-            #nearbyDist[shipY,shipX]=1
-            #logging.info("Ship {} nearbyDist {}".format(ships[i].id, nearbyDist))
-            #negShipFlag -= nearbyDist
-            #negShipFlag[negShipFlag > 1] = 0
-            #negShipFlag[negShipFlag <= 0] = 0
-            #negShipFlag[negShipFlag > 0] = 1
-
-            #logging.info("Ship {} negShipFlag1 {}".format(ships[i].id, negShipFlag))
-            #negShipFlag = negShipFlag * self.npMap * shipTest * 1
-            #logging.info("Ship {} negShipFlag2 {}".format(ships[i].id, negShipFlag))
-            #negDelta = np.einsum('ijkl,lk',distInsp,negShipFlag)
-            #logging.info("Ship {} negDelta {}".format(ships[i].id, negDelta))
-            #shipNegDelta = negDelta.copy()
-            #shipNegDelta[shipX][shipY] = 0
             
             finalMap = haliteMap.copy()
             finalMap = finalMap.astype(np.float)
@@ -673,9 +609,8 @@ class GameMap:
             #logging.info("ship {} h: {}".format(ships[i].id, h))
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
-            
 
-        if self.width >55 and len(distMatrix)>0:
+        if self.width >57 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.mean(0)

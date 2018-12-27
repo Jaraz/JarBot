@@ -78,7 +78,6 @@ class Game:
         for ship in self.me.get_ships():
             self.game_map[ship.position].mark_unsafe(ship)
             self.game_map.shipMap[ship.position.y, ship.position.x] = 1
-            self.game_map.negShipMap[ship.position.y, ship.position.x] = 1
         
         playerCount = 2
         for player in self.players.values():
@@ -99,7 +98,6 @@ class Game:
         self.game_map.shipFlag[self.game_map.shipMap==4]=1
         
         self.game_map.updateInspirationMatrix()
-        self.game_map.updateNegInspirationMatrix()
         
         
         #logging.info("Ship locations {}".format(self.game_map.shipMap))

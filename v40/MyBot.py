@@ -146,29 +146,13 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     attackFlag = False
     surroundings = game_map.get_normalized_cardinals(ship.position)
     for enemyShip in game.enemyShips:
-        logging.info("enemy ship {} inspired {}".format(enemyShip.id, game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))
         if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700 and len(game.players)==2:
             logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
         elif ship.halite_amount > 700 and len(game.players)==4 and turns_left < 100:
             runFlag = True
-        elif enemyShip.position in surroundings and \
-             (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * (0.25+0.5*game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))>ATTACK_TARGET_HALITE and \
-             ship.halite_amount<ATTACK_CURRENT_HALITE and \
-             len(game.players)==2 and \
-             game_map.friendlyShipCount[ship.position.y,ship.position.x]>game_map.enemyShipCount[ship.position.y,ship.position.x]:
-            if game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x] == 1:
-                logging.info("ship {} is attacking {}".format(ship.id, enemyShip.id))
+        elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>ATTACK_TARGET_HALITE and ship.halite_amount<ATTACK_CURRENT_HALITE and len(game.players)==2:
             attackFlag = True
-        '''
-        elif enemyShip.position in surroundings and \
-             (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * (0.25+0.5*game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))>(ATTACK_TARGET_HALITE+550) and \
-             ship.halite_amount<ATTACK_CURRENT_HALITE and \
-             len(game.players)==2:
-            if game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x] == 1:
-                logging.info("ship {} is not attacking {}".format(ship.id, enemyShip.id))
-            #attackFlag = True
-        '''
         #elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
         #    attackFlag = True
 
@@ -188,6 +172,15 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     elif currentOrders == 'build depo' and BUILD_DEPO_TIMER < 45:
         status = 'build depo'
         BUILD_DEPO_TIMER += 1
+#    elif FIRST_DEPO_BUILT == False and \
+#         game.turn_number > shipBuildingTurns and \
+#         GLOBAL_DEPO_BUILD_OK == True and \
+#         ship.position not in game.return_all_drop_locations() and \
+#         FIRST_DEPO_BUILT == False:
+#        status = 'build depo'
+#        SAVE_UP_FOR_DEPO = True
+#        DEPO_ONE_SHIP_AT_A_TIME = True         
+         
     elif GLOBAL_DEPO < MAX_DEPO and \
          min(GLOBAL_DEPO+1,2) * 11 < game.me.get_ship_count() and \
          game.turn_number > shipBuildingTurns and \
@@ -322,7 +315,7 @@ RADAR_MAX = RADAR_DEFAULT + 6
 
 # attack thresholds
 ATTACK_CURRENT_HALITE = 250
-ATTACK_TARGET_HALITE = 250
+ATTACK_TARGET_HALITE = 600
 
 #logging.disable(logging.CRITICAL)
 logging.info("map size: {}, max turns: {}".format(game.game_map.width, constants.MAX_TURNS))
@@ -460,7 +453,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v40Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
