@@ -145,33 +145,44 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     runFlag = False
     attackFlag = False
     surroundings = game_map.get_normalized_cardinals(ship.position)
-    for enemyShip in game.enemyShips:
-        logging.info("enemy ship {} inspired {}".format(enemyShip.id, game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))
-        if enemyShip.position in surroundings and enemyShip.halite_amount<300 and ship.halite_amount>700 and len(game.players)==2:
+    
+    #logging.info("Enemy ship halite \n {}".format(game_map.enemyShipHalite))
+    
+    # check to run
+    shipX = ship.position.x
+    shipY = ship.position.y
+    
+    distanceRule = 1
+    
+    dist = game_map.distanceMatrixNonZero[shipX][shipY].copy()
+    dist[dist>distanceRule] = 0
+    enemyInSight = dist * game_map.shipFlag
+    #logging.info("ship {} dist {} enemy in sight {}".format(ship.id, dist, enemyInSight))
+    
+    # is an enemy in zone
+    if np.sum(enemyInSight)>0:
+        enemyHalite = game_map.enemyShipHalite * dist
+        enemyMA = np.ma.masked_equal(enemyHalite, 0, copy=False)
+        fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
+        # check if we should run
+        if enemyMA.min() < 300 and \
+           ship.halite_amount > 700 and \
+           len(game.players) == 2:
             logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
-        elif ship.halite_amount > 700 and len(game.players)==4 and turns_left < 100:
+        elif enemyMA.min() < 500 and \
+             ship.halite_amount>700 and \
+             len(game.players)==4 and \
+             turns_left < 100:
             runFlag = True
-        elif enemyShip.position in surroundings and \
-             (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * (0.25+0.5*game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))>ATTACK_TARGET_HALITE and \
-             ship.halite_amount<ATTACK_CURRENT_HALITE and \
+        # check if we should fight
+        elif np.max(fightHalite) > ATTACK_TARGET_HALITE and \
+             ship.halite_amount < ATTACK_CURRENT_HALITE and \
              len(game.players)==2 and \
-             game_map.friendlyShipCount[ship.position.y,ship.position.x]>game_map.enemyShipCount[ship.position.y,ship.position.x]:
-            if game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x] == 1:
-                logging.info("ship {} is attacking {}".format(ship.id, enemyShip.id))
+             game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
+            logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
-        '''
-        elif enemyShip.position in surroundings and \
-             (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * (0.25+0.5*game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x]))>(ATTACK_TARGET_HALITE+550) and \
-             ship.halite_amount<ATTACK_CURRENT_HALITE and \
-             len(game.players)==2:
-            if game_map.negInspirationBonus[enemyShip.position.y,enemyShip.position.x] == 1:
-                logging.info("ship {} is not attacking {}".format(ship.id, enemyShip.id))
-            #attackFlag = True
-        '''
-        #elif enemyShip.position in surroundings and (enemyShip.halite_amount + game_map[enemyShip.position].halite_amount * 0.25)>800 and ship.halite_amount<50 and len(game.players)==4:
-        #    attackFlag = True
-
+        
     okToBuildDepo = False
     # we wait if we just built a depo
     if FIRST_DEPO_BUILT == False:
@@ -180,7 +191,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         okToBuildDepo = True
 
     #logging.info("ship {} in max zone {}".format(ship.id, game_map.dropCalc.inMaxZone(ship.position)))
-    logging.info("ship {} friendly count {}".format(ship.id, game_map.returnFriendlyCount(ship.position, 7)))
+    #logging.info("ship {} friendly count {}".format(ship.id, game_map.returnFriendlyCount(ship.position, 7)))
 
     status = None
     if currentOrders is None: #new ship
@@ -222,7 +233,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "exploring"
     else:
         status = 'exploring'
-    logging.info("ship {} status is {}".format(ship.id, status))
+    #logging.info("ship {} status is {}".format(ship.id, status))
     return status
 
 #resolve movement function
@@ -350,7 +361,7 @@ elif game.game_map.width > 50:
     DEPO_DISTANCE_DELTA = 6
     MAX_DEPO = 4
     collectingStop = 1
-    DEPO_MIN_HALITE  = 325
+    DEPO_MIN_HALITE  = 300
     DEPO_PERCENTILE = 66
     game.game_map.updateSmoothSize(5)
 elif game.game_map.width > 41:
@@ -438,13 +449,13 @@ if len(game.players) == 4:
         if game.game_map.totalHalite < 260000:
             MAX_DEPO = 1
     elif game.game_map.width < 57:
-        DEPO_HALITE -= 10
+        DEPO_HALITE -= 25
         #shipBuildingTurns = 75
         MAX_DEPO = 4
     elif game.game_map.width < 80:
         #shipBuildingTurns = 75
         RADAR_MAX = 12
-        DEPO_HALITE -= 10
+        DEPO_HALITE -= 25
         #DEPO_DISTANCE  = 17
         MAX_DEPO = 5
     

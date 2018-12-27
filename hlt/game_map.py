@@ -108,6 +108,7 @@ class GameMap:
         # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
         self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
+        self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.dropOffBonus = np.zeros([self.width, self.height], dtype=np.int)
         
@@ -218,7 +219,7 @@ class GameMap:
         res[res<=1] = 0
         res[res>1] = 1
         self.inspirationBonus = res
-        logging.info("inspiration \n{}".format(self.inspirationBonus))
+        #logging.info("inspiration \n{}".format(self.inspirationBonus))
         
     def updateNegInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -231,7 +232,7 @@ class GameMap:
         res[res<=1] = 0
         res[res>1] = 1
         self.negInspirationBonus = res
-        logging.info("Neg inspiration \n{}".format(self.negInspirationBonus))
+        #logging.info("Neg inspiration \n{}".format(self.negInspirationBonus))
         
     def returnFriendlyCount(self, pos, width):
         countMap = self.shipMap.copy()
@@ -264,6 +265,7 @@ class GameMap:
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
         self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
+        self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)        
 
     def buildDistanceMatrix(self):
         '''
@@ -675,7 +677,7 @@ class GameMap:
             distResults[i,:] = dist.ravel()
             
 
-        if self.width >55 and len(distMatrix)>0:
+        if self.width >58 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.mean(0)

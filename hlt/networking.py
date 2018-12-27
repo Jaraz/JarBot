@@ -86,6 +86,7 @@ class Game:
                 for ship in player.get_ships():
                     self.game_map[ship.position].mark_unsafe(ship)
                     self.game_map.shipMap[ship.position.y, ship.position.x] = playerCount
+                    self.game_map.enemyShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
     
                 self.game_map[player.shipyard.position].structure = player.shipyard
                 for dropoff in player.get_dropoffs():

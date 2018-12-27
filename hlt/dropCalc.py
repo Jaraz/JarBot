@@ -42,7 +42,7 @@ class dropCalc:
         self.maxZones[self.maxZones<self.minHalite] = 0
         #logging.info("raw map\n {}".format(self.haliteMap))
         #logging.info("filter map\n {}".format(self.filteredMap))
-        logging.info("peak Max\n {}".format(self.maxZones))
+        #logging.info("peak Max\n {}".format(self.maxZones))
         #logging.info("peak Max\n {}".format(self.peakMaxima))
 
     def inMaxZone(self, pos):
