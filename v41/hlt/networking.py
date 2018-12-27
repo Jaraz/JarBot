@@ -99,11 +99,8 @@ class Game:
         self.game_map.shipFlag[self.game_map.shipMap==3]=1
         self.game_map.shipFlag[self.game_map.shipMap==4]=1
         
-        if len(self.players.values())==2:
-            self.game_map.updateInspirationMatrix()
-            self.game_map.updateNegInspirationMatrix()
-        else:
-            self.game_map.enemyShipCount = self.game_map.shipMap.copy()
+        self.game_map.updateInspirationMatrix()
+        self.game_map.updateNegInspirationMatrix()
         
         
         #logging.info("Ship locations {}".format(self.game_map.shipMap))
@@ -169,8 +166,6 @@ class Game:
         # update dropoff bonus matrix
         self.game_map.updateDropOffMatrix(self.players[self.my_id].get_dropoffs(), 7)
         #logging.info("drop it {}".format(self.game_map.dropOffBonus.tolist()))
-
-        self.game_map.turnNumber = self.turn_number
 
     @staticmethod
     def end_turn(commands):

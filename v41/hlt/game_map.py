@@ -103,7 +103,6 @@ class GameMap:
         self.haliteRegion = 0
         self.haliteData = [0] * (self.width * self.height)
         self.turnsLeft = 500
-        self.turnNumber = 0
         self.optimalDrops = []
         
         # ship map is a simmple 1 or 0 label for which cell has a ship
@@ -326,8 +325,8 @@ class GameMap:
         if self.width > 60:
             maxLoop = 4
             if max(self.shipMap.flatten())==4:
-                maxLoop = 4
-            if self.turnsLeft <50:
+                maxLoop = 5
+            if self.turnsLeft <30:
                 maxLoop = 5
         
 
@@ -546,8 +545,7 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if max(self.shipMap.flatten())==2 and self.turnNumber > 50:
-            tempMap[self.shipMap==2]=0
+        #tempMap[self.shipMap==2]=0
         #if max(self.shipMap.flatten())==4:
             #tempMap[self.shipMap==3]=0
             #tempMap[self.shipMap==4]=0
@@ -688,24 +686,20 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > 75
-                if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = self.npMap.ravel() > 100
+                trueFalseFlag = self.npMap.ravel() > 65
+                if sum(trueFalseFlag) > 3500:
+                    trueFalseFlag = self.npMap.ravel() > 90
             else:
-                trueFalseFlag = self.npMap.ravel() > 55
+                trueFalseFlag = self.npMap.ravel() > 50
                 
-            if self.averageHalite < 45 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 50:
                 trueFalseFlag = self.npMap.ravel() > self.averageHalite
-            elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > self.averageHalite + 15
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
                 trueFalseFlag = self.npMap.ravel() > 25
                 if sum(trueFalseFlag) < len(ships):
                     trueFalseFlag = columnHaliteMean < 10000
-
-            logging.info("trueFalseFlag len {}".format(sum(trueFalseFlag)))
 
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))

@@ -92,3 +92,42 @@ Stdev Score 22151.21727176847
 Minimum Score 0
 Bad seeds ['1545875819']
 52.91874359231224
+
+
+
+
+
+
+
+
+
+
+
+SESSION  --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "cd C:\Users\jaycw_000\Documents\GitHub\JarBot\v41\ & python MyBot.py"
+Win % 0.5888888888888889
+Average Score 2603.133333333333
+Median Score 2435.5
+Stdev Score 15767.194748168322
+Minimum Score 2034
+13.114007456255564
+SESSION  --replay-directory replays/ --no-logs --no-replay  -vvv --width 40 --height 40 "python MyBot.py" "cd C:\Users\jaycw_000\Documents\GitHub\JarBot\v41\ & python MyBot.py"
+Win % 0.6333333333333333
+Average Score 3917.988888888889
+Median Score 4282.0
+Stdev Score 16620.902497554394
+Minimum Score 6004
+25.33069516580001
+SESSION  --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 "python MyBot.py" "cd C:\Users\jaycw_000\Documents\GitHub\JarBot\v41\ & python MyBot.py"
+Win % 0.6
+Average Score 1001.9555555555555
+Median Score 1650.5
+Stdev Score 16443.43095917442
+Minimum Score 7600
+50.386460732944435
+SESSION  --replay-directory replays/ --no-logs --no-replay  -vvv --width 56 --height 56 "python MyBot.py" "cd C:\Users\jaycw_000\Documents\GitHub\JarBot\v41\ & python MyBot.py"
+Win % 0.5555555555555556
+Average Score 2438.2555555555555
+Median Score 2119.5
+Stdev Score 18535.84576409307
+Minimum Score 2579
+93.88520745412222

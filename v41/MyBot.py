@@ -163,11 +163,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     if np.sum(enemyInSight)>0:
         enemyHalite = game_map.enemyShipHalite * dist
         enemyMA = np.ma.masked_equal(enemyHalite, 0, copy=False)
-        if len(game.players)==2:
-            fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
-        else:
-            fightHalite = dist * 1
-        
+        fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
         # check if we should run
         if enemyMA.min() < 300 and \
            ship.halite_amount > 700 and \
@@ -475,7 +471,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v41Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
