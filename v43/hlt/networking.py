@@ -170,12 +170,6 @@ class Game:
         self.game_map.updateDropOffMatrix(self.players[self.my_id].get_dropoffs(), 7)
         #logging.info("drop it {}".format(self.game_map.dropOffBonus.tolist()))
 
-        # update enemy mask
-        if len(self.players)==2:
-            self.game_map.updateNearbyEnemyShips()
-            self.game_map.updateEnemyMask()
-            #logging.info("nearbyEnemy {}".format(self.game_map.nearbyEnemyShip))
-
         self.game_map.turnNumber = self.turn_number
 
     @staticmethod

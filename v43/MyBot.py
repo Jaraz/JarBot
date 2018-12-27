@@ -138,8 +138,6 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     global BUILD_DEPO_TIMER
     global DEPO_MIN_SHIPS
     
-    moveFlag = False
-    
     turns_left = (constants.MAX_TURNS - game.turn_number)
     #logging.info("Ship {} was {}".format(ship, currentOrders))
 
@@ -178,25 +176,16 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             runFlag = True
         elif enemyMA.min() < 500 and \
              ship.halite_amount>700 and \
-             len(game.players) == 4 and \
-             turns_left < 50:
+             len(game.players)==4 and \
+             turns_left < 100:
             runFlag = True
-        elif len(game.players) == 2 and \
-             (ship.halite_amount + game_map.npMap[shipY,shipX] *(0.25 + 0.5 * game_map.inspirationBonus[shipY,shipX]))>500 and \
-             game_map.friendlyShipCount[shipY,shipX] <= game_map.enemyShipCount[shipY,shipX] and \
-             enemyMA.min() < 500:
-            logging.info("ship {} needs to move!".format(ship.id))
-            moveFlag = np.unravel_index(enemyMA.argmin(),enemyMA.shape)
         # check if we should fight
-        elif np.max(fightHalite) > ship.halite_amount and \
+        elif np.max(fightHalite) > ATTACK_TARGET_HALITE and \
+             ship.halite_amount < ATTACK_CURRENT_HALITE and \
              len(game.players)==2 and \
              game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
             logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
-        elif np.max(fightHalite) > 750 and \
-             ship.halite_amount < 200 and \
-             game_map.friendlyShipCount[shipY,shipX] == game_map.enemyShipCount[shipY,shipX]:
-            attackFlag = True                 
         
     okToBuildDepo = False
     # we wait if we just built a depo
@@ -249,7 +238,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     else:
         status = 'exploring'
     #logging.info("ship {} status is {}".format(ship.id, status))
-    return status, moveFlag
+    return status
 
 #resolve movement function
 def resolveMovement(ships, destinations, status, attackTargets, previousDestination):
@@ -486,7 +475,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v43Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -495,7 +484,6 @@ logging.info("Successfully created bot! My Player ID is {}.".format(game.my_id))
 """ <<<Game Loop>>> """
 
 ship_status = {} # track what ships want to do
-ship_move_flag = {} # track if ship is in danger and should move
 ship_destination = {} # track where ships want to go
 ship_previous_destination = {} # keep track of past 
 ship_previous_status = {}
@@ -508,7 +496,6 @@ while True:
     me = game.me
     game_map = game.game_map
     ship_destination = {} # reset destinations
-    ship_move_flag = {} # track if ship is in danger and should move
     attack_targets = {} # make sure we don't double target
     START_TURN_DEPO = GLOBAL_DEPO
     turns_left = (constants.MAX_TURNS - game.turn_number)
@@ -531,9 +518,9 @@ while True:
         ### Set ship priorities ###
         ###########################
         if ship.id not in ship_status: # let function know there are no current orders
-            ship_status[ship.id], ship_move_flag[ship.id] = giveShipOrders(ship, None, collectingStop)
+            ship_status[ship.id] = giveShipOrders(ship, None, collectingStop)
         else:
-            ship_status[ship.id], ship_move_flag[ship.id] = giveShipOrders(ship, ship_status[ship.id], collectingStop)
+            ship_status[ship.id] = giveShipOrders(ship, ship_status[ship.id], collectingStop)
             
         
         ###############################
@@ -651,7 +638,7 @@ while True:
     
     #logging.info("final {}".format(shipsExploringFinal))
 #    logging.info("Ship exp {}".format(shipsExploring))
-    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, ship_move_flag, minHaliteSize, 'hpt', collectingStop)
+    targetRow, targetCol, testOrders = game_map.matchShipsToDest2(shipsExploringFinal, minHaliteSize, 'hpt', collectingStop)
 #    logging.info("TESTTEST! targ row {}, targ col {}, test orders {}".format(targetRow, targetCol, testOrders))
 
     for ship in shipsExploring:

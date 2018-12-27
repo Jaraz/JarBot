@@ -113,10 +113,6 @@ class GameMap:
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.dropOffBonus = np.zeros([self.width, self.height], dtype=np.int)
         
-        # variables to avoid some enemies
-        self.minedNextTurn = np.zeros([self.width, self.height], dtype=np.int)
-        self.enemyMask = np.zeros([self.width, self.height], dtype=np.int) # avoid these zones, risk of attack
-        
         # negative inspiration check for 2 player
         # updated once per turn, telling me all cells currently getting the bonus
         self.negInspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
@@ -213,25 +209,6 @@ class GameMap:
     
     def updateNegativeInspiration(self):
         return 0
-    
-    def updateNearbyEnemyShips(self):
-        self.nearbyEnemyShip = np.zeros([self.width, self.height], dtype=np.int)
-        
-        tempEnemyHalite = self.enemyShipHalite + self.shipFlag
-        
-        # find minimum of nearby ships
-        north = np.roll(tempEnemyHalite,1,0)
-        south = np.roll(tempEnemyHalite,-1,0)
-        east = np.roll(tempEnemyHalite,-1,1)
-        west = np.roll(tempEnemyHalite,1,1)
-        
-        north[north==0] = 1000000
-        south[south==0] = 1000000
-        east[east==0] = 1000000
-        west[west==0] = 1000000
-        
-        self.nearbyEnemyShip = np.minimum(north, np.minimum(south,np.minimum(east,west)))
-        self.nearbyEnemyShip[self.nearbyEnemyShip==1000000]=0
     
     def updateInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -558,7 +535,7 @@ class GameMap:
                 orders[ships[i].id] = self.get_unsafe_moves(pos, nextMove)[0]
         return orders
     
-    def matchShipsToDest2(self, ships, moveFlag, minHalite= 0, hChoice = 'sqrt', collectingStop=50):
+    def matchShipsToDest2(self, ships, minHalite= 0, hChoice = 'sqrt', collectingStop=50):
         '''
         The eyes of JarBot
         need to add penalty when another ship is on a spot already
@@ -626,20 +603,9 @@ class GameMap:
         shipTest[self.npMap<100] = 0
         '''
         for i in range(len(ships)):
-            shipID = ships[i].id
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
-            
-            # take into account enemy zone of control
-            # avoid these spots, you will be killed
-            if max(self.shipMap.flatten())==2:
-                avoid = 1 * (np.sign(self.nearbyEnemyShip) * (ships[i].halite_amount + self.minedNextTurn) > self.nearbyEnemyShip)
-                avoid *= self.enemyZoC
-            else:
-                avoid = 0
-           
-            #logging.info("ship {} ZoC {}".format(shipID, avoid))
             
             #negShipFlag = negShipCount.copy()
             #logging.info("Ship {} negShipFlag0 {}".format(ships[i].id, negShipFlag))
@@ -691,17 +657,11 @@ class GameMap:
             #haliteMap[haliteMap<collectingStop] = 1
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             
-            # if ship should move, eliminate halite on square
-            #if moveFlag[shipID]!=False:
-            #    finalMap[shipY, shipX] = 0
-            #    finalMap[moveFlag[shipID]] = 0
-            #    logging.info("ship {} finalmap {}".format(shipID, finalMap))
-            
             #dist[dist==0] = 1
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -(finalMap - 1000 * avoid) / (dist+1)
+                h = -finalMap / (dist+1)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -728,16 +688,16 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > 65
+                trueFalseFlag = self.npMap.ravel() > 75
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = self.npMap.ravel() > 90
+                    trueFalseFlag = self.npMap.ravel() > 100
             else:
-                trueFalseFlag = self.npMap.ravel() > 50
+                trueFalseFlag = self.npMap.ravel() > 55
                 
-            if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 45 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = self.npMap.ravel() > self.averageHalite
-            elif self.averageHalite < 50 and max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > self.averageHalite
+            elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
+                trueFalseFlag = self.npMap.ravel() > self.averageHalite + 15
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
@@ -992,11 +952,7 @@ class GameMap:
 
         return Direction.Still
 
-    def updateEnemyMask(self):
-        self.minedNextTurn = self.npMap * (0.25 + 0.5 * self.inspirationBonus) # what will be mined next turn
-        self.enemyZoC = 1 * (self.enemyShipCount > self.friendlyShipCount) # zones of control; 1 means enemy controls it
 
-        return 0
 
     @staticmethod
     def _generate():
@@ -1041,4 +997,3 @@ class GameMap:
         self.smoothMap = ndimage.uniform_filter(self.npMap, size = self.smoothSize, mode = 'wrap')
         self.dropCalc.updateMap(self.npMap, self.smoothMap)
         self.dropCalc.identifyBestDrops()
-        
