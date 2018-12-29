@@ -75,15 +75,3 @@ class dropCalc:
             finalMapFar[(shipY-1) % self.width,(shipX) % self.height] = 0
             finalMapFar[(shipY+1) % self.width,(shipX) % self.height] = 0
 '''
-
-        # what you can make on avg next two turns
-        #tempMap = self.npMap * .25 * 1.75
-        #finalMapFar = ndimage.uniform_filter(tempMap, size = 3, mode = 'wrap') * 9/1.5 
-       
-        #finalMapFar2[finalMapFar2 > (850 - ships[i].halite_amount)] = (850 - ships[i].halite_amount)
-        #finalMapFar2[shipY,shipX] = 0
-        #haliteMap[haliteMap<collectingStop] = 1
-        #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
-            
-        #h2 = (finalMapFar2 - 5000 * avoid) / (dist+14)
-        #h = -np.maximum(h1,h2)

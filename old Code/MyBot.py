@@ -169,15 +169,15 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
         else:
             fightHalite = dist * 1
-        logging.info("ship {} halite {} max enemy {} enemyMa {} friendly {} enemy {}".format(ship.id, ship.halite_amount, np.max(fightHalite), enemyMA.min(), game_map.friendlyShipCount[shipY,shipX], game_map.enemyShipCount[shipY,shipX]))        
+        
         # check if we should run
         if enemyMA.min() < 300 and \
            ship.halite_amount > 700 and \
            len(game.players) == 2:
-            logging.info("ship {} runs!!!".format(ship.id))
+            #logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
         elif enemyMA.min() < 500 and \
-             ship.halite_amount>900 and \
+             ship.halite_amount>700 and \
              len(game.players) == 4 and \
              turns_left < 50:
             runFlag = True
@@ -185,10 +185,10 @@ def giveShipOrders(ship, currentOrders, collectingStop):
              (ship.halite_amount + game_map.npMap[shipY,shipX] *(0.25 + 0.5 * game_map.inspirationBonus[shipY,shipX]))>500 and \
              game_map.friendlyShipCount[shipY,shipX] <= game_map.enemyShipCount[shipY,shipX] and \
              enemyMA.min() < 500:
-            logging.info("ship {} needs to move!".format(ship.id))
+            #logging.info("ship {} needs to move!".format(ship.id))
             moveFlag = np.unravel_index(enemyMA.argmin(),enemyMA.shape)
         # check if we should fight
-        elif np.max(fightHalite) - 100 > ship.halite_amount and \
+        elif np.max(fightHalite) > ship.halite_amount and \
              len(game.players)==2 and \
              game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
             #logging.info("ship {} attacks!!!".format(ship.id))
@@ -234,7 +234,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "returnSuicide"
     elif currentOrders == "returning":
         status = "returning"
-        if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
+        if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations(): #or ship.halite_amount < returnHaliteFlag + 100:
             status = "exploring"
     elif ship.halite_amount >= returnHaliteFlag  or runFlag == True:
         status = "returning"
@@ -406,7 +406,7 @@ elif game.game_map.width < 40 and game.game_map.totalHalite < 210000:
     collectingStop = 1
     MAX_DEPO = 1    
     DEPO_DISTANCE  = 12
-elif game.game_map.width < 40 and game.game_map.totalHalite < 270000:
+elif game.game_map.width < 40 and game.game_map.totalHalite < 280000:
     shipBuildingTurns = 90
     collectingStop = 1
     MAX_DEPO = 2
@@ -443,18 +443,17 @@ if game.game_map.averageHalite > 180:
     
 ### 4 player changes ###
 if len(game.players) == 4:
-    returnHaliteFlag  = 950
     if game.game_map.width < 40:
         #shipBuildingTurns = 100
         MAX_DEPO = 1
         collectingStop= 1
         DEPO_HALITE -= 25
-        if game.game_map.totalHalite < 220000:
+        if game.game_map.totalHalite < 200000:
             MAX_DEPO = 0
     elif game.game_map.width < 42:
         #shipBuildingTurns = 120
         collectingStop= 1
-        DEPO_HALITE -= 10
+        DEPO_HALITE -= 0
         MAX_DEPO = 2
         if game.game_map.totalHalite < 225000:
             MAX_DEPO = 1
@@ -465,13 +464,13 @@ if len(game.players) == 4:
         if game.game_map.totalHalite < 260000:
             MAX_DEPO = 1
     elif game.game_map.width < 57:
-        DEPO_HALITE -= 25
+        DEPO_HALITE -= 0
         #shipBuildingTurns = 75
         MAX_DEPO = 4
     elif game.game_map.width < 80:
         #shipBuildingTurns = 75
         RADAR_MAX = 12
-        DEPO_HALITE -= 25
+        DEPO_HALITE -= 0
         #DEPO_DISTANCE  = 17
         MAX_DEPO = 5
     

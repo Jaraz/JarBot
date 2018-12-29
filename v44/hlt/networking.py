@@ -41,8 +41,6 @@ class Game:
         self.enemyShips = None
         self.shipCountList = None
         
-        self.game_map.numPlayers = num_players
-        
     def ready(self, name):
         """
         Indicate that your bot is ready to play.
@@ -102,7 +100,7 @@ class Game:
         self.game_map.shipFlag[self.game_map.shipMap==4]=1
         
         self.game_map.updateInspirationMatrix()
-        if len(self.players.values())>1:
+        if len(self.players.values())==2:
             self.game_map.updateNegInspirationMatrix()
         else:
             self.game_map.enemyShipCount = self.game_map.shipMap.copy()
@@ -147,7 +145,7 @@ class Game:
                 dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
             #logging.info("drop locations {}".format(dropSurrounding))
             #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
-            if len(self.players) > 5 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
+            if len(self.players) > 3 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
                 east = self.game_map.normalize(i.position + Position(1,0))
                 self.game_map[east].mark_enemy_ship(i)
                 self.adjEnemyShips.append(east)
@@ -173,7 +171,7 @@ class Game:
         #logging.info("drop it {}".format(self.game_map.dropOffBonus.tolist()))
 
         # update enemy mask
-        if len(self.players)==2 or len(self.players)==4:
+        if len(self.players)==2:
             self.game_map.updateNearbyEnemyShips()
             self.game_map.updateEnemyMask()
             #logging.info("nearbyEnemy {}".format(self.game_map.nearbyEnemyShip))

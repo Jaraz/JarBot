@@ -169,7 +169,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
         else:
             fightHalite = dist * 1
-        logging.info("ship {} halite {} max enemy {} enemyMa {} friendly {} enemy {}".format(ship.id, ship.halite_amount, np.max(fightHalite), enemyMA.min(), game_map.friendlyShipCount[shipY,shipX], game_map.enemyShipCount[shipY,shipX]))        
+        
         # check if we should run
         if enemyMA.min() < 300 and \
            ship.halite_amount > 700 and \
@@ -177,7 +177,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             logging.info("ship {} runs!!!".format(ship.id))
             runFlag = True
         elif enemyMA.min() < 500 and \
-             ship.halite_amount>900 and \
+             ship.halite_amount>700 and \
              len(game.players) == 4 and \
              turns_left < 50:
             runFlag = True
@@ -188,10 +188,10 @@ def giveShipOrders(ship, currentOrders, collectingStop):
             logging.info("ship {} needs to move!".format(ship.id))
             moveFlag = np.unravel_index(enemyMA.argmin(),enemyMA.shape)
         # check if we should fight
-        elif np.max(fightHalite) - 100 > ship.halite_amount and \
+        elif np.max(fightHalite) > ship.halite_amount and \
              len(game.players)==2 and \
              game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
-            #logging.info("ship {} attacks!!!".format(ship.id))
+            logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
         elif np.max(fightHalite) > 750 and \
              ship.halite_amount < 200 and \
@@ -295,7 +295,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
                 min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= DEPO_DISTANCE and \
                 game_map.dropCalc.inMaxZone(ship.position) and \
                 ship.position not in game.return_all_drop_locations():
-                #logging.info("ship {} w/ {} building a depo".format(ship.id, ship.halite_amount))
+                logging.info("ship {} w/ {} building a depo".format(ship.id, ship.halite_amount))
                 finalOrder.append(ship.make_dropoff())        
                 GLOBAL_DEPO += 1
                 GLOBAL_DEPO_BUILD_OK = False
@@ -308,7 +308,7 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
                     DEPO_DISTANCE += DEPO_DISTANCE_DELTA
                     FIRST_DEPO_BUILT = True
             else:   
-                #logging.info("depo ship {} order {}".format(ship.id, orderList[ship.id]))
+                logging.info("depo ship {} order {}".format(ship.id, orderList[ship.id]))
                 finalOrder.append(ship.move(orderList[ship.id]))
 
         else:
@@ -443,13 +443,12 @@ if game.game_map.averageHalite > 180:
     
 ### 4 player changes ###
 if len(game.players) == 4:
-    returnHaliteFlag  = 950
     if game.game_map.width < 40:
         #shipBuildingTurns = 100
         MAX_DEPO = 1
         collectingStop= 1
         DEPO_HALITE -= 25
-        if game.game_map.totalHalite < 220000:
+        if game.game_map.totalHalite < 200000:
             MAX_DEPO = 0
     elif game.game_map.width < 42:
         #shipBuildingTurns = 120
@@ -487,7 +486,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v44Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -684,21 +683,21 @@ while True:
         buildLogic = True
     else:
         logicCheck = shipConstructionLogic(game.playerScores, game.shipCountList, game_map.totalHalite, turns_left)
-        #logging.info("ship logic {} depo built {} save up {}".format(logicCheck, DEPO_BUILD_THIS_TURN, SAVE_UP_FOR_DEPO))
+        logging.info("ship logic {} depo built {} save up {}".format(logicCheck, DEPO_BUILD_THIS_TURN, SAVE_UP_FOR_DEPO))
         if logicCheck and me.halite_amount >= 5000:
             buildLogic = True
-            #logging.info("extra ship!")
+            logging.info("extra ship!")
         elif logicCheck and DEPO_BUILD_THIS_TURN == True:
             if me.halite_amount >= 5000:
                 buildLogic = True
         elif logicCheck and SAVE_UP_FOR_DEPO == False:
             buildLogic = True
-            #logging.info("extra ship!")            
+            logging.info("extra ship!")            
     
     if FIRST_DEPO_BUILT == True:
         WAIT_TO_BUILD_DEPOT -= 1
     
-    #logging.info("first depo {} depo save {}".format(FIRST_DEPO_BUILT, WAIT_TO_BUILD_DEPOT))
+    logging.info("first depo {} depo save {}".format(FIRST_DEPO_BUILT, WAIT_TO_BUILD_DEPOT))
     
     if me.halite_amount >= constants.SHIP_COST and not (me.shipyard.position in finalDestination.values()) and buildLogic:
         command_queue.append(me.shipyard.spawn())

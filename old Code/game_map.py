@@ -105,7 +105,6 @@ class GameMap:
         self.turnsLeft = 500
         self.turnNumber = 0
         self.optimalDrops = []
-        self.numPlayers = 2
         
         # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
@@ -138,7 +137,7 @@ class GameMap:
         #logging.info("smooth map {}".format(self.smoothMap))
         
         # init drop calc
-        self.dropCalc = dropCalc(5, self.npMap, self.smoothMap, 400, 75) 
+        self.dropCalc = dropCalc(5, self.npMap, self.smoothMap, 400, 75)        
 
 
         self.totalHalite = np.sum(self.npMap)
@@ -164,11 +163,9 @@ class GameMap:
                 startPos = Position(y,x)
                 self.distanceMatrix[y][x] = self.calcDistanceMatrix(startPos)
         
-        # avoid code to connect search and movement allocation
-        self.avoid = np.zeros([1000, self.width, self.height])
-        
         # distances to dropoff locations
         self.dropDistances = np.ones([10, self.width, self.height]) * 200
+        self.dropDistancesAll = np.ones([10, self.width, self.height]) * 200
         
         self.distanceMatrixNonZero = self.distanceMatrix.copy()
         self.distanceMatrixNonZero[self.distanceMatrixNonZero==0] = 1
@@ -219,12 +216,9 @@ class GameMap:
         return 0
     
     def updateNearbyEnemyShips(self):
-        '''
-        for a given cell this matrix shows teh smallest neighboring enemy
-        '''
         self.nearbyEnemyShip = np.zeros([self.width, self.height], dtype=np.int)
         
-        tempEnemyHalite = self.enemyShipHalite + self.shipFlag # if no halite, need to make it 1
+        tempEnemyHalite = self.enemyShipHalite + self.shipFlag
         
         # find minimum of nearby ships
         north = np.roll(tempEnemyHalite,1,0)
@@ -284,13 +278,19 @@ class GameMap:
             
             # cap bonus to one dropoff
             self.dropOffBonus[self.dropOffBonus>1] = 1
-            
+          
     def updateDropDistances(self, locations):
         logging.info("locs {}".format(locations))
         for i in range(len(locations)):
             loc = locations[i]
             self.dropDistances[i] = self.distanceMatrix[loc.x][loc.y]
         #logging.info("drops {}".format(self.dropDistances))
+    
+    def updateDropDistancesAll(self, locations):
+        logging.info("locs {}".format(locations))
+        for i in range(len(locations)):
+            loc = locations[i]
+            self.dropDistancesAll[i] = self.distanceMatrix[loc.x][loc.y]
     
     def emptyShipMap(self):
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
@@ -355,15 +355,15 @@ class GameMap:
         maxLoop = 5
         if self.width > 60:
             maxLoop = 4
-            if self.numPlayers==4:
+            if max(self.shipMap.flatten())==4:
                 maxLoop = 4
             if self.turnsLeft <50:
                 maxLoop = 5
         
 
         while issueFlag and loopCounter < maxLoop:
-            logging.info("loop {}".format(loopCounter))
-            logging.info("issue list {}".format(issueList))
+            #logging.info("loop {}".format(loopCounter))
+            #logging.info("issue list {}".format(issueList))
 
             for i in range(len(ships)):
                 shipMap = np.zeros([self.width, self.height])       
@@ -440,8 +440,7 @@ class GameMap:
                         westHalite = random.randint(1,2)
                         eastHalite = random.randint(1,2)
 
-                    #logging.info("ship {}, dist {}, l {}, r {}, u {}, d{}".format(shipID, distToDest, leftDist, rightDist, upDist, downDist))
-
+                        
                     # NORTH
                     if status[shipID] == "attack" and left in enemyLocs:
                         shipMap[(y) % self.width,(x-1) % self.height] = 10000
@@ -504,22 +503,6 @@ class GameMap:
                 else:
                     shipMap[y,x] = 100000
                 
-
-                # if you are returning halite and its a 4 player game, avoid all spots neighboring an enemy ship
-                if self.numPlayers == 4 and (status[shipID] == 'returnSuicide' or status[shipID] == 'returning'):
-                    shipMap -= np.sign(self.nearbyEnemyShip) * 50000
-                    shipMap[y,x] += np.sign(self.nearbyEnemyShip[y,x]) * 50000
-                    
-                    # make sure dropoff is never blocked
-                    for drop in dropoffs:
-                        shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 50000
-                    shipMap[shipMap<0]=0
-                    
-                
-                if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
-                    shipMap -= self.avoid[shipID] * 50000
-                    shipMap[shipMap<0]=0
-                    
                 turnMatrix[i,:] = shipMap.ravel()
                 #logging.info("ship {} map {}".format(ships[i].id, shipMap))
     
@@ -593,7 +576,7 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if self.numPlayers==2 and self.turnNumber > 50:
+        if max(self.shipMap.flatten())==2 and self.turnNumber > 50:
             tempMap[self.shipMap==2]=0
         #if max(self.shipMap.flatten())==4:
             #tempMap[self.shipMap==3]=0
@@ -628,7 +611,10 @@ class GameMap:
         #logging.info("depo bonus {}".format(depoDist.max() - depoDist))
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
-
+        # what you can make on avg next two turns
+        #tempMap = self.npMap * .25 * 1.75
+        #finalMapFar = ndimage.uniform_filter(tempMap, size = 3, mode = 'wrap') * 9/1.5 
+        
         #distInsp = self.distanceMatrixNonZero.copy()
         #distInsp[distInsp>4] = 0
         #distInsp[distInsp>0] = 1
@@ -657,27 +643,11 @@ class GameMap:
             
             # take into account enemy zone of control
             # avoid these spots, you will be killed
-            if self.numPlayers==2:
+            if max(self.shipMap.flatten())==2:
                 avoid = 1 * (np.sign(self.nearbyEnemyShip) * (ships[i].halite_amount + self.minedNextTurn) > self.nearbyEnemyShip)
                 avoid *= self.enemyZoC
-                #logging.info("ship {} enemyZoc \n {} \n avoid \n {}".format(shipID, self.enemyZoC, avoid))
             else:
-                # avoid spots where enemy is not likely to go b/c:
-                #   1) he is making more by staying (vs moving one and mining)
-                #   2) our ship has less halite (and thus less to lose) by moving
-                
-                # set avoid to all neighboring zones
-                avoid = np.sign(self.nearbyEnemyShip)
-
-                ### (2) ###
-                avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
-                
-                # shouldn't force us to move
-                avoid[shipY,shipX] = 0 
-                #logging.info("ship {} avoid \n {}".format(shipID, avoid))
-                self.avoid[shipID] = avoid
-
-                
+                avoid = 0
            
             #logging.info("ship {} ZoC {}".format(shipID, avoid))
             
@@ -703,6 +673,7 @@ class GameMap:
             
             finalMap = haliteMap.copy()
             finalMap = finalMap.astype(np.float)
+            #finalMapFar2 = finalMapFar.copy()
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
@@ -721,13 +692,16 @@ class GameMap:
                 else:
                     ratio = 0.025
                 finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
+                #finalMapFar2 -= dist * self.smoothMap[shipY, shipX] *ratio * 2
                 finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 
 
-            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
+            finalMap[finalMap > (1000 - ships[i].halite_amount)] = (1000 - ships[i].halite_amount)
+            #finalMapFar2[finalMapFar2 > (850 - ships[i].halite_amount)] = (850 - ships[i].halite_amount)
+            #finalMapFar2[shipY,shipX] = 0
             #haliteMap[haliteMap<collectingStop] = 1
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             
@@ -741,7 +715,13 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -(finalMap - 5000 * avoid) / (dist+1)
+                h1 = (finalMap - 1000 * avoid) / (dist+1)
+                #h2 = (finalMapFar2 - 5000 * avoid) / (dist+14)
+                #h = -np.maximum(h1,h2)
+                h = - h1
+                #if self.turnNumber < 100:
+                    #logging.info("ship {} Far2 {}".format(ships[i].id, finalMapFar2.astype(np.int)))
+
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -768,15 +748,15 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = self.npMap.ravel() > 65
+                trueFalseFlag = self.npMap.ravel() > 60
                 if sum(trueFalseFlag) > 3000:
                     trueFalseFlag = self.npMap.ravel() > 90
             else:
-                trueFalseFlag = self.npMap.ravel() > 50
+                trueFalseFlag = self.npMap.ravel() > 60
                 
-            if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 60 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = self.npMap.ravel() > self.averageHalite
-            elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 60 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = self.npMap.ravel() > self.averageHalite
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
@@ -807,7 +787,7 @@ class GameMap:
         orders = {}
         for i in range(len(ships)):
             orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
-        logging.info("orders {}".format(orders))
+        #logging.info("orders {}".format(orders))
         return row_ind, col_ind, orders
     
     def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=12):
@@ -818,23 +798,24 @@ class GameMap:
             #logging.info("ship {} has a problem".format(ship.id))
             maxHalite = -50
         
+
         # need to be near a friendly ship
         shipLocs = self.shipMap.copy()
         shipLocs[shipLocs != 1] = 0
         #logging.info("ship locs {}".format(shipLocs))
         location_choices = self.get_surrounding_cardinals(ship.position, maxWidth)
-       
+        
         #find max halite
         for x in location_choices:
-            dist = self.distanceMatrixNonZero[x.x][x.y].copy()
+            dist = self.distanceMatrixNonZero[x.x][x.y]
             dist[dist>(self.width/6)]=0
             dist[dist>0]=1
             haliteCheck = self.smoothMap[x.y,x.x]
-            if haliteCheck > maxHalite and x != ship.position and \
+            if haliteCheck > maxHalite + 50 and x != ship.position and \
                 x not in drops and \
                 min([self.calculate_distance(x, j) for j in drops]) >= depoDist and \
-                self.dropCalc.inMaxZone(x) and \
-                np.sum(dist*shipLocs)>3:
+                self.dropCalc.inMaxZone(x):
+                logging.info("loc {}; dist{}; ships {}".format(x, dist, np.sum(dist*shipLocs)))
                 maxHalite = haliteCheck
                 finalLocation = self.normalize(x)
                 #logging.info("ship build location at".format(x))
@@ -987,12 +968,12 @@ class GameMap:
         """
         unsafeMoves = self.get_unsafe_moves(source,destination)
         finalMoves = unsafeMoves.copy()
-        logging.info("unsafe moves {}".format(unsafeMoves))
+        #logging.info("unsafe moves {}".format(unsafeMoves))
         for move in unsafeMoves:
             # check if safe
-            logging.info("checking move {}".format(move))
+            #logging.info("checking move {}".format(move))
             checkLoc = self.normalize(source.directional_offset(move))
-            logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
+            #logging.info("loc {} w/ enemy? {}".format(checkLoc, self[checkLoc].is_enemy()))
             if self[checkLoc].is_enemy():
                 logging.info("loc {} removed".format(checkLoc))
                 finalMoves.remove(move)
@@ -1041,7 +1022,6 @@ class GameMap:
 
     def updateEnemyMask(self):
         self.minedNextTurn = self.npMap * (0.25 + 0.5 * self.inspirationBonus) # what will be mined next turn
-        self.enemyMineNextTurn = self.npMap * (0.25 + 0.5 * self.negInspirationBonus) # what will be mined next turn
         self.enemyZoC = 1 * (self.enemyShipCount > self.friendlyShipCount) # zones of control; 1 means enemy controls it
 
         return 0
@@ -1089,5 +1069,4 @@ class GameMap:
         self.smoothMap = ndimage.uniform_filter(self.npMap, size = self.smoothSize, mode = 'wrap')
         self.dropCalc.updateMap(self.npMap, self.smoothMap)
         self.dropCalc.identifyBestDrops()
-        self.avoid.fill(0)
         
