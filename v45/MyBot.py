@@ -165,9 +165,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     if np.sum(enemyInSight)>0:
         enemyHalite = game_map.enemyShipHalite * dist
         enemyMA = np.ma.masked_equal(enemyHalite, 0, copy=False)
-        if len(game.players)==2 or len(game.players)==4:
+        if len(game.players)==2:
             fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
-            enemyLoc = np.unravel_index(fightHalite.argmax(),fightHalite.shape)
         else:
             fightHalite = dist * 1
         logging.info("ship {} halite {} max enemy {} enemyMa {} friendly {} enemy {}".format(ship.id, ship.halite_amount, np.max(fightHalite), enemyMA.min(), game_map.friendlyShipCount[shipY,shipX], game_map.enemyShipCount[shipY,shipX]))        
@@ -194,18 +193,9 @@ def giveShipOrders(ship, currentOrders, collectingStop):
              game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
             #logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
-        elif np.max(fightHalite) - 500 > ship.halite_amount and \
-             len(game.players)==4 and \
-             game_map.friendlyShipCount[enemyLoc] > game_map.enemyShipCount[enemyLoc] + 2 and \
-             turns_left < 200:
-             #game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX] + 2:
-            #logging.info("ship {} attacks!!!".format(ship.id))
-            attackFlag = True
-            #logging.info("ship {} attacks friendly \n {} enemy \n {}".format(ship.id,game_map.friendlyShipCount,game_map.enemyShipCount))
         elif np.max(fightHalite) > 750 and \
              ship.halite_amount < 200 and \
-             game_map.friendlyShipCount[shipY,shipX] == game_map.enemyShipCount[shipY,shipX] and \
-             len(game.players)==2:
+             game_map.friendlyShipCount[shipY,shipX] == game_map.enemyShipCount[shipY,shipX]:
             attackFlag = True                 
         
     okToBuildDepo = False
@@ -497,7 +487,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v45Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

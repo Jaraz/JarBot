@@ -96,7 +96,6 @@ class Game:
                 playerCount += 1
 
         #flag for enemy ships
-        self.game_map.shipFlag=self.game_map.shipMap.copy()
         self.game_map.shipFlag[self.game_map.shipMap==1]=0
         self.game_map.shipFlag[self.game_map.shipMap==2]=1
         self.game_map.shipFlag[self.game_map.shipMap==3]=1

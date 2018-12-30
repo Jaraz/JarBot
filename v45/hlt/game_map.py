@@ -515,9 +515,6 @@ class GameMap:
                         shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 50000
                     shipMap[shipMap<0]=0
                     
-                    # if no choice stand still
-                    if shipID in issueList:
-                        shipMap[y,x] = 10000
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
                     shipMap -= self.avoid[shipID] * 50000
@@ -622,9 +619,9 @@ class GameMap:
         if self.width > 60:
             depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.15
         elif self.width > 55:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.10
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.20
         elif self.width > 45:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.35
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.25
         else:
             depoBonus = 0
         #logging.info("depo dist {}".format(depoDist))
@@ -672,13 +669,11 @@ class GameMap:
                 # set avoid to all neighboring zones
                 avoid = np.sign(self.nearbyEnemyShip)
 
-                if ships[i].halite_amount < 700:
-                    ### (2) ###
-                    avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
+                ### (2) ###
+                avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
                 
-                    # shouldn't force us to move
-                
-                    avoid[shipY,shipX] = 0 
+                # shouldn't force us to move
+                avoid[shipY,shipX] = 0 
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid
 
@@ -768,22 +763,21 @@ class GameMap:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.mean(0)
-            inspiredHalite = self.npMap * miningSpeed * 4
             
             #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 65
+                trueFalseFlag = self.npMap.ravel() > 65
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 90
+                    trueFalseFlag = self.npMap.ravel() > 90
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 50
+                trueFalseFlag = self.npMap.ravel() > 50
                 
             if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
-                trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
+                trueFalseFlag = self.npMap.ravel() > self.averageHalite
             elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
+                trueFalseFlag = self.npMap.ravel() > self.averageHalite
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
