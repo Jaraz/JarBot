@@ -191,15 +191,15 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         # check if we should fight
         elif np.max(fightHalite) - 100 > ship.halite_amount and \
              len(game.players)==2 and \
-             game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX]:
+             game_map.friendlyShipCount[enemyLoc] > game_map.enemyShipCount[enemyLoc]:
             #logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
         elif np.max(fightHalite) - 500 > ship.halite_amount and \
              len(game.players)==4 and \
              game_map.friendlyShipCount[enemyLoc] > game_map.enemyShipCount[enemyLoc] + 2 and \
-             turns_left < 200:
+             turns_left < 150:
              #game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX] + 2:
-            #logging.info("ship {} attacks!!!".format(ship.id))
+            logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
             #logging.info("ship {} attacks friendly \n {} enemy \n {}".format(ship.id,game_map.friendlyShipCount,game_map.enemyShipCount))
         elif np.max(fightHalite) > 750 and \
@@ -286,7 +286,13 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
     
     enemyLoc = []
     for enemy in game.enemyShips:
-        enemyLoc.append(enemy.position)
+        #enemyLoc.append(enemy.position)
+        if enemy.halite_amount !=1000 and len(game.players)==2:
+            enemyLoc.append(enemy.position)
+        elif len(game.players)==4:
+            enemyLoc.append(enemy.position)
+        else:
+            logging.info("1k found")
     #logging.info("enemyLoc {} and adj {}".format(game.enemyShips, game.adjEnemyShips))    
     if len(game.players) > 3:
         enemyLoc.extend(game.adjEnemyShips)
@@ -376,7 +382,7 @@ if game.game_map.width > 60:
     collectingStop = 1
     DEPO_HALITE_LOOK  = 3
     DEPO_HALITE = 140
-    DEPO_MIN_HALITE = 300
+    DEPO_MIN_HALITE = 290
     DEPO_PERCENTILE = 66
     game.game_map.updateSmoothSize(5)
     DEPO_MIN_SHIPS = 2
@@ -386,7 +392,7 @@ elif game.game_map.width > 50:
     DEPO_DISTANCE_DELTA = 6
     MAX_DEPO = 4
     collectingStop = 1
-    DEPO_MIN_HALITE  = 300
+    DEPO_MIN_HALITE  = 290
     DEPO_PERCENTILE = 66
     game.game_map.updateSmoothSize(5)
 elif game.game_map.width > 41:
@@ -484,6 +490,8 @@ if len(game.players) == 4:
         DEPO_HALITE -= 25
         #DEPO_DISTANCE  = 17
         MAX_DEPO = 5
+        DEPO_MIN_HALITE = 270
+
     
 if len(game.players) == 4:
     SUICIDE_TURN_FLAG = 14

@@ -113,6 +113,7 @@ class GameMap:
         self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.dropOffBonus = np.zeros([self.width, self.height], dtype=np.int)
+        self.myShipHalite = np.zeros([self.width, self.height], dtype=np.int)
         
         # variables to avoid some enemies
         self.minedNextTurn = np.zeros([self.width, self.height], dtype=np.int)
@@ -297,6 +298,7 @@ class GameMap:
         self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)        
+        self.myShipHalite = np.zeros([self.width, self.height], dtype=np.int)
 
     def buildDistanceMatrix(self):
         '''
@@ -428,12 +430,12 @@ class GameMap:
                     elif downDist < distToDest and rightDist > distToDest and leftDist > distToDest:
                         downOnly = True
                         
-                    # try to reduce movement costs (if possible)
+                    # try to reduce movement costs (if possible); now incorporates enemy ship (try to avoid if possible)
                     if status[shipID] == 'returnSuicide' or status[shipID] == 'returning':
-                        northHalite = (10 - self.npMap[(y) % self.width,(x-1) % self.height]/100)
-                        southHalite = (10 - self.npMap[(y) % self.width,(x+1) % self.height]/100)
-                        westHalite = (10 - self.npMap[(y-1) % self.width,(x) % self.height]/100)
-                        eastHalite = (10 - self.npMap[(y+1) % self.width,x % self.height]/100)
+                        northHalite = (10 - self.npMap[(y) % self.width,(x-1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x-1) % self.height]
+                        southHalite = (10 - self.npMap[(y) % self.width,(x+1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x+1) % self.height]
+                        westHalite = (10 - self.npMap[(y-1) % self.width,(x) % self.height]/100) - self.nearbyEnemyShip[(y-1) % self.width,(x) % self.height]
+                        eastHalite = (10 - self.npMap[(y+1) % self.width,x % self.height]/100) - self.nearbyEnemyShip[(y+1) % self.width,x % self.height]
                     else:
                         northHalite = random.randint(1,2)
                         southHalite = random.randint(1,2)
@@ -505,6 +507,7 @@ class GameMap:
                     shipMap[y,x] = 100000
                 
 
+                    
                 # if you are returning halite and its a 4 player game, avoid all spots neighboring an enemy ship
                 if self.numPlayers == 4 and (status[shipID] == 'returnSuicide' or status[shipID] == 'returning'):
                     shipMap -= np.sign(self.nearbyEnemyShip) * 50000
@@ -602,6 +605,14 @@ class GameMap:
             #tempMap[self.shipMap==3]=0
             #tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
+        
+        #add back 1k ships (assumes they move only for 2p)
+        if self.numPlayers==2:
+            tempMap2 = self.myShipHalite.copy()
+            tempMap2[self.myShipHalite!=1000]=0
+            tempMap2[self.myShipHalite==1000]=1
+            haliteMap += 1000 * tempMap2
+        
         finalMap = haliteMap.copy()
         
         #if self.turnsLeft < 300 and max(self.shipMap.flatten())==4:

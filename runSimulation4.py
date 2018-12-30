@@ -10,11 +10,12 @@ Multiprocessor supported test
 import subprocess
 import numpy as np
 import multiprocessing
+import timeit
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45 & python MyBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --turn-limit 500 --width 64 --height 64 "python MyBot.py" "python oldBot.py" "python oldBot.py" "python oldBot.py"'
 
@@ -24,7 +25,7 @@ oldBotScores2 = []
 oldBotScores3 = []
 seedArray = []
 
-runSims = 10
+runSims = 36
 
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
@@ -40,7 +41,8 @@ def runSim(i):
     return player1, player2, player3, player4, seed
 
 if __name__ == '__main__':
-    pool = multiprocessing.Pool(processes = 4)
+    start_time = timeit.default_timer()
+    pool = multiprocessing.Pool(processes = 6)
     for newScore, oldScore1, oldScore2, oldScore3, seed in pool.map(runSim, range(runSims)):
         newBotScores.append(newScore)
         oldBotScores1.append(oldScore1)
@@ -53,22 +55,35 @@ if __name__ == '__main__':
     oldScores1 = np.array(oldBotScores1)
     oldScores2 = np.array(oldBotScores2)
     oldScores3 = np.array(oldBotScores3)
+    totalScores = np.array([newScores,oldScores1,oldScores2,oldScores3])
     
     results = []
     second = []
+    third = []
+    fourth = []
     for i in range(runSims):
         if newScores[i] > oldScores1[i] and newScores[i] > oldScores2[i] and newScores[i] > oldScores3[i]:
             results.append(1)
             second.append(0)
+            third.append(0)
+            fourth.append(0)
         else:
             results.append(0)
             if (newScores[i] > oldScores1[i] and newScores[i] > oldScores2[i]) or (newScores[i] > oldScores2[i] and newScores[i] > oldScores3[i]) or (newScores[i] > oldScores1[i] and newScores[i] > oldScores3[i]):
                 second.append(1)
+                third.append(0)
+                fourth.append(0)
             else:
                 second.append(0)
+                if newScores[i] > oldScores1[i] or newScores[i] > oldScores2[i] or newScores[i] > oldScores3[i]:
+                    third.append(1)
+                    fourth.append(0)
+                else:
+                    third.append(0)
+                    fourth.append(1)
         
     print("Win %: {}".format(np.mean(results)))
     print("Second %: {}".format(np.mean(second)))
-        
-        
-    
+    print("Third %: {}".format(np.mean(third)))
+    print("Fourth %: {}".format(np.mean(fourth)))
+    print((timeit.default_timer() - start_time)/runSims)

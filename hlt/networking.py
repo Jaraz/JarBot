@@ -80,6 +80,7 @@ class Game:
         for ship in self.me.get_ships():
             self.game_map[ship.position].mark_unsafe(ship)
             self.game_map.shipMap[ship.position.y, ship.position.x] = 1
+            self.game_map.myShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
             self.game_map.negShipMap[ship.position.y, ship.position.x] = 1
         
         playerCount = 2
