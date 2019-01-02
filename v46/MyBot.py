@@ -46,8 +46,7 @@ TODO
 4) Ways to optimize player scores, perhaps combine attacking to algorithm?
 5) Want to incorporate percent mined into algorithm
 6) 
-7) for 4p when enemy is on a lot of halite (+bonus) don't expect him to move and hit u
-8) when enemy is x units away from big halite zone, reduce dist cost so we move towards it
+7) 
 8) ???
 8) Profit?
 '''
@@ -415,8 +414,8 @@ elif game.game_map.width > 39:
     DEPO_HALITE_LOOK  = 3
     if game.game_map.totalHalite < 200000:
         MAX_DEPO = 1
-    DEPO_DISTANCE  = 11
-    DEPO_DISTANCE_DELTA = 6
+    DEPO_DISTANCE  = 10
+    DEPO_DISTANCE_DELTA = 7
     DEPO_MIN_HALITE   = 375
 elif game.game_map.width < 40 and game.game_map.totalHalite < 210000:
     shipBuildingTurns = 110
@@ -506,7 +505,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v46Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
@@ -535,7 +534,7 @@ while True:
     game_map.turnsLeft = turns_left
     GLOBAL_DEPO_BUILD_OK = True # only build one depo per turn
     DEPO_BUILD_THIS_TURN = False
-    #game_map.dropCalc.updateMinHalite(DEPO_MIN_HALITE)
+    game_map.dropCalc.updateMinHalite(DEPO_MIN_HALITE)
     game_map.dropCalc.updatePercentile(DEPO_PERCENTILE)
 
     if game.turn_number > 11:

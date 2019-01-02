@@ -16,18 +16,13 @@ class dropCalc:
     """
     Class which identifies the best dropoff locations
     """
-    def __init__(self, maxDrops, haliteMap, smoothMap, minHalite, percentile, miningSpeed):
+    def __init__(self, maxDrops, haliteMap, smoothMap, minHalite, percentile):
         self.maxDrops = maxDrops
         self.haliteMap = haliteMap
         self.smoothMap = smoothMap
         self.length = len(self.haliteMap)
         self.minHalite =  minHalite
         self.percentileFlag = percentile
-        self.miningSpeed = miningSpeed
-        self.minHalite = 12000/(8 * 8)
-        self.percentileFlag = 50
-        self.numPlayers = 2
-        logging.info("minHalite {}, lenght {}, denom {}".format(self.minHalite, self.length, (self.length/4 * self.length/4)))
 
     def updateMap(self, haliteMap, smoothMap):
         self.haliteMap = haliteMap
@@ -36,21 +31,14 @@ class dropCalc:
     def updateMinHalite(self, minHalite):
         self.minHalite = minHalite
         
-    def updateMiningSpeed(self, miningSpeed):
-        self.miningSpeed = miningSpeed
-        
     def updatePercentile(self, percentile):
         self.percentileFlag = percentile
         
     def identifyBestDrops(self):
-        targetMap = self.haliteMap
-        if self.numPlayers == 4:
-            targetMap = self.haliteMap * self.miningSpeed * 4
-        self.filteredMap = ndimage.uniform_filter(targetMap, size = 8, mode = 'wrap')
-        #self.filteredMap = ndimage.maximum_filter(self.smoothMap, size = self.length / 4, mode = 'wrap')
-        #self.peakMaxima = peak_local_max(self.smoothMap, min_distance = 1)
-        self.maxZones = self.filteredMap
-        #self.maxZones[self.filteredMap < np.percentile(self.filteredMap, self.percentileFlag)]=0
+        self.filteredMap = ndimage.maximum_filter(self.smoothMap, size = self.length / 4, mode = 'wrap')
+        self.peakMaxima = peak_local_max(self.smoothMap, min_distance = 1)
+        self.maxZones = self.filteredMap.copy()
+        self.maxZones[self.filteredMap < np.percentile(self.filteredMap, self.percentileFlag)]=0
         self.maxZones[self.maxZones<self.minHalite] = 0
         #logging.info("raw map\n {}".format(self.haliteMap))
         #logging.info("filter map\n {}".format(self.filteredMap))

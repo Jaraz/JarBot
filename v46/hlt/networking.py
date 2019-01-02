@@ -42,9 +42,6 @@ class Game:
         self.shipCountList = None
         
         self.game_map.numPlayers = num_players
-        self.game_map.dropCalc.numPlayers = num_players
-        if num_players == 4:
-            self.game_map.dropCalc.minHalite *= 2
         
     def ready(self, name):
         """

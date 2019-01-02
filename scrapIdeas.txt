@@ -134,9 +134,10 @@ Minimum Score 2579
 
 
 
-
-
-
+###################### IDEAS #######################
+1) near end of 4p game start being more protective of ships > 400 - 500 halite
+2) change cap for finding halite from 950 to 1000 (maybe little more?)
+3) for 2p watch when you attack adn his friend is next door or vice versa
 
 
 
