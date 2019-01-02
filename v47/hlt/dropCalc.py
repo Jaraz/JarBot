@@ -6,7 +6,7 @@ Created on Fri Dec 21 15:37:13 2018
 """
 
 from scipy import ndimage, misc
-from skimage.feature import peak_local_max
+#from skimage.feature import peak_local_max
 import numpy as np
 import logging
 np.set_printoptions(threshold=np.nan)

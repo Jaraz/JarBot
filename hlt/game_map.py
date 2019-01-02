@@ -170,6 +170,7 @@ class GameMap:
         
         # distances to dropoff locations
         self.dropDistances = np.ones([10, self.width, self.height]) * 200
+        self.dropDistancesAll = np.ones([10, self.width, self.height]) * 200
         
         self.distanceMatrixNonZero = self.distanceMatrix.copy()
         self.distanceMatrixNonZero[self.distanceMatrixNonZero==0] = 1
@@ -292,11 +293,17 @@ class GameMap:
             self.dropOffBonus[self.dropOffBonus>1] = 1
             
     def updateDropDistances(self, locations):
-        logging.info("locs {}".format(locations))
+        #logging.info("locs {}".format(locations))
         for i in range(len(locations)):
             loc = locations[i]
             self.dropDistances[i] = self.distanceMatrix[loc.x][loc.y]
         #logging.info("drops {}".format(self.dropDistances))
+    
+    def updateDropDistancesAll(self, locations):
+        #logging.info("locs {}".format(locations))
+        for i in range(len(locations)):
+            loc = locations[i]
+            self.dropDistancesAll[i] = self.distanceMatrix[loc.x][loc.y]
     
     def emptyShipMap(self):
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
@@ -636,7 +643,10 @@ class GameMap:
         #miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
         #miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
         #logging.info("Mining turns {}".format(miningTurns))
-        depoDist = self.dropDistances.min(0)
+        depoDist = self.dropDistances.min(0) # does not include starting yard
+        depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
+        #logging.info("depo dist all {}".format(depoDistAll))
+        
         if self.width > 60:
             depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.15
         elif self.width > 55:
@@ -675,7 +685,8 @@ class GameMap:
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
-            
+            depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
+            #logging.info("ship {} dropShip {} drop marg {}".format(shipID, depoDistAll[shipY][shipX], depoDistMarginal))
             # guess work
             #dist[self.inspirationGuess==1] += -2
             #dist[self.inspirationBonus==1] += -1
@@ -747,7 +758,7 @@ class GameMap:
                 elif self.width > 39:
                     ratio = 0.025
                 else:
-                    ratio = 0.025
+                    ratio = 0.0
                 finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
                 finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
@@ -775,7 +786,7 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                h = -(finalMap - 5000 * avoid) / (dist+1)
+                h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -803,9 +814,9 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 80
+                trueFalseFlag = inspiredHalite.ravel() > 70
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 115
+                    trueFalseFlag = inspiredHalite.ravel() > 105
             else:
                 trueFalseFlag = inspiredHalite.ravel() > 50
                 

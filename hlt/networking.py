@@ -172,6 +172,7 @@ class Game:
         # update drop distances
         #self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
         self.game_map.updateDropDistances(self.players[self.my_id].get_dropoff_locations())
+        self.game_map.updateDropDistancesAll(self.players[self.my_id].get_all_drop_locations())
         
         # update dropoff bonus matrix
         self.game_map.updateDropOffMatrix(self.players[self.my_id].get_dropoffs(), 7)
