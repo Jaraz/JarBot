@@ -758,7 +758,7 @@ class GameMap:
                 elif self.width > 39:
                     ratio = 0.025
                 else:
-                    ratio = 0.0
+                    ratio = 0.025
                 finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
                 finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
