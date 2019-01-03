@@ -16,7 +16,8 @@ argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.
 #argum = ' --replay-directory replays/ -vvv --width 56 --height 56 --seed 1546125004 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v33 & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 325 "python MyBot.py" "python MyBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v48 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v48 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v48 & python MyBot.py"'#argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v49 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v49 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v49 & python MyBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
 
 start_time = timeit.default_timer()
 
