@@ -131,7 +131,6 @@ class GameMap:
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
         self.npMapDistance = self.buildDistanceMatrix()
         
-        self.startingHalite = np.sum(self.npMap)
         
         self.smoothSize = 3
         self.smoothMap = ndimage.uniform_filter(self.npMap, size = self.smoothSize, mode = 'wrap')
@@ -653,7 +652,7 @@ class GameMap:
         elif self.width > 55:
             depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.10
         elif self.width > 45:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.35
         else:
             depoBonus = 0
         #logging.info("depo dist {}".format(depoDist))
@@ -686,6 +685,7 @@ class GameMap:
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
+            depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
             #logging.info("ship {} dropShip {} drop marg {}".format(shipID, depoDistAll[shipY][shipX], depoDistMarginal))
             # guess work
             #dist[self.inspirationGuess==1] += -2
@@ -786,11 +786,7 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                if self.numPlayers == 2:
-                    depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)*self.freeHalite)
-                else:
-                    h = -(finalMap - 5000 * avoid) / (dist+1)
+                h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -1148,5 +1144,3 @@ class GameMap:
         self.dropCalc.identifyBestDrops()
         self.avoid.fill(0)
         
-        self.freeHalite = self.totalHalite / self.startingHalite
-        logging.info("free halite  {}".format(self.freeHalite))
