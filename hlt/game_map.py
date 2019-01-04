@@ -782,15 +782,16 @@ class GameMap:
             #distIdea[self.inspirationBonus==1] += -1
             #distIdea[distIdea <0] = 1
             #logging.info("dist2 \n {}".format(distIdea))
+            depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
 
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)*self.freeHalite)
+                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
-                    h = -(finalMap - 5000 * avoid) / (dist+1)
+                    depoDistMarginal[depoDistMarginal>0]=0
+                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
