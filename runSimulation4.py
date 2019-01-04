@@ -42,7 +42,7 @@ def runSim(i):
 
 if __name__ == '__main__':
     start_time = timeit.default_timer()
-    pool = multiprocessing.Pool(processes = 6)
+    pool = multiprocessing.Pool(processes = 4)
     for newScore, oldScore1, oldScore2, oldScore3, seed in pool.map(runSim, range(runSims)):
         newBotScores.append(newScore)
         oldBotScores1.append(oldScore1)
