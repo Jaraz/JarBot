@@ -259,6 +259,7 @@ class GameMap:
         self.miningSpeed[self.miningSpeed<1] = .25
         self.miningSpeed[self.miningSpeed>.99] = .75
         self.dropCalc.updateMiningSpeed(self.miningSpeed)
+        self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = self.smoothSize, mode = 'wrap')
        
     def updateNegInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -788,10 +789,10 @@ class GameMap:
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.25*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
                     depoDistMarginal[depoDistMarginal>0]=0
-                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.25*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -819,13 +820,13 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 70
+                trueFalseFlag = inspiredHalite.ravel() > 60
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 105
+                    trueFalseFlag = inspiredHalite.ravel() > 80
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 50
+                trueFalseFlag = inspiredHalite.ravel() > 60
                 
-            if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 60 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
             elif self.averageHalite < 60 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
