@@ -259,7 +259,6 @@ class GameMap:
         self.miningSpeed[self.miningSpeed<1] = .25
         self.miningSpeed[self.miningSpeed>.99] = .75
         self.dropCalc.updateMiningSpeed(self.miningSpeed)
-        self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = self.smoothSize, mode = 'wrap')
        
     def updateNegInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -789,9 +788,9 @@ class GameMap:
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
                     depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.25*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)*self.freeHalite)
                 else:
-                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.5*self.smoothInspirationMap) / (dist+1)
+                    h = -(finalMap - 5000 * avoid) / (dist+1)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
