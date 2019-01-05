@@ -12,11 +12,12 @@ import subprocess
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ -vvv --width 64 --height 64 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v34 & python MyBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 58 --height 58 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50\\ & python MyBot.py"'
 argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 56 --height 56 --seed 1546125004 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v33 & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 325 "python MyBot.py" "python MyBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v50 & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
 
 start_time = timeit.default_timer()

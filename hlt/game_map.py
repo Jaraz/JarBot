@@ -126,6 +126,7 @@ class GameMap:
         
         # build numpy map
         self.npMap = np.zeros([self.width, self.height], dtype=np.int) 
+        self.npMapOld = np.zeros([self.width, self.height], dtype=np.int) 
         for y in range(self.height):
             for x in range(self.width):
                 self.npMap[y][x] = self[Position(x,y)].halite_amount
@@ -190,7 +191,11 @@ class GameMap:
         # negative inspiration variables
         self.shiftShipTensor = np.zeros([self.width, self.height, self.width, self.height], dtype=np.int)
         
-        # setup row column labels to keep track of positions later
+        # mining
+        self.haliteHistory = np.zeros([500])
+        self.miningHistory = np.zeros([500])
+        self.miningMA = np.zeros([500])
+        self.haliteHistory[0] = np.sum(self.npMap)
         
 
     def __getitem__(self, location):
@@ -259,7 +264,7 @@ class GameMap:
         self.miningSpeed[self.miningSpeed<1] = .25
         self.miningSpeed[self.miningSpeed>.99] = .75
         self.dropCalc.updateMiningSpeed(self.miningSpeed)
-        self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = self.smoothSize, mode = 'wrap')
+        self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = 3, mode = 'wrap')
        
     def updateNegInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -378,8 +383,8 @@ class GameMap:
         
 
         while issueFlag and loopCounter < maxLoop:
-            logging.info("loop {}".format(loopCounter))
-            logging.info("issue list {}".format(issueList))
+            #logging.info("loop {}".format(loopCounter))
+            #logging.info("issue list {}".format(issueList))
 
             for i in range(len(ships)):
                 shipMap = np.zeros([self.width, self.height])       
@@ -530,6 +535,7 @@ class GameMap:
                     # make sure dropoff is never blocked
                     for drop in dropoffs:
                         shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 50000
+                        
                     shipMap[shipMap<0]=0
                     
                     # if no choice stand still
@@ -539,7 +545,7 @@ class GameMap:
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
                     shipMap -= self.avoid[shipID] * 50000
                     shipMap[shipMap<0]=0
-                    
+                                        
                 turnMatrix[i,:] = shipMap.ravel()
                 #logging.info("ship {} map {}".format(ships[i].id, shipMap))
     
@@ -712,10 +718,10 @@ class GameMap:
                     avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
                 
                     # shouldn't force us to move
-                
-                    avoid[shipY,shipX] = 0 
+                    if self.freeHalite > 0.15 or (self.freeHalite < 0.15 and ships[i].halite_amount > 200):
+                        avoid[shipY,shipX] = 0 
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
-                self.avoid[shipID] = avoid
+                self.avoid[shipID] = avoid # to be used in resolve movement function
 
                 
            
@@ -820,15 +826,15 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 60
+                trueFalseFlag = inspiredHalite.ravel() > 85
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 80
+                    trueFalseFlag = inspiredHalite.ravel() > 100
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 60
+                trueFalseFlag = inspiredHalite.ravel() > 70
                 
             if self.averageHalite < 60 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-            elif self.averageHalite < 60 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 45 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
@@ -859,7 +865,7 @@ class GameMap:
         orders = {}
         for i in range(len(ships)):
             orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
-        logging.info("orders {}".format(orders))
+        #logging.info("orders {}".format(orders))
         return row_ind, col_ind, orders
     
     def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=12):
@@ -1127,6 +1133,8 @@ class GameMap:
         """
         # Mark cells as safe for navigation (will re-mark unsafe cells
         # later)
+        #self.npMapOld = self.npMap.copy()
+        
         self.totalHalite = 0
         for _ in range(int(read_input())):
             cell_x, cell_y, cell_energy = map(int, read_input().split())
@@ -1151,4 +1159,21 @@ class GameMap:
         self.avoid.fill(0)
         
         self.freeHalite = self.totalHalite / self.startingHalite
-        logging.info("free halite  {}".format(self.freeHalite))
+        
+
+        if self.turnNumber>0:
+            tempMap = self.npMap.copy()
+            #logging.info("temp1 {}".format(tempMap))
+            tempMap[tempMap>self.npMapOld] = self.npMapOld[tempMap>self.npMapOld]
+            #logging.info("temp2 {}".format(tempMap))
+            self.miningHistory[self.turnNumber] = - np.sum(tempMap) + self.haliteHistory[self.turnNumber-1]
+            self.haliteHistory[self.turnNumber] = np.sum(tempMap)
+            self.npMapOld = tempMap
+        else:
+            self.npMapOld = self.npMap.copy()
+            self.miningHistory[self.turnNumber] = 0
+            
+        if self.turnNumber>20:
+            self.miningMA[self.turnNumber] = np.mean(self.miningHistory[self.turnNumber-20:self.turnNumber])
+            logging.info("turn {} mining speed {}; MA {}; total {} temp {}".format(self.turnNumber, self.miningHistory[self.turnNumber], self.miningMA[self.turnNumber], np.sum(self.miningHistory),np.sum(tempMap)))
+        

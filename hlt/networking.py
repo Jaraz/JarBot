@@ -132,7 +132,7 @@ class Game:
                 self.playerScores.append(self.players[player].halite_amount)
                 self.shipCountList.append(self.players[player].get_ship_count())
                 self.enemyShips.extend([i for i in self.players[player].get_ships() if i.position not in self.players[self.my_id].get_all_drop_locations()])
-        logging.info("player scores".format(self.playerScores))
+        #logging.info("player scores".format(self.playerScores))
         
         self.adjEnemyShips = []
         

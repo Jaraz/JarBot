@@ -62,68 +62,35 @@ import logging
 # assume first number in list is player one
 def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     # don't build ships after this
-    turnStopBuilding = 100
+    turnStopBuilding = 90
     buildShip = False
-    minHaliteToKeepGoing = 60 
-    shipLead = 10
+    playerMultiple = len(playerScores)/2
+    shipLead = 20
+    shipCompare = playerShips[1]
+    totalShips = np.sum(playerShips)
     
+    if totalShips < 1:
+        totalShips = 1
+    nextTen = 10 * (game_map.miningMA[game_map.turnNumber-1] * 2 - game_map.miningMA[game_map.turnNumber-10])/totalShips
+    logging.info("next 10 turns {} one {} two {} flag {}".format(nextTen, game_map.miningMA[game_map.turnNumber-1], game_map.miningMA[game_map.turnNumber-10],nextTen/10 * turnsLeft))
     
-    if game_map.width == 40:
-        turnStopBuilding = 100
-    if game_map.width == 56:
-        minHaliteToKeepGoing = 45
-    if game_map.width == 64:
-        minHaliteToKeepGoing = 40
+    if len(playerScores) == 4:
+        shipCompare = np.mean(playerShips)
+        playerMultiple = 1.5
         
-    if len(playerScores)==2 and game_map.width > 64:
-        shipLead = 15
-    
     if len(playerScores)==4:
-        turnStopBuilding = 140
-        minHaliteToKeepGoing = 80
-        if game_map.width == 32:
-            minHaliteToKeepGoing = 90
-        if game_map.width == 64:
-            minHaliteToKeepGoing = 65
-    
-    # choose enemy to watch (obv in 2 player game)
-    if len(playerScores)==2:
-        scoreCompare = playerScores[1]
-        shipCompare = playerShips[1]
+        if nextTen/10 * turnsLeft < 1000*playerMultiple or \
+        turnsLeft<turnStopBuilding or \
+        playerShips[0] - shipCompare > shipLead or \
+        game_map.freeHalite < 0.3:
+            buildShip = False    
+        else:
+            buildShip = True
     else:
-        #bestPlayer = np.argmax(playerScores[1:3])
-        scoreCompare = np.mean(playerScores[1:3])
-        shipCompare = np.mean(playerShips[1:3])
-    
-    # we aren't getting first, make sure we beat #4
-    if turnsLeft > 250 and len(playerScores)==4 and playerScores[0] < min(playerScores[1:3]):
-        minPlayer = np.array(playerScores[1:3]).argmin() + 1
-        scoreCompare = playerScores[minPlayer]
-        shipCompare = playerShips[minPlayer]
-    
-    # 2 player logic
-    if len(playerScores) == 2 or (game_map.width > 31 and len(playerScores) == 4):
-        
-        # if i'm in the lead but i have less ships, lets build more!
-        if playerScores[0] > scoreCompare and \
-            playerShips[0] < shipCompare and \
-            (turnsLeft > turnStopBuilding or (turnsLeft > turnStopBuilding-25 and game_map.averageHalite > 100)):
+        if (nextTen/10 * turnsLeft > 1000 and turnsLeft > turnStopBuilding):
             buildShip = True
-            
-        # i'm ahead but theres a lot of halite left, lets build!
-        elif playerScores[0] > scoreCompare and \
-            turnsLeft > turnStopBuilding +10 and \
-            playerShips[0] < shipCompare + shipLead  and \
-            game_map.averageHalite > minHaliteToKeepGoing:
-            buildShip = True
-            
-        # i'm behind and i'm down on ships so need to build!
-        elif playerScores[0] - 2000 < scoreCompare and \
-            turnsLeft > turnStopBuilding + 25 and \
-            game_map.averageHalite > minHaliteToKeepGoing and \
-            playerShips[0] < shipCompare + 7:
-            buildShip = True
-        
+        if turnsLeft < 45 or playerShips[0] - shipCompare > shipLead:
+            buildShip = False
     return buildShip
 
 def giveShipOrders(ship, currentOrders, collectingStop):
