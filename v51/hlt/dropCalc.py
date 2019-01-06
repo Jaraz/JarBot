@@ -24,7 +24,7 @@ class dropCalc:
         self.minHalite =  minHalite
         self.percentileFlag = percentile
         self.miningSpeed = miningSpeed
-        self.minHalite = 10000/(8 * 8)
+        self.minHalite = 12000/(8 * 8)
         self.percentileFlag = 50
         self.numPlayers = 2
         logging.info("minHalite {}, lenght {}, denom {}".format(self.minHalite, self.length, (self.length/4 * self.length/4)))

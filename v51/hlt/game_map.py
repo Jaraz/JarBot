@@ -264,18 +264,7 @@ class GameMap:
         self.miningSpeed[self.miningSpeed<1] = .25
         self.miningSpeed[self.miningSpeed>.99] = .75
         self.dropCalc.updateMiningSpeed(self.miningSpeed)
-        #self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = 3, mode = 'wrap')
-        
-        dist2 = self.distanceMatrixNonZero.copy()
-        dist2 = dist2.astype(np.float)
-        dist2[dist2>4] = 0
-        dist2[dist2>0] = 1/(dist2[dist2>0] * dist2[dist2>0])
-        #logging.info("dist2 {}".format(dist2[0][0]))
-        #temp = self.npMap*self.miningSpeed
-        self.smoothInspirationMap = np.einsum('ijkl,lk',dist2,self.npMap*self.miningSpeed)/np.sum(dist2[0][0])
-        #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
-        #temp = self.npMap*self.miningSpeed
-        #logging.info("halite map \n {} \n smooth \n {}".format(temp.astype(np.int), self.smoothInspirationMap.astype(np.int)))
+        self.smoothInspirationMap = ndimage.uniform_filter(self.npMap*self.miningSpeed, size = 3, mode = 'wrap')
        
     def updateNegInspirationMatrix(self):
         dist = self.distanceMatrixNonZero.copy()
@@ -662,19 +651,18 @@ class GameMap:
         #miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
         #miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
         #logging.info("Mining turns {}".format(miningTurns))
-        #depoDist = self.dropDistances.min(0) # does not include starting yard
+        depoDist = self.dropDistances.min(0) # does not include starting yard
         depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
         #logging.info("depo dist all {}".format(depoDistAll))
-        '''
+        
         if self.width > 60:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.0
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.15
         elif self.width > 55:
-            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.0
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.10
         elif self.width > 45:
             depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0
         else:
-        '''
-        depoBonus = 0
+            depoBonus = 0
         #logging.info("depo dist {}".format(depoDist))
         #logging.info("depo bonus {}".format(depoDist.max() - depoDist))
         haliteMap = haliteMap - collectingStop
@@ -730,7 +718,7 @@ class GameMap:
                     avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
                 
                     # shouldn't force us to move
-                    if self.freeHalite > 0.025 or (self.freeHalite < 0.05 and ships[i].halite_amount > 200):
+                    if self.freeHalite > 0.15 or (self.freeHalite < 0.15 and ships[i].halite_amount > 200):
                         avoid[shipY,shipX] = 0 
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid # to be used in resolve movement function
@@ -807,10 +795,10 @@ class GameMap:
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    h = -(1* finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.25*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
                     depoDistMarginal[depoDistMarginal>0]=0
-                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*0.25*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -840,15 +828,14 @@ class GameMap:
             if max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > 85
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 105
+                    trueFalseFlag = inspiredHalite.ravel() > 100
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 80
+                trueFalseFlag = inspiredHalite.ravel() > 70
                 
-            if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 60 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-            elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 45 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-                
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
             # if map is over mined can lead to an error
             if sum(trueFalseFlag) < len(ships):
