@@ -209,11 +209,6 @@ class GameMap:
         self.dist4Discount = self.dist4.copy()
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
-        self.distSmooth = self.distanceMatrixNonZero.copy()
-        self.distSmooth = self.distSmooth.astype(np.float)
-        self.distSmooth[self.distSmooth>self.width/8] = 0
-        self.distSmooth[self.distSmooth>0] = 1/(self.distSmooth[self.distSmooth>0] * (self.distSmooth[self.distSmooth>0]))
-
 
     def __getitem__(self, location):
         """
@@ -288,7 +283,7 @@ class GameMap:
         else:
             tempSpeed = self.miningSpeed.copy()
             tempSpeed[self.miningSpeed==0.25]=0.125
-        self.smoothInspirationMap = np.einsum('ijkl,lk',self.distSmooth,self.npMap*tempSpeed)/np.sum(self.distSmooth[0][0])
+        self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
         #logging.info("halite map \n {} \n smooth \n {}".format(temp.astype(np.int), self.smoothInspirationMap.astype(np.int)))
@@ -402,7 +397,7 @@ class GameMap:
         issueList = []
         maxLoop = 5
         if self.width > 60:
-            maxLoop = 5
+            maxLoop = 4
             if self.numPlayers==4:
                 maxLoop = 4
             if self.turnsLeft <50:
@@ -808,7 +803,7 @@ class GameMap:
                 finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 
 
-            finalMap[finalMap > (1000 - ships[i].halite_amount)] = (1000 - ships[i].halite_amount)
+            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             #haliteMap[haliteMap<collectingStop] = 1
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             

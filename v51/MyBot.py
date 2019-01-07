@@ -46,11 +46,6 @@ TODO
 4) Ways to optimize player scores, perhaps combine attacking to algorithm?
 5) Want to incorporate percent mined into algorithm
 6) 
-
-fix depo building built next to enemy one
-fix big maps when u don't trigger a depo by turn 150ish (just force build one at 200)
-build depos in a bigger ZoC in 2p
-
 7) for 4p when enemy is on a lot of halite (+bonus) don't expect him to move and hit u
 8) when enemy is x units away from big halite zone, reduce dist cost so we move towards it
 8) ???
@@ -70,18 +65,9 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     turnStopBuilding = 90
     buildShip = False
     playerMultiple = len(playerScores)/2
-    shipLead = 16
+    shipLead = 20
     shipCompare = playerShips[1]
     totalShips = np.sum(playerShips)
-    
-    stopFlag = 0.3
-    if game_map.width > 50:
-        stopFlag = 0.25
-    
-    if game_map.width <= 40:
-        shipLead = 8
-    elif game_map.width <= 48:
-        shipLead = 12
     
     if totalShips < 1:
         totalShips = 1
@@ -89,15 +75,14 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     logging.info("next 10 turns {} one {} two {} flag {}".format(nextTen, game_map.miningMA[game_map.turnNumber-1], game_map.miningMA[game_map.turnNumber-10],nextTen/10 * turnsLeft))
     
     if len(playerScores) == 4:
-        shipCompare = np.mean(playerShips[1:3])
-        playerMultiple = 1.75
+        shipCompare = np.mean(playerShips)
+        playerMultiple = 1.5
         
     if len(playerScores)==4:
-        shipLead += -2
         if nextTen/10 * turnsLeft < 1000*playerMultiple or \
         turnsLeft<turnStopBuilding or \
         playerShips[0] - shipCompare > shipLead or \
-        game_map.freeHalite < stopFlag:
+        game_map.freeHalite < 0.3:
             buildShip = False    
         else:
             buildShip = True
@@ -359,25 +344,25 @@ if game.game_map.width > 60:
     RADAR_MAX = 12
     DEPO_HALITE += 0
     DEPO_DISTANCE  = 12
-    DEPO_DISTANCE_DELTA = 5
+    DEPO_DISTANCE_DELTA = 6
     SUICIDE_TURN_FLAG = 7
-    MAX_DEPO = 7
+    MAX_DEPO = 6
     collectingStop = 1
     DEPO_HALITE_LOOK  = 3
     DEPO_HALITE = 140
     DEPO_MIN_HALITE = 290
     DEPO_PERCENTILE = 66
-    #game.game_map.updateSmoothSize(5)
+    game.game_map.updateSmoothSize(5)
     DEPO_MIN_SHIPS = 2
 elif game.game_map.width > 50:
     shipBuildingTurns = 80
-    DEPO_DISTANCE  = 12
-    DEPO_DISTANCE_DELTA = 4
+    DEPO_DISTANCE  = 11
+    DEPO_DISTANCE_DELTA = 6
     MAX_DEPO = 4
     collectingStop = 1
     DEPO_MIN_HALITE  = 290
     DEPO_PERCENTILE = 66
-    #game.game_map.updateSmoothSize(5)
+    game.game_map.updateSmoothSize(5)
 elif game.game_map.width > 41:
     shipBuildingTurns = 80
     collectingStop= 1
@@ -400,7 +385,7 @@ elif game.game_map.width > 39:
     DEPO_DISTANCE  = 11
     DEPO_DISTANCE_DELTA = 6
     DEPO_MIN_HALITE   = 375
-elif game.game_map.width < 40 and game.game_map.totalHalite < 200000:
+elif game.game_map.width < 40 and game.game_map.totalHalite < 210000:
     shipBuildingTurns = 110
     collectingStop = 1
     MAX_DEPO = 1    
@@ -488,7 +473,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v51Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

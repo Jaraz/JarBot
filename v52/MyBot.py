@@ -46,11 +46,6 @@ TODO
 4) Ways to optimize player scores, perhaps combine attacking to algorithm?
 5) Want to incorporate percent mined into algorithm
 6) 
-
-fix depo building built next to enemy one
-fix big maps when u don't trigger a depo by turn 150ish (just force build one at 200)
-build depos in a bigger ZoC in 2p
-
 7) for 4p when enemy is on a lot of halite (+bonus) don't expect him to move and hit u
 8) when enemy is x units away from big halite zone, reduce dist cost so we move towards it
 8) ???
@@ -358,7 +353,7 @@ if game.game_map.width > 60:
     shipBuildingTurns = 80
     RADAR_MAX = 12
     DEPO_HALITE += 0
-    DEPO_DISTANCE  = 12
+    DEPO_DISTANCE  = 3
     DEPO_DISTANCE_DELTA = 5
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 7
@@ -371,7 +366,7 @@ if game.game_map.width > 60:
     DEPO_MIN_SHIPS = 2
 elif game.game_map.width > 50:
     shipBuildingTurns = 80
-    DEPO_DISTANCE  = 12
+    DEPO_DISTANCE  = 13
     DEPO_DISTANCE_DELTA = 4
     MAX_DEPO = 4
     collectingStop = 1
@@ -488,7 +483,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v52Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
