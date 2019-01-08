@@ -211,7 +211,7 @@ class GameMap:
 
         self.distSmooth = self.distanceMatrixNonZero.copy()
         self.distSmooth = self.distSmooth.astype(np.float)
-        self.distSmooth[self.distSmooth>self.width/8] = 0
+        self.distSmooth[self.distSmooth>4] = 0
         self.distSmooth[self.distSmooth>0] = 1/(self.distSmooth[self.distSmooth>0] * (self.distSmooth[self.distSmooth>0]))
 
 
@@ -287,7 +287,7 @@ class GameMap:
             tempSpeed[self.miningSpeed==0.25]=0.25
         else:
             tempSpeed = self.miningSpeed.copy()
-            tempSpeed[self.miningSpeed==0.25]=0.125
+            tempSpeed[self.miningSpeed==0.25]=0.25
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.distSmooth,self.npMap*tempSpeed)/np.sum(self.distSmooth[0][0])
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
@@ -674,7 +674,7 @@ class GameMap:
             miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
         else:
-            miningSpeed[miningSpeed<1] = .125
+            miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
 
         if self.turnNumber<50:
