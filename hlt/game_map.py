@@ -209,17 +209,6 @@ class GameMap:
         self.dist4Discount = self.dist4.copy()
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.distSmooth = self.distanceMatrixNonZero.copy()
-        self.distSmooth = self.distSmooth.astype(np.float)
-        self.distSmooth[self.distSmooth>4] = 0
-        self.distSmooth[self.distSmooth>0] = 1/(self.distSmooth[self.distSmooth>0] * (self.distSmooth[self.distSmooth>0]))
-
-=======
->>>>>>> parent of 0814b91... v53 laptop
-=======
->>>>>>> parent of 0814b91... v53 laptop
 
     def __getitem__(self, location):
         """
@@ -293,18 +282,8 @@ class GameMap:
             tempSpeed[self.miningSpeed==0.25]=0.25
         else:
             tempSpeed = self.miningSpeed.copy()
-<<<<<<< HEAD
-<<<<<<< HEAD
-            tempSpeed[self.miningSpeed==0.25]=0.25
-        self.smoothInspirationMap = np.einsum('ijkl,lk',self.distSmooth,self.npMap*tempSpeed)/np.sum(self.distSmooth[0][0])
-=======
             tempSpeed[self.miningSpeed==0.25]=0.125
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
->>>>>>> parent of 0814b91... v53 laptop
-=======
-            tempSpeed[self.miningSpeed==0.25]=0.125
-        self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
->>>>>>> parent of 0814b91... v53 laptop
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
         #logging.info("halite map \n {} \n smooth \n {}".format(temp.astype(np.int), self.smoothInspirationMap.astype(np.int)))
@@ -690,7 +669,7 @@ class GameMap:
             miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
         else:
-            miningSpeed[miningSpeed<1] = .25
+            miningSpeed[miningSpeed<1] = .125
             miningSpeed[miningSpeed>.99] = .75
 
         if self.turnNumber<50:

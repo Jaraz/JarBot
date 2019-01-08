@@ -50,7 +50,6 @@ TODO
 fix depo building built next to enemy one
 fix big maps when u don't trigger a depo by turn 150ish (just force build one at 200)
 build depos in a bigger ZoC in 2p
-should change depo construction code so it minimizes distance traveled too
 
 7) for 4p when enemy is on a lot of halite (+bonus) don't expect him to move and hit u
 8) when enemy is x units away from big halite zone, reduce dist cost so we move towards it
@@ -92,9 +91,6 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     if len(playerScores) == 4:
         shipCompare = np.mean(playerShips[1:3])
         playerMultiple = 1.75
-        
-        if game_map.width >50:
-            stopFlag = 0.225
         
     if len(playerScores)==4:
         shipLead += -2
