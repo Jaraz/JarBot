@@ -209,22 +209,7 @@ class GameMap:
         self.dist4Discount = self.dist4.copy()
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
-        self.haliteRegBene4x = 0.125
-        self.distaceDenom = 1000
-        
-        if self.width == 40:
-            self.haliteRegBene4x = 0.125
-            self.distaceDenom = 950
-        elif self.width == 48:
-            self.haliteRegBene4x = 0.125
-            self.distaceDenom = 900
-        elif self.width == 56:
-            self.haliteRegBene4x = 0.125
-            self.distaceDenom = 850
-        elif self.width == 64:
-            self.haliteRegBene4x = 0.125
-            self.distaceDenom = 800
-        
+
     def __getitem__(self, location):
         """
         Getter for position object or entity objects within the game map
@@ -297,7 +282,7 @@ class GameMap:
             tempSpeed[self.miningSpeed==0.25]=0.25
         else:
             tempSpeed = self.miningSpeed.copy()
-            tempSpeed[self.miningSpeed==0.25]=self.haliteRegBene4x
+            tempSpeed[self.miningSpeed==0.25]=0.125
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
@@ -414,7 +399,7 @@ class GameMap:
         if self.width > 60:
             maxLoop = 4
             if self.numPlayers==4:
-                maxLoop = 5
+                maxLoop = 4
             if self.turnsLeft <50:
                 maxLoop = 5
         
@@ -684,14 +669,11 @@ class GameMap:
             miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
         else:
-            miningSpeed[miningSpeed<1] = self.haliteRegBene4x
+            miningSpeed[miningSpeed<1] = .125
             miningSpeed[miningSpeed>.99] = .75
 
         if self.turnNumber<50:
-            miningSpeed[miningSpeed==self.haliteRegBene4x]= .25
-        
-        if self.turnNumber<75 and self.game_width > 55:
-            miningSpeed[miningSpeed==self.haliteRegBene4x]= .25
+            miningSpeed[miningSpeed<1] = .25
 
         #miningSpeed[miningSpeed==0.25] += 0.5 * self.inspirationGuess[miningSpeed==0.25]
         #logging.info("mining speed {}".format(miningSpeed))
@@ -843,10 +825,10 @@ class GameMap:
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/750)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
                     depoDistMarginal[depoDistMarginal>0]=0
-                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/750)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
