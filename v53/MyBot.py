@@ -91,8 +91,6 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     if len(playerScores) == 4:
         shipCompare = np.mean(playerShips[1:3])
         playerMultiple = 1.75
-        if game_map.width > 55:
-            stopFlag = 0.225
         
     if len(playerScores)==4:
         shipLead += -2
@@ -490,7 +488,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v53Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

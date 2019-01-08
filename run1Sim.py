@@ -17,19 +17,8 @@ argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.
 #argum = ' --replay-directory replays/ -vvv --width 56 --height 56 --seed 1546125004 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v45\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v33 & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 325 "python MyBot.py" "python MyBot.py"'
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v53 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v53 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v53 & python MyBot.py"'
-=======
-argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py"'
->>>>>>> parent of 0814b91... v53 laptop
-=======
-argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v52 & python MyBot.py"'
->>>>>>> parent of 0814b91... v53 laptop
-=======
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v51 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v51 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v51 & python MyBot.py"'
->>>>>>> parent of 30b75bf... v53
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
 
 start_time = timeit.default_timer()
