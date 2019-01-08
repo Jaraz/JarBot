@@ -210,11 +210,14 @@ class GameMap:
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.distSmooth = self.distanceMatrixNonZero.copy()
         self.distSmooth = self.distSmooth.astype(np.float)
         self.distSmooth[self.distSmooth>4] = 0
         self.distSmooth[self.distSmooth>0] = 1/(self.distSmooth[self.distSmooth>0] * (self.distSmooth[self.distSmooth>0]))
 
+=======
+>>>>>>> parent of 0814b91... v53 laptop
 =======
 >>>>>>> parent of 0814b91... v53 laptop
 
@@ -291,8 +294,13 @@ class GameMap:
         else:
             tempSpeed = self.miningSpeed.copy()
 <<<<<<< HEAD
+<<<<<<< HEAD
             tempSpeed[self.miningSpeed==0.25]=0.25
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.distSmooth,self.npMap*tempSpeed)/np.sum(self.distSmooth[0][0])
+=======
+            tempSpeed[self.miningSpeed==0.25]=0.125
+        self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
+>>>>>>> parent of 0814b91... v53 laptop
 =======
             tempSpeed[self.miningSpeed==0.25]=0.125
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
