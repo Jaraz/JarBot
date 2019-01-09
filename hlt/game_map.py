@@ -313,7 +313,7 @@ class GameMap:
         self.waitTillInsp = np.einsum('ijkl,lk',self.distTillInsp,self.shipFlag)
         self.waitTillInsp[self.waitTillInsp>0] = 1
         self.waitTillInsp[self.inspirationBonus==1] = 0
-        
+        #logging.info("wit till insp)
         
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
@@ -703,12 +703,6 @@ class GameMap:
             miningSpeed[miningSpeed<1] = self.haliteRegBene4x
             miningSpeed[miningSpeed>.99] = .75
 
-        if self.turnNumber<50:
-            miningSpeed[miningSpeed==self.haliteRegBene4x]= .25
-        
-        if self.turnNumber<75 and self.width > 55:
-            miningSpeed[miningSpeed==self.haliteRegBene4x]= .25
-
         #miningSpeed[miningSpeed==0.25] += 0.5 * self.inspirationGuess[miningSpeed==0.25]
         #logging.info("mining speed {}".format(miningSpeed))
         #miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
@@ -855,8 +849,8 @@ class GameMap:
             #logging.info("dist2 \n {}".format(distIdea))
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
             
-            tempInspMap = self.smoothInspirationMap.copy()
-            tempInspMap[tempInspMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
+            #tempInspMap = self.smoothInspirationMap.copy()
+            #tempInspMap[tempInspMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             
             
             
@@ -867,7 +861,6 @@ class GameMap:
                     term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                     term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
                     h = -(term1 + term2 - 5000*avoid)
-                    logging.info("in 2p mode")
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
                     #depoDistMarginal[depoDistMarginal>0]=0
@@ -876,7 +869,7 @@ class GameMap:
                     # add opportunity costs
                     term3 = finalMap.copy()
                     term3[self.miningSpeed == 0.75] = 0
-                    term3[self.miningSpeed ==self.haliteRegBene4x] = -finalMap[self.miningSpeed==self.haliteRegBene4x]*2 / (dist[self.miningSpeed==self.haliteRegBene4x]+1+8-4*self.waitTillInsp[self.miningSpeed ==self.haliteRegBene4x])
+                    term3[self.miningSpeed ==self.haliteRegBene4x] = -finalMap[self.miningSpeed==self.haliteRegBene4x]*2 / (dist[self.miningSpeed==self.haliteRegBene4x]+1+6-4*32/self.width*self.waitTillInsp[self.miningSpeed ==self.haliteRegBene4x])
                     h = -(term1 + term2 + term3 - 5000*avoid)
 
                     #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
