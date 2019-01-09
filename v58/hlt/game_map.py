@@ -310,11 +310,10 @@ class GameMap:
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
         
         # calc wait till inspiration, assuming 1 ship enemy distance for now
-        if self.numPlayers==4:
-            self.waitTillInsp = np.einsum('ijkl,lk',self.distTillInsp,self.shipFlag)
-            self.waitTillInsp[self.waitTillInsp>0] = 1
-            self.waitTillInsp[self.inspirationBonus==1] = 0
-            #logging.info("wit till insp)
+        self.waitTillInsp = np.einsum('ijkl,lk',self.distTillInsp,self.shipFlag)
+        self.waitTillInsp[self.waitTillInsp>0] = 1
+        self.waitTillInsp[self.inspirationBonus==1] = 0
+        #logging.info("wit till insp)
         
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
@@ -864,7 +863,6 @@ class GameMap:
                     h = -(term1 + term2 - 5000*avoid)
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
-                    depoDistMarginal=0
                     #depoDistMarginal[depoDistMarginal>0]=0
                     term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                     term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
