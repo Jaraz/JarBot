@@ -197,15 +197,6 @@ class GameMap:
         self.miningMA = np.zeros([500])
         self.haliteHistory[0] = np.sum(self.npMap)
         
-        # how long till spot is inspired (look at one hsip for now)
-        self.waitTillInsp = np.zeros([self.width, self.height], dtype = np.int)
-        # check if an enemy is within this distance
-        self.distTillInsp = self.distanceMatrixNonZero.copy()
-        self.distTillInsp = self.distTillInsp.astype(np.float)
-        self.distTillInsp[self.distTillInsp>8] = 0
-        self.distTillInsp[self.distTillInsp<=4] = 0
-
-        
         # precompute distance for averaging
         self.dist4 = self.distanceMatrixNonZero.copy()
         self.dist4 = self.dist4.astype(np.float)
@@ -218,20 +209,20 @@ class GameMap:
         self.dist4Discount = self.dist4.copy()
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
-        self.haliteRegBene4x = 0.25
+        self.haliteRegBene4x = 0.125
         self.distaceDenom = 1000
         
         if self.width == 40:
-            self.haliteRegBene4x = 0.25
+            self.haliteRegBene4x = 0.125
             self.distaceDenom = 950
         elif self.width == 48:
-            self.haliteRegBene4x = 0.25
+            self.haliteRegBene4x = 0.125
             self.distaceDenom = 900
         elif self.width == 56:
-            self.haliteRegBene4x = 0.25
+            self.haliteRegBene4x = 0.125
             self.distaceDenom = 850
         elif self.width == 64:
-            self.haliteRegBene4x = 0.25
+            self.haliteRegBene4x = 0.125
             self.distaceDenom = 800
         
     def __getitem__(self, location):
@@ -308,13 +299,6 @@ class GameMap:
             tempSpeed = self.miningSpeed.copy()
             tempSpeed[self.miningSpeed==0.25]=self.haliteRegBene4x
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
-        
-        # calc wait till inspiration, assuming 1 ship enemy distance for now
-        self.waitTillInsp = np.einsum('ijkl,lk',self.distTillInsp,self.shipFlag)
-        self.waitTillInsp[self.waitTillInsp>0] = 1
-        self.waitTillInsp[self.inspirationBonus==1] = 0
-        
-        
         #self.smoothInspirationMap = ndimage.gaussian_filter(self.npMap*self.miningSpeed, sigma = 3, mode = 'wrap')
         #temp = self.npMap*self.miningSpeed
         #logging.info("halite map \n {} \n smooth \n {}".format(temp.astype(np.int), self.smoothInspirationMap.astype(np.int)))
@@ -854,32 +838,15 @@ class GameMap:
             #distIdea[distIdea <0] = 1
             #logging.info("dist2 \n {}".format(distIdea))
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            
-            tempInspMap = self.smoothInspirationMap.copy()
-            tempInspMap[tempInspMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
-            
-            
-            
+
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
-                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
-                    h = -(term1 + term2 - 5000*avoid)
-                    logging.info("in 2p mode")
-                    #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
-                    #depoDistMarginal[depoDistMarginal>0]=0
-                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
-                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
-                    # add opportunity costs
-                    term3 = finalMap.copy()
-                    term3[self.miningSpeed == 0.75] = 0
-                    term3[self.miningSpeed ==self.haliteRegBene4x] = -finalMap[self.miningSpeed==self.haliteRegBene4x]*2 / (dist[self.miningSpeed==self.haliteRegBene4x]+1+8-4*self.waitTillInsp[self.miningSpeed ==self.haliteRegBene4x])
-                    h = -(term1 + term2 + term3 - 5000*avoid)
-
-                    #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    depoDistMarginal[depoDistMarginal>0]=0
+                    h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
