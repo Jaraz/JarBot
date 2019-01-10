@@ -594,7 +594,7 @@ class GameMap:
                     
                     # if no choice stand still
                     if shipID in issueList:
-                        shipMap[y,x] = 50000
+                        shipMap[y,x] = 10000
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
                     shipMap -= self.avoid[shipID] * 50000
@@ -866,15 +866,8 @@ class GameMap:
                 else:
                     #depoDistMarginal=0
                     #depoDistMarginal[depoDistMarginal>0]=0
-                    mineTurn1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
-                    
-                    finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
-                    mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000))
-                    
-                    #finalMap[2.3125*finalMap > (950 - ships[i].halite_amount - finalMap)] = (950 - ships[i].halite_amount - finalMap)
-                    #mineTurn3 = (2.3125 * finalMap) / (dist+3+depoDistMarginal*(ships[i].halite_amount/1000))
-                    term1 = np.maximum(mineTurn1, mineTurn2)
-                    term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
+                    term1 = np.maximum(finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)) ,(1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000)))
+                    term2 = self.smoothInspirationMap / (dist+1+3+depoDistMarginal*(ships[i].halite_amount/1000))
                     h = -(term1 + term2 - 5000*avoid)
 
                     #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
