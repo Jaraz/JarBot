@@ -310,7 +310,7 @@ class GameMap:
         self.smoothInspirationMap = np.einsum('ijkl,lk',self.dist4Discount,self.npMap*tempSpeed)/np.sum(self.dist4Discount[0][0])
         
         # calc wait till inspiration, assuming 1 ship enemy distance for now
-        if self.numPlayers==5:
+        if self.numPlayers==4:
             self.waitTillInsp = np.einsum('ijkl,lk',self.distTillInsp,self.shipFlag)
             self.waitTillInsp[self.waitTillInsp>0] = 1
             self.waitTillInsp[self.inspirationBonus==1] = 0
@@ -864,11 +864,15 @@ class GameMap:
                     h = -(term1 + term2 - 5000*avoid)
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
-                    #depoDistMarginal=0
+                    depoDistMarginal=0
                     #depoDistMarginal[depoDistMarginal>0]=0
-                    term1 = np.maximum(finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)) ,(1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000)))
-                    term2 = self.smoothInspirationMap / (dist+1+3+depoDistMarginal*(ships[i].halite_amount/1000))
-                    h = -(term1 + term2 - 5000*avoid)
+                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
+                    # add opportunity costs
+                    term3 = finalMap.copy()
+                    term3[self.miningSpeed == 0.75] = 0
+                    term3[self.miningSpeed ==self.haliteRegBene4x] = -finalMap[self.miningSpeed==self.haliteRegBene4x]*2 / (dist[self.miningSpeed==self.haliteRegBene4x]+1+6-4*32/self.width*self.waitTillInsp[self.miningSpeed ==self.haliteRegBene4x])
+                    h = -(term1 + term2 + term3 - 5000*avoid)
 
                     #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
