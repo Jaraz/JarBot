@@ -147,7 +147,7 @@ class GameMap:
         self.totalHalite = np.sum(self.npMap)
         self.averageHalite = np.mean(self.npMap)
         self.stdDevHalite = np.std(self.npMap)
-        #logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
+        logging.info("Total {}, avg {}, stdev {}".format(self.totalHalite, self.averageHalite, self.stdDevHalite))
         
         # precompute normalized distances
         self.directionMatrix = np.zeros([self.width, self.height, 4, 2], dtype=np.int)
@@ -161,17 +161,11 @@ class GameMap:
                     self.directionMatrix[y][x][i][1] = endPos.y
 
         # precompute start adn end distances [x][y] is start, to [q][p] returns a scalar manhattan distance
-        # count space for each part of matrix
-        self.matrixID = np.zeros([self.width, self.height], dtype = np.int)
-        matrixCount = 0
-
         self.distanceMatrix = np.zeros([self.width, self.height, self.width, self.height], dtype=np.int)
         for y in range(self.height):
             for x in range(self.width):
                 startPos = Position(y,x)
                 self.distanceMatrix[y][x] = self.calcDistanceMatrix(startPos)
-                self.matrixID[y][x] = matrixCount
-                matrixCount += 1
         
         # avoid code to connect search and movement allocation
         self.avoid = np.zeros([1000, self.width, self.height])
@@ -184,7 +178,14 @@ class GameMap:
         self.distanceMatrixNonZero[self.distanceMatrixNonZero==0] = 1
         #self.distanceMatrixNonZero = 1/self.distanceMatrixNonZero
         #logging.info("distanceMatrix {}".format(self.distanceMatrix))
-
+        
+        # count space for each part of matrix
+        self.matrixID = np.zeros([self.width, self.height], dtype = np.int)
+        matrixCount = 0
+        for y in range(self.height):
+            for x in range(self.width):
+                self.matrixID[y][x] = matrixCount
+                matrixCount += 1
         #logging.info("matrix count {}".format(self.matrixID))
         
         # negative inspiration variables
@@ -197,12 +198,12 @@ class GameMap:
         self.haliteHistory[0] = np.sum(self.npMap)
         
         # how long till spot is inspired (look at one hsip for now)
-        #self.waitTillInsp = np.zeros([self.width, self.height], dtype = np.int)
+        self.waitTillInsp = np.zeros([self.width, self.height], dtype = np.int)
         # check if an enemy is within this distance
-        #self.distTillInsp = self.distanceMatrixNonZero.copy()
-        #self.distTillInsp = self.distTillInsp.astype(np.float)
-        #self.distTillInsp[self.distTillInsp>8] = 0
-        #self.distTillInsp[self.distTillInsp<=4] = 0
+        self.distTillInsp = self.distanceMatrixNonZero.copy()
+        self.distTillInsp = self.distTillInsp.astype(np.float)
+        self.distTillInsp[self.distTillInsp>8] = 0
+        self.distTillInsp[self.distTillInsp<=4] = 0
 
         
         # precompute 1 distance
@@ -212,6 +213,7 @@ class GameMap:
         
         # precompute distance for averaging
         self.dist4 = self.distanceMatrixNonZero.copy()
+        self.dist4 = self.dist4.astype(np.float)
         self.dist4[self.dist4>4] = 0
         
         self.dist4Indicator = self.dist4.copy()
@@ -219,7 +221,6 @@ class GameMap:
         self.dist4Indicator[self.dist4Indicator>0] = 1
         
         self.dist4Discount = self.dist4.copy()
-        self.dist4Discount = self.dist4Discount.astype(np.float)
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
         self.haliteRegBene4x = 0.25
@@ -881,7 +882,7 @@ class GameMap:
                     #mineTurn3 = (2.3125 * finalMap) / (dist+3+depoDistMarginal*(ships[i].halite_amount/1000))
                     term1 = np.maximum(mineTurn1, mineTurn2)
                     term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
-                    h = -(term1 + 0*term2 - 5000*avoid)
+                    h = -(term1 + term2 - 5000*avoid)
                     logging.info("ship {} turn1 {} turn2 {}".format(ships[i].id, mineTurn1.astype(np.int), mineTurn2.astype(np.int)))
                     #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
