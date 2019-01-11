@@ -206,6 +206,12 @@ class GameMap:
         self.distTillInsp[self.distTillInsp<=4] = 0
 
         
+        # precompute 1 distance
+        self.dist1 = self.distanceMatrixNonZero.copy()
+        self.dist1 = self.dist1.astype(np.float)
+        self.dist1[self.dist1>1] = 0
+        
+        
         # precompute distance for averaging
         self.dist4 = self.distanceMatrixNonZero.copy()
         self.dist4 = self.dist4.astype(np.float)
@@ -583,22 +589,23 @@ class GameMap:
                     
                 # if you are returning halite and its a 4 player game, avoid all spots neighboring an enemy ship
                 if self.numPlayers == 4 and (status[shipID] == 'returnSuicide' or status[shipID] == 'returning'):
-                    shipMap -= np.sign(self.nearbyEnemyShip) * 50000
-                    shipMap[y,x] += np.sign(self.nearbyEnemyShip[y,x]) * 50000
+                    shipMap -= np.sign(self.nearbyEnemyShip) * 10000
+                    shipMap[y,x] += np.sign(self.nearbyEnemyShip[y,x]) * 10000
                     
                     # make sure dropoff is never blocked
                     for drop in dropoffs:
                         shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 50000
                         
-                    shipMap[shipMap<0]=0
+                    #shipMap[shipMap<0]=-1
                     
                     # if no choice stand still
                     if shipID in issueList:
-                        shipMap[y,x] = 50000
+                        shipMap[y,x] = 500000
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
-                    shipMap -= self.avoid[shipID] * 50000
-                    shipMap[shipMap<0]=0
+                    shipMap -= self.avoid[shipID] * 10000
+                    #shipMap[shipMap<0]=-1
+                
                                         
                 turnMatrix[i,:] = shipMap.ravel()
                 #logging.info("ship {} map {}".format(ships[i].id, shipMap))
@@ -763,6 +770,11 @@ class GameMap:
             if self.numPlayers==2:
                 avoid = 1 * (np.sign(self.nearbyEnemyShip) * (ships[i].halite_amount + self.minedNextTurn) > self.nearbyEnemyShip)
                 avoid *= self.enemyZoC
+                
+                # late game move if you are gonna be attacked
+                if ships[i].halite_amount > 1500 and self.turnsLeft<100:
+                    avoid = np.sign(self.nearbyEnemyShip)
+                    avoid -= 1 * (self.nearbyEnemyShip > ships[i].halite_amount)
                 #logging.info("ship {} enemyZoc \n {} \n avoid \n {}".format(shipID, self.enemyZoC, avoid))
             else:
                 # avoid spots where enemy is not likely to go b/c:

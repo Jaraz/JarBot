@@ -139,11 +139,8 @@ def giveShipOrders(ship, currentOrders, collectingStop):
     shipX = ship.position.x
     shipY = ship.position.y
     
-    distanceRule = 1
-    
-    dist = game_map.distanceMatrixNonZero[shipX][shipY].copy()
-    dist[dist>distanceRule] = 0
-    enemyInSight = dist * game_map.shipFlag
+    dist = game_map.distanceMatrixNonZero[shipX][shipY]
+    enemyInSight = game_map.dist1[shipX][shipY] * game_map.shipFlag
     #logging.info("ship {} dist {} enemy in sight {}".format(ship.id, dist, enemyInSight))
     
     # is an enemy in zone
