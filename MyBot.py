@@ -70,7 +70,7 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     turnStopBuilding = 90
     buildShip = False
     playerMultiple = len(playerScores)/2
-    shipLead = 12
+    shipLead = 10
     shipCompare = playerShips[1]
     totalShips = np.sum(playerShips)
     
@@ -79,9 +79,9 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
         stopFlag = 0.25
     
     if game_map.width <= 40:
-        shipLead = 7
+        shipLead = 5
     elif game_map.width <= 48:
-        shipLead = 10
+        shipLead = 8
     
     if totalShips < 1:
         totalShips = 1
