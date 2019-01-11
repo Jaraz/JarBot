@@ -717,7 +717,16 @@ class GameMap:
         #depoDist = self.dropDistances.min(0) # does not include starting yard
         depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
         #logging.info("depo dist all {}".format(depoDistAll))
-
+        '''
+        if self.width > 60:
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.0
+        elif self.width > 55:
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0.0
+        elif self.width > 45:
+            depoBonus = np.sqrt(depoDist.max() - depoDist) * self.npMap * 0
+        else:
+        '''
+        depoBonus = 0
         #logging.info("depo dist {}".format(depoDist))
         #logging.info("depo bonus {}".format(depoDist.max() - depoDist))
         haliteMap = haliteMap - collectingStop
@@ -808,6 +817,7 @@ class GameMap:
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
+            finalMap += depoBonus
             finalMap *= miningSpeed
             # if above minimum threshold then lets include it
             if self.npMap[shipY,shipX] > collectingStop:
@@ -862,14 +872,18 @@ class GameMap:
                 else:
                     #depoDistMarginal=0
                     #depoDistMarginal[depoDistMarginal>0]=0
-                    if self.width<64:
-                        mineTurn1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
-                        finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
-                        mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000))
-                        term1 = np.maximum(mineTurn1, mineTurn2)
-                    else:
-                        term1 = np.maximum(finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)) ,(1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000)))
-                    h = -(term1 - 5000*avoid)
+                    mineTurn1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    
+                    finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
+                    mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000))
+                    
+                    #finalMap[2.3125*finalMap > (950 - ships[i].halite_amount - finalMap)] = (950 - ships[i].halite_amount - finalMap)
+                    #mineTurn3 = (2.3125 * finalMap) / (dist+3+depoDistMarginal*(ships[i].halite_amount/1000))
+                    term1 = np.maximum(mineTurn1, mineTurn2)
+                    term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
+                    h = -(term1 + 0*term2 - 5000*avoid)
+                    #logging.info("ship {} turn1 {} turn2 {}".format(ships[i].id, mineTurn1.astype(np.int), mineTurn2.astype(np.int)))
+                    #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
