@@ -581,7 +581,7 @@ class GameMap:
                         shipMap[(y+1) % self.width,x % self.height] = 2
                 # or mine and stay still
                 else:
-                    shipMap[y,x] = 100000
+                    shipMap[y,x] = 10000
                 
 
                     
@@ -592,13 +592,13 @@ class GameMap:
                     
                     # make sure dropoff is never blocked
                     for drop in dropoffs:
-                        shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 50000
+                        shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 10000
                         
                     #shipMap[shipMap<0]=-1
                     
                     # if no choice stand still
                     if shipID in issueList:
-                        shipMap[y,x] = 50000
+                        shipMap[y,x] = 10000
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
                     shipMap -= self.avoid[shipID] * 10000
@@ -882,7 +882,7 @@ class GameMap:
                     term1 = np.maximum(mineTurn1, mineTurn2)
                     term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
                     h = -(term1 + 0*term2 - 5000*avoid)
-                    logging.info("ship {} turn1 {} turn2 {}".format(ships[i].id, mineTurn1.astype(np.int), mineTurn2.astype(np.int)))
+                    #logging.info("ship {} turn1 {} turn2 {}".format(ships[i].id, mineTurn1.astype(np.int), mineTurn2.astype(np.int)))
                     #h = -(finalMap - 5000 * avoid + (1-ships[i].halite_amount/1000)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
