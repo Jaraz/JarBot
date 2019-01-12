@@ -326,9 +326,12 @@ class GameMap:
         #logging.info("halite map \n {} \n smooth \n {}".format(temp.astype(np.int), self.smoothInspirationMap.astype(np.int)))
        
     def updateNegInspirationMatrix(self):
+        dist = self.distanceMatrixNonZero.copy()
+        dist[dist>4] = 0
+        dist[dist>0] = 1
         ships = self.shipMap.copy()
         ships[ships>1] = 0
-        self.friendlyShipCount = np.einsum('ijkl,lk',self.dist4Indicator,ships)
+        self.friendlyShipCount = np.einsum('ijkl,lk',dist,ships)
         res = self.friendlyShipCount.copy()
         res[res<=1] = 0
         res[res>1] = 1
@@ -770,7 +773,7 @@ class GameMap:
 
                 if ships[i].halite_amount < 700:
                     ### (2) ###
-                    avoid -= 1 * (self.nearbyEnemyShip-600 > ships[i].halite_amount)
+                    avoid -= 1 * (self.nearbyEnemyShip-500 > ships[i].halite_amount)
                 
                     # shouldn't force us to move
                     if ships[i].halite_amount < 300:
@@ -868,9 +871,9 @@ class GameMap:
                         term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
                         
                     else:
-                        depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
-                        term1 = np.maximum(finalMap / (dist+1+depoDistDecayed) ,(1.75 * finalMap) / (dist+2+depoDistDecayed))
-                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistDecayed)
+                        term1 = np.maximum(finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000)) ,(1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000)))
+                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
+                        term3 = 0
                     h = -(term1 + term2 - 5000*avoid)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
@@ -899,15 +902,15 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 105
+                trueFalseFlag = inspiredHalite.ravel() > 95
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 120
+                    trueFalseFlag = inspiredHalite.ravel() > 110
             else:
                 trueFalseFlag = inspiredHalite.ravel() > 80
                 
             if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-            elif self.averageHalite < 50 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 40 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
                 
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))

@@ -74,7 +74,7 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
     shipCompare = playerShips[1]
     totalShips = np.sum(playerShips)
     
-    stopFlag = 0.28
+    stopFlag = 0.3
     if game_map.width > 50:
         stopFlag = 0.25
     
@@ -274,6 +274,9 @@ def resolveMovement(ships, destinations, status, attackTargets, previousDestinat
             enemyLoc.append(enemy.position)
         else:
             logging.info("1k found")
+    #logging.info("enemyLoc {} and adj {}".format(game.enemyShips, game.adjEnemyShips))    
+    if len(game.players) > 3:
+        enemyLoc.extend(game.adjEnemyShips)
     
     
     #logging.info("ships {} *** dest {} *** dropoffs {}".format(ships, destinations, dropoffs))
@@ -332,7 +335,7 @@ DEPO_MIN_SHIPS = 4
 MAX_DEPO          = 3
 DEPO_HALITE_LOOK  = 5
 DEPO_HALITE       = 100
-DEPO_DISTANCE     = 14
+DEPO_DISTANCE     = 12
 DEPO_MIN_HALITE   = 400
 
 #default is 1, 3, 7
@@ -353,7 +356,7 @@ if game.game_map.width > 60:
     shipBuildingTurns = 80
     RADAR_MAX = 12
     DEPO_HALITE += 0
-    DEPO_DISTANCE  = 14
+    DEPO_DISTANCE  = 12
     DEPO_DISTANCE_DELTA = 5
     SUICIDE_TURN_FLAG = 7
     MAX_DEPO = 7
@@ -366,9 +369,9 @@ if game.game_map.width > 60:
     DEPO_MIN_SHIPS = 2
 elif game.game_map.width > 50:
     shipBuildingTurns = 80
-    DEPO_DISTANCE  = 13
+    DEPO_DISTANCE  = 12
     DEPO_DISTANCE_DELTA = 4
-    MAX_DEPO = 5
+    MAX_DEPO = 4
     collectingStop = 1
     DEPO_MIN_HALITE  = 290
     DEPO_PERCENTILE = 66
@@ -380,7 +383,7 @@ elif game.game_map.width > 41:
     MAX_DEPO = 3
     if game.game_map.totalHalite < 200000:
         MAX_DEPO = 1
-    DEPO_DISTANCE  = 12
+    DEPO_DISTANCE  = 11
     DEPO_DISTANCE_DELTA = 6
     DEPO_MIN_HALITE   = 350
     DEPO_MIN_SHIPS = 3
@@ -392,19 +395,22 @@ elif game.game_map.width > 39:
     DEPO_HALITE_LOOK  = 3
     if game.game_map.totalHalite < 200000:
         MAX_DEPO = 1
-    DEPO_DISTANCE  = 12
+    DEPO_DISTANCE  = 11
     DEPO_DISTANCE_DELTA = 6
     DEPO_MIN_HALITE   = 375
 elif game.game_map.width < 40 and game.game_map.totalHalite < 200000:
     shipBuildingTurns = 110
     collectingStop = 1
     MAX_DEPO = 1    
-    DEPO_DISTANCE  = 13
+    DEPO_DISTANCE  = 12
 elif game.game_map.width < 40 and game.game_map.totalHalite < 270000:
     shipBuildingTurns = 90
     collectingStop = 1
     MAX_DEPO = 2
-    DEPO_DISTANCE  = 13
+    DEPO_DISTANCE  = 12
+elif game.game_map.width < 40 and game.game_map.averageHalite > 250:
+    collectingStop = 1
+    shipBuildingTurns = 90
 else:
     shipBuildingTurns = 90
     collectingStop= 1
@@ -470,7 +476,6 @@ if len(game.players) == 4:
     
 if len(game.players) == 4:
     SUICIDE_TURN_FLAG = 14
-    DEPO_DISTANCE += -1
 
 
 logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
@@ -481,7 +486,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v66Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
