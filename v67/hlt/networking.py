@@ -81,6 +81,7 @@ class Game:
         self.game_map.emptyShipMap()
         # first populate with your own ships
         for ship in self.me.get_ships():
+            self.game_map[ship.position].mark_unsafe(ship)
             self.game_map.shipMap[ship.position.y, ship.position.x] = 1
             self.game_map.myShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
             self.game_map.negShipMap[ship.position.y, ship.position.x] = 1
@@ -89,6 +90,7 @@ class Game:
         for player in self.players.values():
             if player.id != self.me.id:
                 for ship in player.get_ships():
+                    self.game_map[ship.position].mark_unsafe(ship)
                     self.game_map.shipMap[ship.position.y, ship.position.x] = playerCount
                     self.game_map.enemyShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
     
@@ -134,6 +136,39 @@ class Game:
         
         self.adjEnemyShips = []
         
+        for i in self.enemyShips:
+            if i.position not in self.players[self.my_id].get_all_drop_locations():
+                self.game_map[i.position].mark_enemy_ship(i)
+
+            #logging.info("Enemy identified {}".format(i))
+            
+            # ship info
+            haliteAtEnemy = self.game_map[i.position].halite_amount
+                
+            # guess enemy movement, skip if he is on a lot of halite and empty
+            dropLocations = self.players[self.my_id].get_all_drop_locations()
+            dropSurrounding = []
+            for j in dropLocations:
+                dropSurrounding.extend(self.game_map.get_surrounding_cardinals(j,1))
+            #logging.info("drop locations {}".format(dropSurrounding))
+            #if len(self.players) > 3 and haliteAtEnemy < self.game_map.averageHalite and i.position not in dropSurrounding:
+            if len(self.players) > 5 and haliteAtEnemy < 100 and i.position not in dropSurrounding and self.game_map.turnsLeft > 100:
+                east = self.game_map.normalize(i.position + Position(1,0))
+                self.game_map[east].mark_enemy_ship(i)
+                self.adjEnemyShips.append(east)
+                
+                south = self.game_map.normalize(i.position + Position(0,1))
+                self.game_map[south].mark_enemy_ship(i)
+                self.adjEnemyShips.append(south)
+                
+                west = self.game_map.normalize(i.position + Position(-1,0))
+                self.game_map[west].mark_enemy_ship(i)
+                self.adjEnemyShips.append(west)
+                
+                north = self.game_map.normalize(i.position + Position(0,-1))
+                self.game_map[north].mark_enemy_ship(i)
+                self.adjEnemyShips.append(north)
+
         # update drop distances
         #self.game_map.updateDropDistances(self.players[self.my_id].get_all_drop_locations())
         self.game_map.updateDropDistances(self.players[self.my_id].get_dropoff_locations())

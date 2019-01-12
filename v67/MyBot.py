@@ -95,7 +95,7 @@ def shipConstructionLogic(playerScores, playerShips, haliteLeft, turnsLeft):
             stopFlag = 0.225
         
     if len(playerScores)==4:
-        shipLead += 2
+        shipLead += -2
         if nextTen/10 * turnsLeft < 1000*playerMultiple or \
         turnsLeft<turnStopBuilding or \
         playerShips[0] - shipCompare > shipLead or \
@@ -147,7 +147,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         enemyHalite = game_map.enemyShipHalite * dist
         enemyMA = np.ma.masked_equal(enemyHalite, 0, copy=False)
         if len(game.players)==2 or len(game.players)==4:
-            fightHalite = dist * (game_map.enemyShipHalite + game_map.enemyMiningNext)
+            fightHalite = dist * (game_map.enemyShipHalite + game_map.shipFlag * game_map.npMap * (0.25 + 0.5 * game_map.negInspirationBonus))
             enemyLoc = np.unravel_index(fightHalite.argmax(),fightHalite.shape)
         else:
             fightHalite = dist * 1
@@ -481,7 +481,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v67Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

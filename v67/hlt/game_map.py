@@ -111,7 +111,6 @@ class GameMap:
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
         self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
         self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)
-        self.enemyMiningNext = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.dropOffBonus = np.zeros([self.width, self.height], dtype=np.int)
         self.myShipHalite = np.zeros([self.width, self.height], dtype=np.int)
@@ -272,7 +271,6 @@ class GameMap:
         for a given cell this matrix shows teh smallest neighboring enemy
         '''
         self.nearbyEnemyShip = np.zeros([self.width, self.height], dtype=np.int)
-        self.nearbyEnemyShipCount = np.zeros([self.width, self.height], dtype=np.int)
         
         tempEnemyHalite = self.enemyShipHalite + self.shipFlag # if no halite, need to make it 1
         
@@ -287,10 +285,8 @@ class GameMap:
         east[east==0] = 1000000
         west[west==0] = 1000000
         
-        self.nearbyEnemyShipCount = np.roll(self.shipFlag,1,0) + np.roll(self.shipFlag,-1,0) + np.roll(self.shipFlag,-1,1) + np.roll(self.shipFlag,1,1)
         self.nearbyEnemyShip = np.minimum(north, np.minimum(south,np.minimum(east,west)))
         self.nearbyEnemyShip[self.nearbyEnemyShip==1000000]=0
-        logging.info("nearby enemy ship count {}".format(self.nearbyEnemyShipCount.shape))
     
     def updateInspirationMatrix(self):
         self.enemyShipCount = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag)
@@ -338,8 +334,6 @@ class GameMap:
         res[res>1] = 1
         self.negInspirationBonus = res
         #logging.info("Neg inspiration \n{}".format(self.negInspirationBonus))
-        
-        self.enemyMiningNext = self.shipFlag * self.npMap * (0.25 + 0.5 * self.negInspirationBonus)
         
     def returnFriendlyCount(self, pos, width):
         countMap = self.shipMap.copy()
@@ -684,7 +678,7 @@ class GameMap:
         tempMap = self.shipMap.copy()
         if self.numPlayers==2 and self.turnNumber > 50:
             tempMap[self.shipMap==2]=0
-        if self.numPlayers==4 and self.turnNumber > 500:
+        if self.numPlayers==4 and self.turnNumber > 50:
             tempMap[self.shipMap==2]=0
             tempMap[self.shipMap==3]=0
             tempMap[self.shipMap==4]=0
@@ -748,12 +742,6 @@ class GameMap:
         shipTest = self.shipFlag.copy()
         shipTest[self.npMap<100] = 0
         '''
-        enemyShipMoveAmt = 250
-        tempShipMatrix = self.nearbyEnemyShip.copy()
-        tempShipMatrix[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)] -= self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]
-        logging.info("help meh {}".format(self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]))
-
-        
         for i in range(len(ships)):
             shipID = ships[i].id
             shipX = ships[i].position.x
@@ -778,14 +766,15 @@ class GameMap:
                 #   2) our ship has less halite (and thus less to lose) by moving
                 
                 # set avoid to all neighboring zones
-                # check if the enemy won't move b/c of mining
-                avoid = np.sign(tempShipMatrix)
+                avoid = np.sign(self.nearbyEnemyShip)
 
-                ### (2) ###
-                # take into account how much they will mine
-
-                avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
-                avoid[avoid<0]=0
+                if ships[i].halite_amount < 700:
+                    ### (2) ###
+                    avoid -= 1 * (self.nearbyEnemyShip-600 > ships[i].halite_amount)
+                
+                    # shouldn't force us to move
+                    if ships[i].halite_amount < 300:
+                        avoid[shipY,shipX] = 0 
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid # to be used in resolve movement function
 
@@ -863,24 +852,23 @@ class GameMap:
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
-                depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
-
                 if self.numPlayers == 2:
-                    term1 = finalMap / (dist+1+depoDistDecayed)
-                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistDecayed)
+                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
                     h = -(term1 + term2 - 5000*avoid)
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
                     #depoDistMarginal=0
                     #depoDistMarginal[depoDistMarginal>0]=0
                     if self.width<64:                        
-                        mineTurn1 = finalMap / (dist+1+depoDistDecayed)
+                        mineTurn1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                         finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
-                        mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistDecayed)
+                        mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistMarginal*(ships[i].halite_amount/1000))
                         term1 = np.maximum(mineTurn1, mineTurn2)
-                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistDecayed)
+                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistMarginal*(ships[i].halite_amount/1000))
                         
                     else:
+                        depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
                         term1 = np.maximum(finalMap / (dist+1+depoDistDecayed) ,(1.75 * finalMap) / (dist+2+depoDistDecayed))
                         term2 = self.smoothInspirationMap / (dist+1+4+depoDistDecayed)
                     h = -(term1 + term2 - 5000*avoid)
@@ -911,15 +899,15 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 110
+                trueFalseFlag = inspiredHalite.ravel() > 105
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 125
+                    trueFalseFlag = inspiredHalite.ravel() > 120
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 90
+                trueFalseFlag = inspiredHalite.ravel() > 80
                 
-            if self.averageHalite < 25 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 50 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-            elif self.averageHalite < 25 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 50 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
                 
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
