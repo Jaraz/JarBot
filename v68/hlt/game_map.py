@@ -489,7 +489,7 @@ class GameMap:
                     elif destinations[shipID] not in shipPosList:
                         shipMap[y,x] = 6
                     else: 
-                        shipMap[y,x] = halite
+                        shipMap[y,x] = 1
                         
                     # is goal directly n,s,e,w?
                     up = Position(self.directionMatrix[pos.x][pos.y][0][0],self.directionMatrix[pos.x][pos.y][0][1])
@@ -585,7 +585,7 @@ class GameMap:
                         shipMap[(y+1) % self.width,x % self.height] = 2
                 # or mine and stay still
                 else:
-                    shipMap[y,x] = 100000
+                    shipMap[y,x] = 10000
                 
 
                     
@@ -788,7 +788,6 @@ class GameMap:
                 avoid[avoid<0]=0
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid # to be used in resolve movement function
-                logging.info("ship {} avoid matrix {}".format(shipID,avoid))
 
                 
            

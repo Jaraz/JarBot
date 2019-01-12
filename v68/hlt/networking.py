@@ -81,7 +81,6 @@ class Game:
         self.game_map.emptyShipMap()
         # first populate with your own ships
         for ship in self.me.get_ships():
-            self.game_map[ship.position].mark_unsafe(ship)
             self.game_map.shipMap[ship.position.y, ship.position.x] = 1
             self.game_map.myShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
             self.game_map.negShipMap[ship.position.y, ship.position.x] = 1
@@ -90,7 +89,6 @@ class Game:
         for player in self.players.values():
             if player.id != self.me.id:
                 for ship in player.get_ships():
-                    self.game_map[ship.position].mark_unsafe(ship)
                     self.game_map.shipMap[ship.position.y, ship.position.x] = playerCount
                     self.game_map.enemyShipHalite[ship.position.y, ship.position.x] = ship.halite_amount
     

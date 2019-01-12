@@ -219,7 +219,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = 'build depo'
         SAVE_UP_FOR_DEPO = True
         DEPO_ONE_SHIP_AT_A_TIME = True
-    elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 and game_map[ship.position].halite_amount >= 10:
+    elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1:
         status = 'mining'
     elif min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) >= turns_left - SUICIDE_TURN_FLAG:
         status = "returnSuicide"
@@ -481,7 +481,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v68Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.
