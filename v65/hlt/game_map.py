@@ -435,7 +435,7 @@ class GameMap:
         if self.width > 60:
             maxLoop = 4
             if self.numPlayers==4:
-                maxLoop = 4
+                maxLoop = 5
             if self.turnsLeft <50:
                 maxLoop = 5
         
@@ -678,12 +678,11 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if self.numPlayers==2 and self.turnNumber > 500:
+        if self.numPlayers==2 and self.turnNumber > 50:
             tempMap[self.shipMap==2]=0
-        if self.numPlayers==4 and self.turnNumber > 50:
-            tempMap[self.shipMap==2]=0
-            tempMap[self.shipMap==3]=0
-            tempMap[self.shipMap==4]=0
+        #if max(self.shipMap.flatten())==4:
+            #tempMap[self.shipMap==3]=0
+            #tempMap[self.shipMap==4]=0
         haliteMap = self.npMap - 1000 * tempMap
         
         #add back 1k ships (assumes they move only for 2p)
@@ -772,10 +771,10 @@ class GameMap:
 
                 if ships[i].halite_amount < 700:
                     ### (2) ###
-                    avoid -= 1 * (self.nearbyEnemyShip-500 > ships[i].halite_amount)
+                    avoid -= 1 * (self.nearbyEnemyShip-300 > ships[i].halite_amount)
                 
                     # shouldn't force us to move
-                    if ships[i].halite_amount < 300:
+                    if ships[i].halite_amount < 500:
                         avoid[shipY,shipX] = 0 
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid # to be used in resolve movement function
@@ -810,25 +809,26 @@ class GameMap:
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             finalMap *= miningSpeed
-
-            # add costs to other squares
-            if self.width > 60:
-                ratio = 0.075
-            elif self.width > 41:
-                ratio = 0.05
-            elif self.width > 39:
-                ratio = 0.025
-            else:
-                ratio = 0.025
-            finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
-            finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            # if above minimum threshold then lets include it
+            if self.npMap[shipY,shipX] > collectingStop:
+                # add costs to other squares
+                #logging.info("ship {} sees {}".format(ships[i].id, self.npMap[shipY,shipX]))
+                if self.width > 60:
+                    ratio = 0.075
+                elif self.width > 41:
+                    ratio = 0.05
+                elif self.width > 39:
+                    ratio = 0.025
+                else:
+                    ratio = 0.025
+                finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
+                finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+                finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+                finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+                finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
                 
-            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
-            depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
 
+            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             #haliteMap[haliteMap<collectingStop] = 1
             #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             
@@ -844,7 +844,7 @@ class GameMap:
             #distIdea[self.inspirationBonus==1] += -1
             #distIdea[distIdea <0] = 1
             #logging.info("dist2 \n {}".format(distIdea))
-
+            depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
             
             #tempInspMap = self.smoothInspirationMap.copy()
             #tempInspMap[tempInspMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
@@ -855,8 +855,8 @@ class GameMap:
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
                 if self.numPlayers == 2:
-                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/2000))
-                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/2000))
+                    term1 = finalMap / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistMarginal*(ships[i].halite_amount/1000))
                     h = -(term1 + term2 - 5000*avoid)
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
