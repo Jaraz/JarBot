@@ -209,7 +209,8 @@ class GameMap:
         # precompute 1 distance
         self.dist1 = self.distanceMatrixNonZero.copy()
         self.dist1[self.dist1>1] = 0
-                
+        
+        
         # precompute distance for averaging
         self.dist4 = self.distanceMatrixNonZero.copy()
         self.dist4[self.dist4>4] = 0
@@ -217,13 +218,10 @@ class GameMap:
         self.dist4Indicator = self.dist4.copy()
         self.dist4Indicator[self.dist4Indicator>4] = 0
         self.dist4Indicator[self.dist4Indicator>0] = 1
-
-
-        self.dist4Discount = self.distanceMatrix.copy()
-        self.dist4Discount[self.dist4Discount>4] = 0
+        
+        self.dist4Discount = self.dist4.copy()
         self.dist4Discount = self.dist4Discount.astype(np.float)
-        self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4Discount[self.dist4Discount>0] * (self.dist4Discount[self.dist4Discount>0]))
-
+        self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4[self.dist4>0] * (self.dist4[self.dist4>0]))
 
         self.haliteRegBene4x = 0.25
         self.distaceDenom = 1000
@@ -870,7 +868,7 @@ class GameMap:
 
                 if self.numPlayers == 2:
                     term1 = finalMap / (dist+1+depoDistDecayed)
-                    term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
+                    term2 = self.smoothInspirationMap / (dist+1+2+depoDistDecayed)
                     h = -(term1 + term2 - 5000*avoid)
                     #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
                 else:
@@ -881,11 +879,11 @@ class GameMap:
                         finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
                         mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistDecayed)
                         term1 = np.maximum(mineTurn1, mineTurn2)
-                        term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
+                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistDecayed)
                         
                     else:
                         term1 = np.maximum(finalMap / (dist+1+depoDistDecayed) ,(1.75 * finalMap) / (dist+2+depoDistDecayed))
-                        term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
+                        term2 = self.smoothInspirationMap / (dist+1+4+depoDistDecayed)
                     h = -(term1 + term2 - 5000*avoid)
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
@@ -914,11 +912,11 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 95
+                trueFalseFlag = inspiredHalite.ravel() > 110
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 120
+                    trueFalseFlag = inspiredHalite.ravel() > 125
             else:
-                trueFalseFlag = inspiredHalite.ravel() > 85
+                trueFalseFlag = inspiredHalite.ravel() > 90
                 
             if self.averageHalite < 25 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
