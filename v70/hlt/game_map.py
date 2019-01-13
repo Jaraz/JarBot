@@ -602,8 +602,8 @@ class GameMap:
                     # make sure dropoff is never blocked
                     for drop in dropoffs:
                         shipMap[drop.y,drop.x] += np.sign(self.nearbyEnemyShip[drop.y,drop.x]) * 10000
-                    
-                    shipMap[shipMap < 0] = 0
+                        
+                    #shipMap[shipMap<0]=-1
                     
                     # if no choice stand still
                     if shipID in issueList:
@@ -611,10 +611,10 @@ class GameMap:
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
                     # need to ensure avoid only gives locations next to ship
-                    shipMap -= self.avoid[shipID] * 10000
-                    shipMap[shipMap < 0] = 0
-                                                        
-                #logging.info("shipo {} shipMap {}".format(shipID, shipMap))
+                    shipMap -= self.avoid[shipID] * 10000 * self.dist1[y][x]
+                    #shipMap[shipMap<0]=-1
+                
+                                        
                 turnMatrix[i,:] = shipMap.ravel()
                 #logging.info("ship {} map {}".format(ships[i].id, shipMap))
     
@@ -720,25 +720,57 @@ class GameMap:
             miningSpeed[miningSpeed<1] = self.haliteRegBene4x
             miningSpeed[miningSpeed>.99] = .75
 
-
+        #miningSpeed[miningSpeed==0.25] += 0.5 * self.inspirationGuess[miningSpeed==0.25]
+        #logging.info("mining speed {}".format(miningSpeed))
+        #miningTurns = np.log(collectingStop/haliteMap) / miningSpeed
+        #miningTurns[miningTurns<0] = np.log(1/collectingStop) / miningSpeed[miningTurns<0]
+        #logging.info("Mining turns {}".format(miningTurns))
+        #depoDist = self.dropDistances.min(0) # does not include starting yard
         depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
+        #logging.info("depo dist all {}".format(depoDistAll))
+
+        #logging.info("depo dist {}".format(depoDist))
+        #logging.info("depo bonus {}".format(depoDist.max() - depoDist))
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
 
-
+        #distInsp = self.distanceMatrixNonZero.copy()
+        #distInsp[distInsp>4] = 0
+        #distInsp[distInsp>0] = 1
+        
+        #calculate what the enemy is getting from inspiration bonus
+        #currentNegInspBonus = np.sum(self.negInspirationBonus * self.npMap * self.shipFlag) * 0.5
+        #logging.info("Current neg bonus {}".format(currentNegInspBonus))
+        
+        '''
+        distForNegInsp = self.distanceMatrixNonZero.copy()
+        distForNegInsp[distForNegInsp>4] = 0
+        distForNegInsp[distForNegInsp>0] = 1
+        shipsForNegInsp = self.shipMap.copy()
+        shipsForNegInsp[shipsForNegInsp>1] = 0
+        negShipCount = np.einsum('ijkl,lk',distForNegInsp,shipsForNegInsp)
+        
+        #logging.info("Neg delta sum {} \n {}".format(np.sum(negDelta), negDelta))
+        shipTest = self.shipFlag.copy()
+        shipTest[self.npMap<100] = 0
+        '''
         enemyShipMoveAmt = 250
         tempShipMatrix = self.nearbyEnemyShip.copy()
         tempShipMatrix[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)] -= self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]
-        #logging.info("help meh {}".format(self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]))
-        #logging.info("NES {}".format(self.nearbyEnemyShip))
-        #logging.info("TSM {}".format(tempShipMatrix))
+        logging.info("help meh {}".format(self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]))
+
         
         for i in range(len(ships)):
             shipID = ships[i].id
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
-
+            #logging.info("ship {} dropShip {} drop marg {}".format(shipID, depoDistAll[shipY][shipX], depoDistMarginal))
+            # guess work
+            #dist[self.inspirationGuess==1] += -2
+            #dist[self.inspirationBonus==1] += -1
+            #dist[dist<0] = 0
+            
             # take into account enemy zone of control
             # avoid these spots, you will be killed
             if self.numPlayers==2:
@@ -759,22 +791,40 @@ class GameMap:
                 # take into account how much they will mine
                 #avoid -= 1 * (self.nearbyEnemyShip - 750*(self.freeHalite-0.4)> ships[i].halite_amount)
                 #avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
-                
-                if self.width==56:
-                    multiplier = 600
-                elif self.width==64:
-                    multiplier = 700
+                if self.width==32:
+                    avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
                 else:
-                    multiplier = 500
-
-                    
-                avoid -= 1 * (self.nearbyEnemyShip - multiplier*(self.freeHalite*self.freeHalite)> ships[i].halite_amount)
+                    avoid -= 1 * (self.nearbyEnemyShip - 500*(self.freeHalite*self.freeHalite)> ships[i].halite_amount)
                 avoid[avoid<0]=0
-                avoid = avoid.astype(np.int)
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
+                avoid = avoid.astype(np.int)
                 self.avoid[shipID] = avoid # to be used in resolve movement function
                 #logging.info("ship {} avoid matrix {}".format(shipID,avoid))
 
+                
+           
+            #logging.info("ship {} ZoC {}".format(shipID, avoid))
+            
+            #negShipFlag = negShipCount.copy()
+            #logging.info("Ship {} negShipFlag0 {}".format(ships[i].id, negShipFlag))
+            #nearbyDist = dist.copy()
+            #nearbyDist[nearbyDist>4]=0
+            #nearbyDist[nearbyDist>1]=1
+            #nearbyDist[shipY,shipX]=1
+            #logging.info("Ship {} nearbyDist {}".format(ships[i].id, nearbyDist))
+            #negShipFlag -= nearbyDist
+            #negShipFlag[negShipFlag > 1] = 0
+            #negShipFlag[negShipFlag <= 0] = 0
+            #negShipFlag[negShipFlag > 0] = 1
+
+            #logging.info("Ship {} negShipFlag1 {}".format(ships[i].id, negShipFlag))
+            #negShipFlag = negShipFlag * self.npMap * shipTest * 1
+            #logging.info("Ship {} negShipFlag2 {}".format(ships[i].id, negShipFlag))
+            #negDelta = np.einsum('ijkl,lk',distInsp,negShipFlag)
+            #logging.info("Ship {} negDelta {}".format(ships[i].id, negDelta))
+            #shipNegDelta = negDelta.copy()
+            #shipNegDelta[shipX][shipY] = 0
+            
             finalMap = haliteMap.copy()
             finalMap = finalMap.astype(np.float)
             # add back current ship from earlier subtraction of friendlies
@@ -800,6 +850,28 @@ class GameMap:
             finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
 
+            #haliteMap[haliteMap<collectingStop] = 1
+            #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
+            
+            # if ship should move, eliminate halite on square
+            #if moveFlag[shipID]!=False:
+            #    finalMap[shipY, shipX] = 0
+            #    finalMap[moveFlag[shipID]] = 0
+            #    logging.info("ship {} finalmap {}".format(shipID, finalMap))
+
+            #distIdea = dist.copy()
+            #logging.info("ship {} dist1 \n {}".format(shipID, distIdea))
+            #distIdea[self.inspirationGuess==1] += -1
+            #distIdea[self.inspirationBonus==1] += -1
+            #distIdea[distIdea <0] = 1
+            #logging.info("dist2 \n {}".format(distIdea))
+
+            
+            #tempInspMap = self.smoothInspirationMap.copy()
+            #tempInspMap[tempInspMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
+            
+            
+            
             if hChoice == 'sqrt':
                 h = -haliteMap / np.sqrt(dist)
             elif hChoice == 'hpt':
@@ -824,7 +896,6 @@ class GameMap:
                         term1 = np.maximum(finalMap / (dist+1+depoDistDecayed) ,(1.75 * finalMap) / (dist+2+depoDistDecayed))
                         term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
                     h = -(term1 + term2 - 5000*avoid)
-                    #logging.info("ship {} h \n {}".format(shipID, h.astype(np.int)))
             elif hChoice == 'sqrt2':
                 h = -haliteMap / np.sqrt(dist * 2)
             elif hChoice == 'fourthRoot':
@@ -852,15 +923,15 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 100
+                trueFalseFlag = inspiredHalite.ravel() > 110
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 120
+                    trueFalseFlag = inspiredHalite.ravel() > 125
             else:
                 trueFalseFlag = inspiredHalite.ravel() > 85
                 
-            if self.averageHalite < 35 and max(self.shipMap.flatten())==2:
+            if self.averageHalite < 25 and max(self.shipMap.flatten())==2:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
-            elif self.averageHalite < 35 and max(self.shipMap.flatten())==4:
+            elif self.averageHalite < 25 and max(self.shipMap.flatten())==4:
                 trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
                 
             #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))

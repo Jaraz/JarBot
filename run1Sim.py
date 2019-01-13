@@ -11,9 +11,9 @@ import timeit
 import subprocess
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
-argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v69\\ & python MyBot.py"'
-argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v69 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v69 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v69 & python MyBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 64 --height 64 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v70\\ & python MyBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v70 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v70 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v70 & python MyBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
 
 start_time = timeit.default_timer()
 
@@ -27,6 +27,8 @@ for i in range(rng):
     seed = lineSplit[0].split()[4]
     player1 = int(results.split("[info] Player 0")[1].split()[6])
     player2 = int(results.split("[info] Player 1")[1].split()[6])
+    #player3 = int(results.split("[info] Player 2")[1].split()[6])
+    #player4 = int(results.split("[info] Player 3")[1].split()[6])
     
     if player1 == 0 or player2 ==0:
         break
@@ -35,5 +37,7 @@ print((timeit.default_timer() - start_time)/rng)
 #print(lineSplit)
 print(player1)
 print(player2)
+#print(player3)
+#print(player4)
 
 
