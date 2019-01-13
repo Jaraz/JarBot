@@ -110,9 +110,6 @@ class GameMap:
         # ship map is a simmple 1 or 0 label for which cell has a ship
         self.shipMap = np.zeros([self.width, self.height], dtype=np.int)
         self.shipFlag = np.zeros([self.width, self.height], dtype=np.int)
-        self.smoothInspirationMap = np.zeros([self.width, self.height], dtype=np.float)
-        self.friendlyShipCount = np.zeros([self.width, self.height], dtype=np.int)
-        self.enemyShipCount = np.zeros([self.width, self.height], dtype=np.int)
         self.enemyShipHalite = np.zeros([self.width, self.height], dtype=np.int)
         self.enemyMiningNext = np.zeros([self.width, self.height], dtype=np.int)
         self.inspirationBonus = np.zeros([self.width, self.height], dtype=np.int)
@@ -178,7 +175,7 @@ class GameMap:
                 matrixCount += 1
         
         # avoid code to connect search and movement allocation
-        self.avoid = np.zeros([1000, self.width, self.height], np.int)
+        self.avoid = np.zeros([1000, self.width, self.height])
         
         # distances to dropoff locations
         self.dropDistances = np.ones([10, self.width, self.height]) * 200
@@ -454,7 +451,7 @@ class GameMap:
             #logging.info("issue list {}".format(issueList))
 
             for i in range(len(ships)):
-                shipMap = np.zeros([self.width, self.height], np.int)       
+                shipMap = np.zeros([self.width, self.height])       
                 halite = ships[i].halite_amount
                 if halite < 10:
                     halite = 10
@@ -518,10 +515,10 @@ class GameMap:
                         
                     # try to reduce movement costs (if possible); now incorporates enemy ship (try to avoid if possible)
                     if status[shipID] == 'returnSuicide' or status[shipID] == 'returning':
-                        northHalite = random.randint(1,2) + (10 - self.npMap[(y) % self.width,(x-1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x-1) % self.height]
-                        southHalite = random.randint(1,2) + (10 - self.npMap[(y) % self.width,(x+1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x+1) % self.height]
-                        westHalite = random.randint(1,2) + (10 - self.npMap[(y-1) % self.width,(x) % self.height]/100) - self.nearbyEnemyShip[(y-1) % self.width,(x) % self.height]
-                        eastHalite = random.randint(1,2) + (10 - self.npMap[(y+1) % self.width,x % self.height]/100) - self.nearbyEnemyShip[(y+1) % self.width,x % self.height]
+                        northHalite = (10 - self.npMap[(y) % self.width,(x-1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x-1) % self.height]
+                        southHalite = (10 - self.npMap[(y) % self.width,(x+1) % self.height]/100) - self.nearbyEnemyShip[(y) % self.width,(x+1) % self.height]
+                        westHalite = (10 - self.npMap[(y-1) % self.width,(x) % self.height]/100) - self.nearbyEnemyShip[(y-1) % self.width,(x) % self.height]
+                        eastHalite = (10 - self.npMap[(y+1) % self.width,x % self.height]/100) - self.nearbyEnemyShip[(y+1) % self.width,x % self.height]
                     else:
                         northHalite = random.randint(1,2) - self.nearbyEnemyShip[(y) % self.width,(x-1) % self.height]/1000*2
                         southHalite = random.randint(1,2) - self.nearbyEnemyShip[(y) % self.width,(x+1) % self.height]/1000*2
@@ -610,8 +607,7 @@ class GameMap:
                         shipMap[y,x] = 50000
                 
                 if self.numPlayers == 4 and (status[shipID] == 'exploring' or status[shipID] == 'build depo'):
-                    # need to ensure avoid only gives locations next to ship
-                    shipMap -= self.avoid[shipID] * 10000 * self.dist1[y][x]
+                    shipMap -= self.avoid[shipID] * 10000
                     #shipMap[shipMap<0]=-1
                 
                                         
@@ -789,17 +785,12 @@ class GameMap:
 
                 ### (2) ###
                 # take into account how much they will mine
-                #avoid -= 1 * (self.nearbyEnemyShip - 750*(self.freeHalite-0.4)> ships[i].halite_amount)
-                #avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
-                if self.width==32:
-                    avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
-                else:
-                    avoid -= 1 * (self.nearbyEnemyShip - 500*(self.freeHalite*self.freeHalite)> ships[i].halite_amount)
+
+                avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
                 avoid[avoid<0]=0
                 #logging.info("ship {} avoid \n {}".format(shipID, avoid))
-                avoid = avoid.astype(np.int)
                 self.avoid[shipID] = avoid # to be used in resolve movement function
-                #logging.info("ship {} avoid matrix {}".format(shipID,avoid))
+                logging.info("ship {} avoid matrix {}".format(shipID,avoid))
 
                 
            
@@ -923,9 +914,9 @@ class GameMap:
             #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
             #logging.info("mean {}".format(columnHaliteMean.tolist()))
             if max(self.shipMap.flatten())==4:
-                trueFalseFlag = inspiredHalite.ravel() > 110
+                trueFalseFlag = inspiredHalite.ravel() > 95
                 if sum(trueFalseFlag) > 3000:
-                    trueFalseFlag = inspiredHalite.ravel() > 125
+                    trueFalseFlag = inspiredHalite.ravel() > 120
             else:
                 trueFalseFlag = inspiredHalite.ravel() > 85
                 
