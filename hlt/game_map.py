@@ -723,7 +723,11 @@ class GameMap:
             miningSpeed[miningSpeed<1] = self.haliteRegBene4x
             miningSpeed[miningSpeed>.99] = .75
 
-
+        miningSpeed2 = miningSpeed.copy()
+        #miningSpeed2[miningSpeed2==0.75]=0.25
+        if self.turnNumber > 50:
+            miningSpeed2=0
+        #logging.info("miningSpeed2 {}".format(miningSpeed2))
         depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
@@ -780,7 +784,9 @@ class GameMap:
             finalMap = finalMap.astype(np.float)
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
+            finalMap2 = finalMap.copy()
             finalMap *= miningSpeed
+            finalMap2 *= miningSpeed2
 
             # add costs to other squares
             if self.width > 60:
@@ -796,6 +802,14 @@ class GameMap:
             finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            
+            '''
+            finalMap2 -= dist * self.smoothMap[shipY, shipX] *ratio
+            finalMap2[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            finalMap2[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            finalMap2[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            finalMap2[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
+            '''
                 
             finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
@@ -805,6 +819,16 @@ class GameMap:
                 term1 = finalMap / (dist+1+depoDistDecayed)
                 term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
                 h = -(term1 + term2 - 5000*avoid)
+                '''
+                term1 = finalMap / (dist+1+depoDistDecayed)
+                term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap2) / (dist+2+depoDistDecayed)
+                
+                term2Time = np.ones([self.width, self.height], dtype=np.int) * 3
+                term2Time[term1>term1a] = 2
+                                
+                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+term2Time+depoDistDecayed)
+                h = -(np.maximum(term1,term1a) + term2 - 5000*avoid)
+                '''
             else:
                 mineTurn1 = finalMap / (dist+1+depoDistDecayed)
                 finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
@@ -823,6 +847,8 @@ class GameMap:
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.min(0)
             trueFalseFlag = columnHaliteMean < -2
+            if self.turnsLeft < 100:
+                trueFalseFlag = columnHaliteMean < 0
             logging.info("len {}".format(np.sum(1*trueFalseFlag)))
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
             solveMatrix = distMatrix[:,trueFalseFlag]
