@@ -227,9 +227,8 @@ class GameMap:
         self.dist4Discount = self.dist4Discount.astype(np.float)
         self.dist4Discount[self.dist4Discount>0] = 1/(self.dist4Discount[self.dist4Discount>0] * (self.dist4Discount[self.dist4Discount>0]))
 
-        self.dist16Indicator = self.distanceMatrixNonZero.copy()
-        self.dist16Indicator[self.dist16Indicator>16] = 0
-        self.dist16Indicator[self.dist16Indicator>1] = 1
+        self.dist8 = self.distanceMatrixNonZero.copy()
+        self.dist8[self.dist8>8] = 0
 
         self.haliteRegBene4x = 0.25
         self.distaceDenom = 1000
@@ -774,12 +773,15 @@ class GameMap:
                 avoid -= 1 * (self.nearbyEnemyShip - multiplier*(self.freeHalite*self.freeHalite)> ships[i].halite_amount)
                 avoid[avoid<0]=0
                 avoid = avoid.astype(np.int)
+                #logging.info("ship {} avoid \n {}".format(shipID, avoid))
                 self.avoid[shipID] = avoid # to be used in resolve movement function
+                #logging.info("ship {} avoid matrix {}".format(shipID,avoid))
 
             finalMap = haliteMap.copy()
             finalMap = finalMap.astype(np.float)
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
+            #logging.info("ship {} final map {}".format(ships[i].id, finalMap))
             finalMap *= miningSpeed
 
             # add costs to other squares
@@ -799,46 +801,103 @@ class GameMap:
                 
             finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
 
-            if self.numPlayers == 2:
-                term1 = finalMap / (dist+1+depoDistDecayed)
-                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
-                h = -(term1 + term2 - 5000*avoid)
-            else:
-                mineTurn1 = finalMap / (dist+1+depoDistDecayed)
-                finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
-                mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistDecayed)
-                term1 = np.maximum(mineTurn1, mineTurn2)
-                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
-                h = -(term1 + term2 - 5000*avoid)
-            if self.width > 63:
-                h *= self.dist16Indicator[shipX, shipY] # kill far away points
+            if hChoice == 'sqrt':
+                h = -haliteMap / np.sqrt(dist)
+            elif hChoice == 'hpt':
+                depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
+
+                if self.numPlayers == 2:
+                    term1 = finalMap / (dist+1+depoDistDecayed)
+                    term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
+                    h = -(term1 + term2 - 5000*avoid)
+                    #h = -(1* finalMap - 5000 * avoid + np.maximum(0,1-ships[i].halite_amount/800)*.5*self.smoothInspirationMap) / (dist+1+depoDistMarginal*(ships[i].halite_amount/1000))
+                else:
+                    #depoDistMarginal=0
+                    #depoDistMarginal[depoDistMarginal>0]=0
+                    if self.width<64:                        
+                        mineTurn1 = finalMap / (dist+1+depoDistDecayed)
+                        finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
+                        mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistDecayed)
+                        term1 = np.maximum(mineTurn1, mineTurn2)
+                        term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
+                        
+                    else:
+                        term1 = np.maximum(finalMap / (dist+1+depoDistDecayed) ,(1.75 * finalMap) / (dist+2+depoDistDecayed))
+                        term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
+                    h = -(term1 + term2 - 5000*avoid)
+                    #logging.info("ship {} h \n {}".format(shipID, h.astype(np.int)))
+            elif hChoice == 'sqrt2':
+                h = -haliteMap / np.sqrt(dist * 2)
+            elif hChoice == 'fourthRoot':
+                h = -haliteMap / np.sqrt(np.sqrt(dist))
+            elif hChoice == 'quad':
+                h = -haliteMap / (dist * dist)
+            elif hChoice == 'linear':
+                h = -haliteMap / dist
+            elif hChoice == "nThird":
+                h = -haliteMap / (dist * dist / np.sqrt(dist))
+            elif hChoice == 'maxHalite':
+                h = -haliteMap         
+            #logging.info("ship {} h: {}".format(ships[i].id, h))
+            if self.width > 70:
+                h *= self.dist8[shipX, shipY] # kill far away points
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
             
-        # shrink targets for 64x
+
         if self.width >58 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
-            columnHaliteMean = distMatrix.min(0)
-            trueFalseFlag = columnHaliteMean < -2
-            logging.info("len {}".format(np.sum(1*trueFalseFlag)))
+            columnHaliteMean = distMatrix.mean(0)
+            inspiredHalite = self.npMap * miningSpeed * 4
+            #trueFalseFlag = columnHaliteMean > 5
+            #logging.info("dist {} - len {}".format(distMatrix, distMatrix.shape))
+            #logging.info("mlabels {} - len {}".format(matrixLabels, len(matrixLabels)))
+            #logging.info("mean {}".format(columnHaliteMean.tolist()))
+            
+            if max(self.shipMap.flatten())==4:
+                trueFalseFlag = inspiredHalite.ravel() > 100
+                if sum(trueFalseFlag) > 3000:
+                    trueFalseFlag = inspiredHalite.ravel() > 120
+            else:
+                trueFalseFlag = inspiredHalite.ravel() > 85
+                
+            if self.averageHalite < 35 and max(self.shipMap.flatten())==2:
+                trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
+            elif self.averageHalite < 35 and max(self.shipMap.flatten())==4:
+                trueFalseFlag = inspiredHalite.ravel() > self.averageHalite
+                
+            #logging.info("true {}; percentile {}".format(sum(trueFalseFlag/4096),np.percentile(self.npMap, 10, interpolation='lower')))
+            # if map is over mined can lead to an error
+            if sum(trueFalseFlag) < len(ships):
+                trueFalseFlag = self.npMap.ravel() > 25
+                if sum(trueFalseFlag) < len(ships):
+                    trueFalseFlag = columnHaliteMean < 10000
+            
+            #logging.info("trueFalseFlag len {}".format(sum(trueFalseFlag)))
+
             matrixLabelsFinal = matrixLabels[trueFalseFlag]
+            #logging.info("equality {} - len {}".format(columnHaliteMean < minHalite, len(columnHaliteMean < minHalite)))
+            #logging.info("mlabel reduced {} - len {}".format(matrixLabelsFinal, len(matrixLabelsFinal)))
+                
             solveMatrix = distMatrix[:,trueFalseFlag]
+            #logging.info("dist {} - len {}".format(solveMatrix, solveMatrix.shape))
         else:
             solveMatrix = distMatrix
             matrixLabels = self.matrixID.copy().ravel() # which cell teh destination will be 
             matrixLabelsFinal = matrixLabels
 
         # find closest destination
+        #distMatrix = distMatrix.astype(np.int, copy=False)
         row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
+        #logging.info("row {}, col {}, colLen".format(distMatrix, row_ind, col_ind, len(col_ind)))
         
         # convert to ship orders
         orders = {}
         for i in range(len(ships)):
             orders[ships[i].id] = Position(matrixLabelsFinal[col_ind[i]] % self.width,int(matrixLabelsFinal[col_ind[i]]/self.width))
-
+        #logging.info("orders {}".format(orders))
         return row_ind, col_ind, orders
     
     def findHighestSmoothHalite(self, ship, drops, depoDist, maxWidth=12):
