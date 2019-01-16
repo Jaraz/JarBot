@@ -695,8 +695,8 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if self.numPlayers==2 and self.turnNumber > 50:
-            tempMap[self.shipMap==2]=0
+        #if self.numPlayers==2 and self.turnNumber > 50:
+        #    tempMap[self.shipMap==2]=0
         if self.numPlayers==4 and self.turnNumber > 500:
             tempMap[self.shipMap==2]=0
             tempMap[self.shipMap==3]=0
@@ -747,7 +747,10 @@ class GameMap:
         # negative inspiration check for 2p
         # this is the penalty if you give a bonus at that square
         if self.numPlayers == 2:
-            negInspirationPenalty = np.einsum('ijkl,lk',self.distNegInsp,(1-self.negInspirationBonus) * self.shipFlag * self.npMap) * 0.5
+            negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap) * 1.25
+            #logging.info("NIP {}".format(negInspirationPenalty.astype(np.int)))
+            #negInspirationPenalty1 = np.einsum('ijkl,lk',self.dist4,(1-self.negInspirationBonus) * self.shipFlag * self.npMap) * 0.5
+
             #negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap) * 0.5
         else:
             negInspirationPenalty = 0
@@ -826,19 +829,26 @@ class GameMap:
             depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
 
             if self.numPlayers == 2:
-                '''
-                term1 = finalMap / (dist+1+depoDistDecayed)
-                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
+                denom = dist + 1 + depoDistDecayed
+                denom[self.inspirationBonus==1] -= 1
+                denom[denom<=1] = 1
+                term1 = finalMap / (denom)
+                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+3)
                 h = -(term1 + term2 - 5000*avoid)
                 '''
                 term1 = finalMap / (dist+1+depoDistDecayed)
-                term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap2) / (dist+2+depoDistDecayed)
+                #term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap2) / (dist+2+depoDistDecayed)
+                term1a = 1.75 * finalMap2 / (dist+2+depoDistDecayed)- negInspirationPenalty
                 
                 term2Time = np.ones([self.width, self.height], dtype=np.int) * 3
-                term2Time[term1>term1a - negInspirationPenalty] = 2
+                term2Time[term1>term1a] = 2
                                 
                 term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+term2Time+depoDistDecayed)
-                h = -(np.maximum(term1,term1a - negInspirationPenalty) + term2 - 5000*avoid)
+                htest = np.maximum(term1, term1a)
+                htest[self.inspirationBonus==1] = term1a[self.inspirationBonus==1]
+                htest[self.negInspirationBonus==1] = term1[self.negInspirationBonus==1]
+                h = -(htest + term2 - 5000*avoid)
+                '''
                 
             else:
                 mineTurn1 = finalMap / (dist+1+depoDistDecayed)
