@@ -799,9 +799,9 @@ class GameMap:
             finalMap = finalMap.astype(np.float)
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
-            finalMap2 = finalMap.copy()
+            #finalMap2 = finalMap.copy()
             finalMap *= miningSpeed
-            finalMap2 *= miningSpeed2
+            #finalMap2 *= miningSpeed2
 
             # add costs to other squares
             if self.width > 60:
@@ -817,13 +817,13 @@ class GameMap:
             finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            
+            '''
             finalMap2 -= dist * self.smoothMap[shipY, shipX] *ratio
             finalMap2[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap2[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap2[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap2[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-                
+            '''    
             finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
             depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
@@ -834,7 +834,11 @@ class GameMap:
                 denom[denom<=1] = 1
                 term1 = finalMap / (denom)
                 term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+3)
-                h = -(term1 + term2 - 5000*avoid)
+                term3 = finalMap.copy()
+                term3[self.inspirationBonus==1] *= 1/3
+                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
+                term3 *= 2 / (denom) # neg opp cost
+                h = -(term1 + term2 + term3 - 5000*avoid)
                 '''
                 term1 = finalMap / (dist+1+depoDistDecayed)
                 #term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap2) / (dist+2+depoDistDecayed)
@@ -851,12 +855,21 @@ class GameMap:
                 '''
                 
             else:
-                mineTurn1 = finalMap / (dist+1+depoDistDecayed)
+                denom = dist + 1 + depoDistDecayed
+                denom[self.inspirationBonus==1] -= 1
+                denom[denom<=1] = 1
+                mineTurn1 = finalMap / (denom)
                 finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
-                mineTurn2 = (1.75 * finalMap) / (dist+2+depoDistDecayed)
+                mineTurn2 = (1.75 * finalMap) / (denom)
                 term1 = np.maximum(mineTurn1, mineTurn2)
                 term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
-                h = -(term1 + term2 - 5000*avoid)
+                
+                # add negative opportunity cost
+                term3 = finalMap.copy()
+                term3[self.inspirationBonus==1] *= 1/3
+                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
+                term3 *= 2 / (denom) # neg opp cost
+                h = -(term1 + term2 + term3 - 5000*avoid)
             if self.width > 63:
                 h *= self.dist16Indicator[shipX, shipY] # kill far away points
             distMatrix[i,:] = h.ravel()
