@@ -233,10 +233,10 @@ class GameMap:
         self.haliteRegBene4x = 0.25
         self.distaceDenom = 1000
         
-        self.negInspWindow = self.width / 8 + 1
-        self.distNegInsp = self.distanceMatrixNonZero.copy()
-        self.distNegInsp[self.distNegInsp > self.negInspWindow] = 0
-        self.distNegInsp[self.distNegInsp > 1] = 1
+        #self.negInspWindow = self.width / 8 + 1
+        #self.distNegInsp = self.distanceMatrixNonZero.copy()
+        #self.distNegInsp[self.distNegInsp > self.negInspWindow] = 0
+        #self.distNegInsp[self.distNegInsp > 1] = 1
         
         if self.width == 40:
             self.haliteRegBene4x = 0.25
@@ -746,6 +746,7 @@ class GameMap:
 
         # negative inspiration check for 2p
         # this is the penalty if you give a bonus at that square
+        '''
         if self.numPlayers == 2:
             negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap) * 1.25
             #logging.info("NIP {}".format(negInspirationPenalty.astype(np.int)))
@@ -754,7 +755,7 @@ class GameMap:
             #negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap) * 0.5
         else:
             negInspirationPenalty = 0
-        
+        '''
         for i in range(len(ships)):
             shipID = ships[i].id
             shipX = ships[i].position.x
@@ -832,6 +833,7 @@ class GameMap:
                 denom = dist + 1 + depoDistDecayed
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
+                
                 term1 = finalMap / (denom)
                 term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+3)
                 term3 = finalMap.copy()
@@ -840,18 +842,18 @@ class GameMap:
                 term3 *= 2 / (denom) # neg opp cost
                 h = -(term1 + term2 + term3 - 5000*avoid)
                 '''
-                term1 = finalMap / (dist+1+depoDistDecayed)
-                #term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap2) / (dist+2+depoDistDecayed)
-                term1a = 1.75 * finalMap2 / (dist+2+depoDistDecayed)- negInspirationPenalty
+                term1 = finalMap / (denom)
+                term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap) / (denom+1)
+                term1Final = np.maximum(term1, term1a)
+
+                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+2)
                 
-                term2Time = np.ones([self.width, self.height], dtype=np.int) * 3
-                term2Time[term1>term1a] = 2
-                                
-                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+term2Time+depoDistDecayed)
-                htest = np.maximum(term1, term1a)
-                htest[self.inspirationBonus==1] = term1a[self.inspirationBonus==1]
-                htest[self.negInspirationBonus==1] = term1[self.negInspirationBonus==1]
-                h = -(htest + term2 - 5000*avoid)
+                term3 = finalMap.copy()
+                term3[self.inspirationBonus==1] *= 1/3
+                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
+                term3 *= 2 / (denom+1) # neg opp cost
+                
+                h = -(term1Final + term2 + term3 - 5000*avoid)
                 '''
                 
             else:
@@ -876,7 +878,7 @@ class GameMap:
             distResults[i,:] = dist.ravel()
             
         # shrink targets for 64x
-        if self.width >58 and len(distMatrix)>0:
+        if self.width >55 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.min(0)
