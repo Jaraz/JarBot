@@ -784,9 +784,9 @@ class GameMap:
                 #avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
                 
                 if self.width==56:
-                    multiplier = 500
+                    multiplier = 600
                 elif self.width==64:
-                    multiplier = 500
+                    multiplier = 700
                 else:
                     multiplier = 500
 
@@ -829,7 +829,7 @@ class GameMap:
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
             depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
 
-            if self.numPlayers >= 2:
+            if self.numPlayers == 2:
                 denom = dist + 1 + depoDistDecayed
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
