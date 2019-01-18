@@ -175,10 +175,10 @@ def giveShipOrders(ship, currentOrders, collectingStop):
              game_map.friendlyShipCount[enemyLoc] > game_map.enemyShipCount[enemyLoc]:
             #logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
-        elif np.max(fightHalite) - 200 > ship.halite_amount and \
+        elif np.max(fightHalite) - 500 > ship.halite_amount and \
              len(game.players)==4 and \
-             game_map.friendlyShipCount[enemyLoc] >= game_map.enemyShipCount[enemyLoc] + 2 and \
-             game_map.freeHalite < game_map.attackThreshold:
+             game_map.friendlyShipCount[enemyLoc] > game_map.enemyShipCount[enemyLoc] + 2 and \
+             turns_left < 150:
              #game_map.friendlyShipCount[shipY,shipX] > game_map.enemyShipCount[shipY,shipX] + 2:
             logging.info("ship {} attacks!!!".format(ship.id))
             attackFlag = True
@@ -227,7 +227,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "returning"
         if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
             status = "exploring"
-    elif ship.halite_amount >= game_map.haliteCollectionTarget  or runFlag == True:
+    elif ship.halite_amount >= returnHaliteFlag  or runFlag == True:
         status = "returning"
     #elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
     #    status = 'mining'
@@ -434,7 +434,7 @@ if game.game_map.averageHalite > 180:
     
 ### 4 player changes ###
 if len(game.players) == 4:
-    returnHaliteFlag  = 850
+    returnHaliteFlag  = 950
     if game.game_map.width < 40:
         #shipBuildingTurns = 100
         MAX_DEPO = 1
@@ -481,7 +481,7 @@ logging.info("NEARBY: avg {}, stdev {}".format(nearAvg, nearStd))
 #elif nearAvg + 50 < game.game_map.averageHalite:
 #    shipBuildingTurns -= 50
 
-game.ready("JarBot")
+game.ready("v73Bot")
 
 # Now that your bot is initialized, save a message to yourself in the log file with some important information.
 #   Here, you log here your id, which you can always fetch from the game object by using my_id.

@@ -233,31 +233,23 @@ class GameMap:
         self.haliteRegBene4x = 0.25
         self.distaceDenom = 1000
         
-        self.haliteCollectionTarget = 1000
-        
         #self.negInspWindow = self.width / 8 + 1
         #self.distNegInsp = self.distanceMatrixNonZero.copy()
         #self.distNegInsp[self.distNegInsp > self.negInspWindow] = 0
         #self.distNegInsp[self.distNegInsp > 1] = 1
         
-        self.attackThreshold = 0.3
-        
         if self.width == 40:
             self.haliteRegBene4x = 0.25
             self.distaceDenom = 950
-            self.attackThreshold = 0.275
         elif self.width == 48:
             self.haliteRegBene4x = 0.25
             self.distaceDenom = 900
-            self.attackThreshold = 0.25
         elif self.width == 56:
             self.haliteRegBene4x = 0.25
             self.distaceDenom = 850
-            self.attackThreshold = 0.225
         elif self.width == 64:
             self.haliteRegBene4x = 0.25
             self.distaceDenom = 800
-            self.attackThreshold = 0.2
         
     def __getitem__(self, location):
         """
@@ -833,33 +825,22 @@ class GameMap:
             finalMap2[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap2[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             '''    
-            finalMap[finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
+            finalMap[finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            depoDistDecayed = depoDistMarginal*np.minimum(1, ships[i].halite_amount/750)
+            depoDistDecayed = depoDistMarginal*(ships[i].halite_amount/1000)
 
             if self.numPlayers >= 2:
                 denom = dist + 1 + depoDistDecayed
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
                 
-                # add negative opportunity cost
                 term1 = finalMap / (denom)
-                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (denom+3)
+                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+3)
                 term3 = finalMap.copy()
                 term3[self.inspirationBonus==1] *= 1/3
                 term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
                 term3 *= 2 / (denom) # neg opp cost
-                
-                if self.numPlayers == 4:
-                    term4 = self.npMap.copy()
-                    term4[term4<1]=1
-                    turns = (np.log(0.1) - np.log(term4))/np.log(0.75)
-                    term4 = -term4/turns/2
-                    term4[self.inspirationBonus==1]=0
-                else:
-                    term4 = 0
-                    
-                h = -(term1 + term2 + term3 + term4 - 5000*avoid)
+                h = -(term1 + term2 + term3 - 5000*avoid)
                 '''
                 term1 = finalMap / (denom)
                 term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap) / (denom+1)
@@ -880,10 +861,10 @@ class GameMap:
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
                 mineTurn1 = finalMap / (denom)
-                finalMap[1.75*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - finalMap[1.75*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
+                finalMap[1.75*finalMap > (950 - ships[i].halite_amount)] = (950 - ships[i].halite_amount - finalMap[1.75*finalMap > (950 - ships[i].halite_amount)])
                 mineTurn2 = (1.75 * finalMap) / (denom)
                 term1 = np.maximum(mineTurn1, mineTurn2)
-                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
+                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
                 
                 # add negative opportunity cost
                 term3 = finalMap.copy()
@@ -1236,7 +1217,3 @@ class GameMap:
             self.miningMA[self.turnNumber] = np.mean(self.miningHistory[self.turnNumber-20:self.turnNumber])
             logging.info("turn {} mining speed {}; MA {}; total {} temp {}".format(self.turnNumber, self.miningHistory[self.turnNumber], self.miningMA[self.turnNumber], np.sum(self.miningHistory),np.sum(tempMap)))
         
-        if self.numPlayers == 2:
-            self.haliteCollectionTarget = 950 
-        else:
-            self.haliteCollectionTarget = 750 + 200 * self.freeHalite

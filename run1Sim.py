@@ -11,8 +11,8 @@ import timeit
 import subprocess
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
-argum = ' --replay-directory replays/ -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v72\\ & python MyBot.py"'
-argum = ' --replay-directory replays/ -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v72 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v72 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v72 & python MyBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v73\\ & python MyBot.py"'
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v73 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v73 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v73 & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "python MyBot.py" "python MyBot.py" "python MyBot.py"'
 
 start_time = timeit.default_timer()
