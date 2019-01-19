@@ -816,7 +816,7 @@ class GameMap:
             if self.width > 60:
                 ratio = 0.075
             elif self.width > 41:
-                ratio = 0.0
+                ratio = 0.05
             elif self.width > 39:
                 ratio = 0.025
             else:
@@ -835,10 +835,9 @@ class GameMap:
             '''    
             finalMap[finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            depoDistDecayed = depoDistMarginal*np.minimum(1, ships[i].halite_amount/1000)
-            #*(1-ships[i].halite_amount/2000)
+            depoDistDecayed = depoDistMarginal*np.minimum(1, ships[i].halite_amount/750)
 
-            if self.numPlayers == 2:
+            if self.numPlayers >= 2:
                 denom = dist + 1 + depoDistDecayed
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
@@ -851,7 +850,7 @@ class GameMap:
                 term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
                 term3 *= 2 / (denom) # neg opp cost
                 
-                if self.numPlayers == 5:
+                if self.numPlayers == 4:
                     term4 = self.npMap.copy()
                     term4[term4<1]=1
                     turns = (np.log(0.1) - np.log(term4))/np.log(0.75)
@@ -882,38 +881,23 @@ class GameMap:
                 denom[denom<=1] = 1
                 mineTurn1 = finalMap / (denom)
                 finalMap[1.75*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - finalMap[1.75*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn2 = (1.75 * finalMap) / (denom+1)
-                finalMap[2.3125*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 1.75*finalMap[2.3125*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn3 = (2.3125 * finalMap) / (denom+2)
-                finalMap[2.734375*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.3125*finalMap[2.734375*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn4 = (2.734375 * finalMap) / (denom+3)
-                finalMap[3.05*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.734375*finalMap[3.05*finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn5 = (3.05 * finalMap) / (denom+4)
-
-                term1 = np.maximum(mineTurn1, np.maximum(mineTurn2, np.maximum(mineTurn3, np.maximum(mineTurn4,mineTurn5))))
-                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
-                term1[(self.inspirationBonus==1)] = mineTurn1[(self.inspirationBonus==1)] + term2[(self.inspirationBonus==1)]
-
-                term2 = 0
-                term3 = 0
-                if self.numPlayers == 4:
-                    term3 = self.npMap.copy()
-                    term3[term3<1]=1
-                    turns = (np.log(0.1) - np.log(term3))/np.log(0.75)
-                    term3 = -term3/turns/2
-                    term3[self.inspirationBonus==1]=0
-                else:
-                    term3 = 0
-
+                mineTurn2 = (1.75 * finalMap) / (denom)
+                term1 = np.maximum(mineTurn1, mineTurn2)
+                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
                 
-                h = -(term1 + term3 - 5000*avoid)
+                # add negative opportunity cost
+                term3 = finalMap.copy()
+                term3[self.inspirationBonus==1] *= 1/3
+                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
+                term3 *= 2 / (denom) # neg opp cost
+                h = -(term1 + term2 + term3 - 5000*avoid)
             if self.width > 63:
                 h *= self.dist16Indicator[shipX, shipY] # kill far away points
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
             
         # shrink targets for 64x
-        if self.width >55 and np.sum(distMatrix)>0:
+        if self.width >55 and len(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.min(0)
