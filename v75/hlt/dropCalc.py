@@ -44,8 +44,8 @@ class dropCalc:
         
     def identifyBestDrops(self):
         targetMap = self.haliteMap
-        #if self.numPlayers == 4:
-        #    targetMap = self.haliteMap * self.miningSpeed * 4
+        if self.numPlayers == 4:
+            targetMap = self.haliteMap * self.miningSpeed * 4
         self.filteredMap = ndimage.uniform_filter(targetMap, size = 8, mode = 'wrap')
         #self.filteredMap = ndimage.maximum_filter(self.smoothMap, size = self.length / 4, mode = 'wrap')
         #self.peakMaxima = peak_local_max(self.smoothMap, min_distance = 1)
