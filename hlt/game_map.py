@@ -235,10 +235,10 @@ class GameMap:
         
         self.haliteCollectionTarget = 1000
         
-        self.negInspWindow = self.width / 8 + 1
-        self.distNegInsp = self.distanceMatrixNonZero.copy()
-        self.distNegInsp[self.distNegInsp > self.negInspWindow] = 0
-        self.distNegInsp[self.distNegInsp > 1] = 1
+        #self.negInspWindow = self.width / 8 + 1
+        #self.distNegInsp = self.distanceMatrixNonZero.copy()
+        #self.distNegInsp[self.distNegInsp > self.negInspWindow] = 0
+        #self.distNegInsp[self.distNegInsp > 1] = 1
         
         self.attackThreshold = 0.3
         
@@ -704,7 +704,7 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if self.numPlayers==2 and self.turnNumber > 50:
+        if self.numPlayers==2 and self.turnNumber > self.turnsLeft:
             tempMap[self.shipMap==2]=0
         if self.numPlayers==4 and self.turnNumber > 500:
             tempMap[self.shipMap==2]=0
@@ -857,7 +857,7 @@ class GameMap:
                 else:
                     term4 = 0
                     
-                h = -(term1 + term2 + term3 + term4 - 5000*avoid)
+                h = -(term1 + term2 + term4 - 5000*avoid)
                 '''
                 term1 = finalMap / (denom)
                 term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap) / (denom+1)
@@ -875,8 +875,8 @@ class GameMap:
                 
             else:
                 denom = dist + 1 + depoDistDecayed
-                #denom[self.inspirationBonus==1] -= 1
-                #denom[denom<=1] = 1
+                denom[self.inspirationBonus==1] -= 1
+                denom[denom<=1] = 1
                 tempCopyMap = finalMap.copy()
                 mineTurn1 = finalMap / (denom)
                 finalMap[1.75*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - tempCopyMap[1.75*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
@@ -905,14 +905,11 @@ class GameMap:
                     term3 = self.npMap.copy()
                     term3[term3<1]=1
                     turns = (np.log(0.1) - np.log(term3))/np.log(0.75)
-                    term3 = term3/turns
+                    term3 = term3/turns/2
                     term3[self.inspirationBonus==1]=0
                 else:
                     term3 = 0
 
-                
-                
-                
                 h = -(term1 + term3 - 5000*avoid)
             if self.width > 63:
                 h *= self.dist16Indicator[shipX, shipY] # kill far away points

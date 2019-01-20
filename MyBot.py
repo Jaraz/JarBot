@@ -229,7 +229,7 @@ def giveShipOrders(ship, currentOrders, collectingStop):
         status = "returning"
         if ship.position == me.shipyard.position or ship.position in me.get_dropoff_locations():
             status = "exploring"
-    elif ship.halite_amount >= game_map.haliteCollectionTarget  or runFlag == True:
+    elif (ship.halite_amount >= game_map.haliteCollectionTarget)  or (runFlag == True) or (ship.halite_amount >=900 and min([game_map.calculate_distance(ship.position, i) for i in me.get_all_drop_locations()]) <= 2):
         status = "returning"
     #elif ship.halite_amount < game_map[ship.position].halite_amount * 0.1 or game_map[ship.position].halite_amount > collectingStop:
     #    status = 'mining'
