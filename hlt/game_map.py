@@ -710,7 +710,7 @@ class GameMap:
             tempMap[self.shipMap==2]=0
             tempMap[self.shipMap==3]=0
             tempMap[self.shipMap==4]=0
-        haliteMap = self.npMap - 1000 * tempMap
+        haliteMap = self.npMap*1 #- 1000 * tempMap
         
         #add back 1k ships (assumes they move only for 2p)
         if self.numPlayers==2:
@@ -745,7 +745,8 @@ class GameMap:
         #if self.turnNumber > 50:
         #    miningSpeed2=0
         #logging.info("miningSpeed2 {}".format(miningSpeed2))
-        depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
+        #depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
+        depoDistAll = self.dropDistances.min(0) # includes yard + depo
         haliteMap = haliteMap - collectingStop
         haliteMap[haliteMap<collectingStop] = 1
 
@@ -829,6 +830,7 @@ class GameMap:
             finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             
+            ratio = 0
             noInspMap -= dist * self.smoothMap[shipY, shipX] *ratio
             noInspMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             noInspMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
@@ -843,9 +845,9 @@ class GameMap:
             finalMap2[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             '''    
             finalMap[finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
-            noInspMap[finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
+            noInspMap[noInspMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            depoDistDecayed = depoDistMarginal*np.minimum(1, ships[i].halite_amount/1000)
+            depoDistDecayed = depoDistMarginal *(ships[i].halite_amount/1000)
             #*(1-ships[i].halite_amount/2000)
 
             if self.numPlayers == 3:
