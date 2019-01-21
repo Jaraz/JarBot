@@ -21,7 +21,7 @@ jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 --seed 1543318434 "python MyBot.py" "python oldBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "python myBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 24 --height 24 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v38\\ & python MyBot.py"'
-argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 48 --height 48 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
+argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum2 = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum3 = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 64 --height 64 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ --no-logs --no-replay  -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v35 & python MyBot.py"'
@@ -39,7 +39,7 @@ oldBotScores = []
 seedArray = []
 lineSplitArray = []
 
-runSims = 180
+runSims = 64
 def runSim(i):
     res = subprocess.Popen(jarBotFolder + argum, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
     
@@ -50,7 +50,7 @@ def runSim(i):
     player2 = int(results.split("[info] Player 1")[1].split()[6])
     
     return player1, player2, seed, lineSplit
-
+'''
 def runSim2(i):
     res = subprocess.Popen(jarBotFolder + argum2, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,bufsize=1, universal_newlines=True)
     
@@ -72,7 +72,7 @@ def runSim3(i):
     player2 = int(results.split("[info] Player 1")[1].split()[6])
     
     return player1, player2, seed, lineSplit
-
+'''
 
 
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     print("Bad seeds {}".format(seedTracker[newScores<1]))
     print((timeit.default_timer() - start_time)/runSims)
     
-    '''
+'''
     start_time = timeit.default_timer()
     pool = multiprocessing.Pool(processes = 6)
     totalWin = 0
@@ -152,4 +152,4 @@ if __name__ == '__main__':
     print("Minimum Score {}".format(np.min(newScores)))
     print("Bad seeds {}".format(seedTracker[newScores<1]))
     print((timeit.default_timer() - start_time)/runSims)
-    '''
+'''
