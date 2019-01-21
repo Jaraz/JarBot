@@ -54,8 +54,6 @@ class Game:
             elif self.game_map.width==64:
                 self.game_map.dropCalc.minHalite *= 0.65
         
-
-        
     def ready(self, name):
         """
         Indicate that your bot is ready to play.

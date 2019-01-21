@@ -27,7 +27,7 @@ class dropCalc:
         self.minHalite = 10000/(8 * 8)
         self.percentileFlag = 50
         self.numPlayers = 2
-        self.width = 32
+        self.width =32
         logging.info("minHalite {}, lenght {}, denom {}".format(self.minHalite, self.length, (self.length/4 * self.length/4)))
 
     def updateMap(self, haliteMap, smoothMap):
