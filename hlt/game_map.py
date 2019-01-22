@@ -704,8 +704,8 @@ class GameMap:
         
         # remove taken spots from the solver
         tempMap = self.shipMap.copy()
-        if self.numPlayers==2 and self.turnNumber > self.turnsLeft:
-            tempMap[self.shipMap==2]=0
+        #if self.numPlayers==2 and self.turnNumber > self.turnsLeft:
+        #    tempMap[self.shipMap==2]=0
         if self.numPlayers==4 and self.turnNumber > 500:
             tempMap[self.shipMap==2]=0
             tempMap[self.shipMap==3]=0
@@ -761,8 +761,8 @@ class GameMap:
         # negative inspiration check for 2p
         # this is the penalty if you give a bonus at that square
         negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap * self.negInspirationBonus) * 0.5
-        #negInspirationPenalty[(self.friendlyShipCount>self.enemyShipCount) & (self.inspirationBonus==1)]=0
-        #negInspirationPenalty[self.inspirationBonus==1]=0
+        negInspirationPenalty[(self.friendlyShipCount>=self.enemyShipCount) & (self.inspirationBonus==1)]=0
+        negInspirationPenalty[self.inspirationBonus==1]=0
 
         for i in range(len(ships)):
             shipID = ships[i].id
@@ -936,12 +936,20 @@ class GameMap:
                 #term1[(self.negInspirationBonus==1) & (self.inspirationBonus==1)] = term1Insp[(self.negInspirationBonus==1) & (self.inspirationBonus==1)]
                 #term1[self.dist4Indicator[shipX][shipY]==1] = term1Insp[self.dist4Indicator[shipX][shipY]==1]
                 #term1[(self.negInspirationBonus==1) & (self.inspirationBonus==1)] = mineTurn1NI[(self.negInspirationBonus==1) & (self.inspirationBonus==1)]
-                term1 = term1NoInsp
-                term1[self.inspirationBonus==1] = term1Insp[self.inspirationBonus==1]
+                term1 = term1Insp 
+                #term1[self.inspirationBonus==1] = mineTurn1[self.inspirationBonus==1]
+                #term1[(self.enemyZoC==0)] = term1Insp[(self.enemyZoC==0)]
+                #term1[(self.enemyZoC==0)] = term1Insp[(self.enemyZoC==0)]
+                #if self.enemyZoC[shipY][shipX]==1: #and self.negInspirationBonus[shipY][shipX] ==1:
+                #    term1 = term1NoInsp
+
                 term1[self.enemyZoC==1] = mineTurn1[self.enemyZoC==1]
+                #term1[self.enemyZoC==1] = mineTurn1NI[self.enemyZoC==1]
+                term1[self.enemyShipCount!=0] += -negInspirationPenalty[self.enemyShipCount!=0]/(dist[self.enemyShipCount!=0]+1) * self.friendlyShipCount[self.enemyShipCount!=0] / self.enemyShipCount[self.enemyShipCount!=0]
+                #term1[self.enemyShipCount>self.friendlyShipCount] += -negInspirationPenalty[self.enemyShipCount>self.friendlyShipCount]/(dist[self.enemyShipCount>self.friendlyShipCount]) * tempFriendlyCount[self.enemyShipCount>self.friendlyShipCount] / self.enemyShipCount[self.enemyShipCount>self.friendlyShipCount]
+                #term1[(self.enemyZoC==1)&(self.negInspirationBonus==1)] = mineTurn1NI[(self.enemyZoC==1)&(self.negInspirationBonus==1)]
+                #term1[(self.enemyZoC==1)&(self.negInspirationBonus==0)] = mineTurn1[(self.enemyZoC==1)&(self.negInspirationBonus==0)]
                 #term1[self.enemyShipCount>=1] = mineTurn1[self.enemyShipCount>=1]
-                #if self.enemyZoC[shipY][shipX]==1:
-                #    term1 = mineTurn1
                 #term1[self.enemyZoC==1] += mineTurn1[self.enemyZoC==1]
                 #logging.info("ship {} term1 {}".format(shipID, term1.astype(np.int)))
                 term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount-mineTurn1NI, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
@@ -953,9 +961,9 @@ class GameMap:
                 #    term1[(self.inspirationBonus==1)] = mineTurn1[(self.inspirationBonus==1)] + term2[(self.inspirationBonus==1)]
                 #+ term2[(self.inspirationBonus==1)]
                 
-                term2 = 0
+                #term2 = 0
                 term3 = 0
-                if self.numPlayers >= 3:
+                if self.numPlayers >= 5:
                     term3 = self.npMap.copy()
                     term3[term3<1]=1
                     turns = (np.log(0.1) - np.log(term3))/np.log(0.75)

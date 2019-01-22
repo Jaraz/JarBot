@@ -11,8 +11,8 @@ import timeit
 import subprocess
 
 jarBotFolder = "C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\halite.exe"
+argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 argum = ' --replay-directory replays/ -vvv --width 48 --height 48 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 56 --height 56 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 48 --height 48 --seed 1548065954 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 --seed 1548064240 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 56 --height 56 --seed 1548029511 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76\\ & python MyBot.py"'
@@ -26,7 +26,7 @@ argum = ' --replay-directory replays/ -vvv --width 48 --height 48 "python MyBot.
 #argum = ' --replay-directory replays/ -vvv --width 56 --height 56 --seed 1547845080 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 40 --height 40 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 48 --height 48 --seed 1548018735 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "python MyBot.py"'
-#argum = ' --replay-directory replays/ -vvv --width 32 --height 32 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "python MyBot.py"'
+#argum = ' --replay-directory replays/ -vvv --width 48 --height 48 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75 & python MyBot.py" "python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 32 --height 32 --seed 1547934087 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v75\\ & python MyBot.py"'
 #argum = ' --replay-directory replays/ -vvv --width 64 --height 64 --seed 1548082979 "python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "cd C:\\Users\\jaycw_000\\Documents\\GitHub\\JarBot\\v76 & python MyBot.py" "python MyBot.py"'
 
