@@ -43,16 +43,8 @@ class Game:
         
         self.game_map.numPlayers = num_players
         self.game_map.dropCalc.numPlayers = num_players
-        self.game_map.dropCalc.width = self.game_map.width
         if num_players == 4:
-            if self.game_map.width==32:
-                self.game_map.dropCalc.minHalite *= 1.5
-            elif self.game_map.width==48:
-                self.game_map.dropCalc.minHalite *= 0.85
-            elif self.game_map.width==56:
-                self.game_map.dropCalc.minHalite *= 0.75
-            elif self.game_map.width==64:
-                self.game_map.dropCalc.minHalite *= 0.65
+            self.game_map.dropCalc.minHalite *= 1
         
     def ready(self, name):
         """

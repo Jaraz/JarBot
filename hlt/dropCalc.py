@@ -27,7 +27,6 @@ class dropCalc:
         self.minHalite = 10000/(8 * 8)
         self.percentileFlag = 50
         self.numPlayers = 2
-        self.width =32
         logging.info("minHalite {}, lenght {}, denom {}".format(self.minHalite, self.length, (self.length/4 * self.length/4)))
 
     def updateMap(self, haliteMap, smoothMap):
@@ -45,8 +44,8 @@ class dropCalc:
         
     def identifyBestDrops(self):
         targetMap = self.haliteMap
-        if self.numPlayers == 4 and self.width == 32:
-            targetMap = self.haliteMap * self.miningSpeed * 4
+        #if self.numPlayers == 4:
+        #    targetMap = self.haliteMap * self.miningSpeed * 4
         self.filteredMap = ndimage.uniform_filter(targetMap, size = 8, mode = 'wrap')
         #self.filteredMap = ndimage.maximum_filter(self.smoothMap, size = self.length / 4, mode = 'wrap')
         #self.peakMaxima = peak_local_max(self.smoothMap, min_distance = 1)

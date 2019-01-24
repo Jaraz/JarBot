@@ -695,29 +695,27 @@ class GameMap:
     
     def matchShipsToDest2(self, ships, moveFlag, minHalite= 0, hChoice = 'sqrt', collectingStop=50):
         '''
-        The eyes of JarBot
-        need to add penalty when another ship is on a spot already
-        halite excluded form search if its below minHalite 
+        function takes a list of ships and tells them where to go
+        Idea is to maximize halite per turn
+        Uses linear sum assignments to optimally order each ship
         '''
+        # will be solved for
         distMatrix = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         distResults = np.zeros([len(ships), self.width*self.height], dtype=np.int)
         
         # remove taken spots from the solver
+        # leave enemy spots within the scan in 2p but not 4p (not sure this matters)
         tempMap = self.shipMap.copy()
-        #if self.numPlayers==2 and self.turnNumber > self.turnsLeft:
-        #    tempMap[self.shipMap==2]=0
+        if self.numPlayers==2 and self.turnNumber > self.turnsLeft:
+            tempMap[self.shipMap==2]=0
         if self.numPlayers==4 and self.turnNumber > 500:
             tempMap[self.shipMap==2]=0
             tempMap[self.shipMap==3]=0
             tempMap[self.shipMap==4]=0
-        haliteMap = self.npMap*1 #- 1000 * tempMap
         
-        #add back 1k ships (assumes they move only for 2p)
-        if self.numPlayers==2:
-            tempMap2 = self.myShipHalite.copy()
-            tempMap2[self.myShipHalite!=1000]=0
-            tempMap2[self.myShipHalite==1000]=1
-            haliteMap += 1000 * tempMap2
+        # np map is a matrix of halite on each square (game map)
+        # remove your current locations
+        haliteMap = self.npMap - 1000 * tempMap
         
         finalMap = haliteMap.copy()
         
@@ -726,72 +724,43 @@ class GameMap:
         
         haliteMap[haliteMap<1] = 1
 
-        # taking into account mining speed
+        # mining speed with either be 0.75 (inspired) or 0.25 (regular)
         miningSpeed = self.inspirationBonus.copy()
         miningSpeed = miningSpeed.astype(np.float)
         if self.numPlayers == 2:
             miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
         else:
-            miningSpeed[miningSpeed<1] = self.haliteRegBene4x
+            miningSpeed[miningSpeed<1] = .25
             miningSpeed[miningSpeed>.99] = .75
-        
-        #miningSpeed[(self.negInspirationBonus==0) & (self.inspirationBonus==1)]=1.25
-        
-        #miningSpeed[(self.friendlyShipCount<=1) & (self.inspirationBonus==1)] = 0.75
-        #miningSpeed[(self.enemyShipCount>self.friendlyShipCount) & (self.friendlyShipCount>1)]=0.25
-        #miningSpeed2 = miningSpeed.copy()
-        #miningSpeed2[miningSpeed2==0.75]=0.25
-        #if self.turnNumber > 50:
-        #    miningSpeed2=0
-        #logging.info("miningSpeed2 {}".format(miningSpeed2))
+
+        # matrix of minimum distace between squar and dropoff + yard        
         depoDistAll = self.dropDistancesAll.min(0) # includes yard + depo
-        #depoDistAll = self.dropDistances.min(0) # includes yard + depo
-        haliteMap = haliteMap - collectingStop
-        haliteMap[haliteMap<collectingStop] = 1
 
-
+        # try to guess if enemy is going to move in 4p or stay still. if they are likely to mine then u can move near them
         enemyShipMoveAmt = 250
         tempShipMatrix = self.nearbyEnemyShip.copy()
         tempShipMatrix[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)] -= self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]
-        #logging.info("help meh {}".format(self.nearbyEnemyShip[(self.enemyMiningNext>enemyShipMoveAmt) & (self.nearbyEnemyShipCount == 1)]))
-        #logging.info("NES {}".format(self.nearbyEnemyShip))
-        #logging.info("TSM {}".format(tempShipMatrix))
-
-        # negative inspiration check for 2p
-        # this is the penalty if you give a bonus at that square
-        negInspirationPenalty = np.einsum('ijkl,lk',self.dist4Indicator,self.shipFlag * self.npMap * self.negInspirationBonus) * 0.5
-        negInspirationPenalty[(self.friendlyShipCount>=self.enemyShipCount) & (self.inspirationBonus==1)]=0
-        negInspirationPenalty[self.inspirationBonus==1]=0
-
+        
+        # loop to build per ship cost function
         for i in range(len(ships)):
             shipID = ships[i].id
             shipX = ships[i].position.x
             shipY = ships[i].position.y
             dist = self.distanceMatrix[ships[i].position.x][ships[i].position.y] #+ depoDist
-            distNZ = self.distanceMatrixNonZero[ships[i].position.x][ships[i].position.y] #+ depoDist
 
-            # take into account enemy zone of control
-            # avoid these spots, you will be killed
+            # avoid these spots, enemy may attack
             if self.numPlayers==2:
                 avoid = 1 * (np.sign(self.nearbyEnemyShip) * (ships[i].halite_amount + self.minedNextTurn) > self.nearbyEnemyShip)
                 avoid *= self.enemyZoC
                 
                 #logging.info("ship {} enemyZoc \n {} \n avoid \n {}".format(shipID, self.enemyZoC, avoid))
             else:
-                # avoid spots where enemy is not likely to go b/c:
-                #   1) he is making more by staying (vs moving one and mining)
-                #   2) our ship has less halite (and thus less to lose) by moving
+                # avoid spots where enemy is not likely to go
                 
                 # set avoid to all neighboring zones
-                # check if the enemy won't move b/c of mining
                 avoid = np.sign(tempShipMatrix)
 
-                ### (2) ###
-                # take into account how much they will mine
-                #avoid -= 1 * (self.nearbyEnemyShip - 750*(self.freeHalite-0.4)> ships[i].halite_amount)
-                #avoid -= 1 * (self.nearbyEnemyShip + 600*(self.freeHalite-0.6)> ships[i].halite_amount)
-                
                 if self.width==56:
                     multiplier = 500
                 elif self.width==64:
@@ -799,187 +768,106 @@ class GameMap:
                 else:
                     multiplier = 500
 
-                    
+                #Take risks as the map emtpies out and start risking your ships life by moving 
                 avoid -= 1 * (self.nearbyEnemyShip - multiplier*(self.freeHalite*self.freeHalite)> ships[i].halite_amount)
                 avoid[avoid<0]=0
                 avoid = avoid.astype(np.int)
                 self.avoid[shipID] = avoid # to be used in resolve movement function
 
             finalMap = haliteMap.copy()
-            noInspMap = haliteMap.copy()
-            
             finalMap = finalMap.astype(np.float)
-            noInspMap = noInspMap.astype(np.float)
             # add back current ship from earlier subtraction of friendlies
             finalMap[shipY, shipX] += self.npMap[shipY, shipX] 
-            noInspMap[shipY, shipX] += self.npMap[shipY, shipX] 
-            #finalMap2 = finalMap.copy()
+            # apply mining speed to halite map. so now it gives next turn mining
             finalMap *= miningSpeed
-            noInspMap *= 0.25
-            #finalMap2 *= miningSpeed2
 
-            # add costs to other squares
+            # wanted to add simple cost penalty for moving
+            # no idea how to do this so i just extrapolated nearby halite
+            # magic numbers
             if self.width > 60:
-                ratio = 0.05
+                ratio = 0.075
             elif self.width > 41:
-                ratio = 0.025
+                ratio = 0.05
             elif self.width > 39:
-                ratio = 0.015
+                ratio = 0.025
             else:
-                ratio = 0.015
+                ratio = 0.025
             finalMap -= dist * self.smoothMap[shipY, shipX] *ratio
             finalMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
             finalMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            
-            ratio = 0
-            noInspMap -= dist * self.smoothMap[shipY, shipX] *ratio
-            noInspMap[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            noInspMap[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            noInspMap[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            noInspMap[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
 
-            '''
-            finalMap2 -= dist * self.smoothMap[shipY, shipX] *ratio
-            finalMap2[(shipY) % self.width,(shipX-1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap2[(shipY) % self.width,(shipX+1) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap2[(shipY-1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            finalMap2[(shipY+1) % self.width,(shipX) % self.height] -= self.npMap[shipY, shipX] * 0.1 - self.smoothMap[shipY, shipX] * ratio
-            '''    
+            # cap halite if we can't carry it
             finalMap[finalMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
-            noInspMap[noInspMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount)
+            
+            # take into acocunt how much further or closer a move will take us to/from a dropoff point
             depoDistMarginal = depoDistAll - depoDistAll[shipY][shipX]
-            depoDistDecayed = depoDistMarginal *(ships[i].halite_amount/1000)
-            #*(1-ships[i].halite_amount/2000)
+            
+            # if you are empty just go out an hunt, don't worry about drop off distance
+            depoDistDecayed = depoDistMarginal*np.minimum(1, ships[i].halite_amount/1000)
 
-            if self.numPlayers == 3:
+            if self.numPlayers == 2:
+                # dist + mining + depo marginal benefit/cost
+                denom = dist + 1 + depoDistDecayed
+                
+                # hunt for the bonus squares
+                denom[self.inspirationBonus==1] -= 1
+                denom[denom<=1] = 1
+                
+                # term1 is halite / turn 
+                term1 = finalMap / (denom)
+                
+                # term2 is average of neighboring squares per turn (estimate)
+                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (denom+1)
+                
+                # this will be sent to the solver
+                h = -(term1 + term2 - 5000*avoid)
+            else: # 4p
                 denom = dist + 1 + depoDistDecayed
                 denom[self.inspirationBonus==1] -= 1
                 denom[denom<=1] = 1
                 
-                # add negative opportunity cost
-                term1 = finalMap / (denom)
-                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (denom+1)
-                term3 = finalMap.copy()
-                term3[self.inspirationBonus==1] *= 1/3
-                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
-                term3 *= 1 / (denom) # neg opp cost
-                
-                if self.numPlayers == 5:
-                    term4 = self.npMap.copy()
-                    term4[term4<1]=1
-                    turns = (np.log(0.1) - np.log(term4))/np.log(0.75)
-                    term4 = -term4/turns/2
-                    term4[self.inspirationBonus==1]=0
-                else:
-                    term4 = 0
-                    
-                h = -(term1 + term2 + term4 - 5000*avoid)
-                '''
-                term1 = finalMap / (denom)
-                term1a = np.minimum(950 - ships[i].halite_amount-finalMap,1.75 * finalMap) / (denom+1)
-                term1Final = np.maximum(term1, term1a)
-
-                term2 = np.minimum(950 - ships[i].halite_amount, self.smoothInspirationMap) / (denom+2)
-                
-                term3 = finalMap.copy()
-                term3[self.inspirationBonus==1] *= 1/3
-                term3[(self.negInspirationBonus==0) | (self.inspirationBonus==0)]=0
-                term3 *= 2 / (denom+1) # neg opp cost
-                
-                h = -(term1Final + term2 + term3 - 5000*avoid)
-                '''
-                
-            else:
-                denom = dist + 1 + depoDistDecayed
-                #denom[(self.negInspirationBonus==1) & (self.inspirationBonus==1) & (self.dist4Indicator[shipX][shipY]==1)] -= 1
-                #denom[denom<=1] = 1
-                #denom[(self.friendlyShipCount>self.enemyShipCount+2)] -= 1
-                #denom[denom<=1] = 1
-                denomBonus = denom.copy()
-                denomBonus[(self.inspirationBonus==1)] -= 1
-                denomBonus[denomBonus<=1] = 1
-                
-                
                 tempCopyMap = finalMap.copy()
-                mineTurn1 = finalMap / (denomBonus)
+                
+                # calculate halite per turn (HPT) if you move and stay at a location and keep mining
+                mineTurn1 = finalMap / (denom)
                 finalMap[1.75*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - tempCopyMap[1.75*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn2 = (1.75 * finalMap) / (denomBonus+1)
+                mineTurn2 = (1.75 * finalMap) / (denom+1)
                 finalMap[2.3125*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 1.75*tempCopyMap[2.3125*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn3 = (2.3125 * finalMap) / (denomBonus+2)
+                mineTurn3 = (2.3125 * finalMap) / (denom+2)
                 finalMap[2.734375*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.3125*tempCopyMap[2.734375*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn4 = (2.734375 * finalMap) / (denomBonus+3)
+                mineTurn4 = (2.734375 * finalMap) / (denom+3)
                 finalMap[3.05*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.734375*tempCopyMap[3.05*tempCopyMap > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn5 = (3.05 * finalMap) / (denomBonus+4)
+                mineTurn5 = (3.05 * finalMap) / (denom+4)
                 
-                tempNoInsp = noInspMap.copy()
-                mineTurn1NI = noInspMap / denom
-                noInspMap[1.75*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - tempNoInsp[1.75*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn2NI = (1.75 * noInspMap) / (denom+1)
-                noInspMap[2.3125*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 1.75*tempNoInsp[2.3125*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn3NI = (2.3125 * noInspMap) / (denom+2)
-                noInspMap[2.734375*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.3125*tempNoInsp[2.734375*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn4NI = (2.734375 * noInspMap) / (denom+3)
-                noInspMap[3.05*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)] = (self.haliteCollectionTarget - ships[i].halite_amount - 2.734375*tempNoInsp[3.05*tempNoInsp > (self.haliteCollectionTarget - ships[i].halite_amount)])
-                mineTurn5NI = (3.05 * noInspMap) / (denom+4)
+                term1 = np.maximum(mineTurn1, np.maximum(mineTurn2, np.maximum(mineTurn3, np.maximum(mineTurn4,mineTurn5))))
+                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount, self.smoothInspirationMap) / (dist+1+2+depoDistDecayed)
                 
-                term1Insp = np.maximum(mineTurn1, np.maximum(mineTurn2, np.maximum(mineTurn3, np.maximum(mineTurn4,mineTurn5))))
-                term1NoInsp = np.maximum(mineTurn1NI, np.maximum(mineTurn2NI, np.maximum(mineTurn3NI, np.maximum(mineTurn4NI,mineTurn5NI))))
-                
-                #term1 = term1Insp
-                #term1[(self.inspirationBonus!=1)] = term1NoInsp[(self.inspirationBonus!=1)]
-                #if self.enemyZoC[shipY][shipX] == 1 and self.negInspirationBonus==1:
-                #    term1= term1NoInsp
-                #term1 = np.maximum(term1NoInsp, term1Insp-negInspirationPenalty/(denom+3))
-                #term1[self.friendlyShipCount>self.enemyShipCount] = term1Insp[self.friendlyShipCount>self.enemyShipCount]
-                #term1[(self.negInspirationBonus==1) & (self.inspirationBonus==1)] = term1Insp[(self.negInspirationBonus==1) & (self.inspirationBonus==1)]
-                #term1[self.dist4Indicator[shipX][shipY]==1] = term1Insp[self.dist4Indicator[shipX][shipY]==1]
-                #term1[(self.negInspirationBonus==1) & (self.inspirationBonus==1)] = mineTurn1NI[(self.negInspirationBonus==1) & (self.inspirationBonus==1)]
-                term1 = term1Insp 
-                #term1[self.inspirationBonus==1] = mineTurn1[self.inspirationBonus==1]
-                #term1[(self.enemyZoC==0)] = term1Insp[(self.enemyZoC==0)]
-                #term1[(self.enemyZoC==0)] = term1Insp[(self.enemyZoC==0)]
-                #if self.enemyZoC[shipY][shipX]==1: #and self.negInspirationBonus[shipY][shipX] ==1:
-                #    term1 = term1NoInsp
+                # the multi mining mechanic was too strong i kept wondering into danger, so calmed it down
+                term1[(self.inspirationBonus==1)] = mineTurn1[(self.inspirationBonus==1)] + term2[(self.inspirationBonus==1)]
 
-                term1[self.enemyZoC==1] = mineTurn1[self.enemyZoC==1]
-                #term1[self.enemyZoC==1] = mineTurn1NI[self.enemyZoC==1]
-                term1[self.enemyShipCount!=0] += -negInspirationPenalty[self.enemyShipCount!=0]/(dist[self.enemyShipCount!=0]+1) * self.friendlyShipCount[self.enemyShipCount!=0] / self.enemyShipCount[self.enemyShipCount!=0]
-                #term1[self.enemyShipCount>self.friendlyShipCount] += -negInspirationPenalty[self.enemyShipCount>self.friendlyShipCount]/(dist[self.enemyShipCount>self.friendlyShipCount]) * tempFriendlyCount[self.enemyShipCount>self.friendlyShipCount] / self.enemyShipCount[self.enemyShipCount>self.friendlyShipCount]
-                #term1[(self.enemyZoC==1)&(self.negInspirationBonus==1)] = mineTurn1NI[(self.enemyZoC==1)&(self.negInspirationBonus==1)]
-                #term1[(self.enemyZoC==1)&(self.negInspirationBonus==0)] = mineTurn1[(self.enemyZoC==1)&(self.negInspirationBonus==0)]
-                #term1[self.enemyShipCount>=1] = mineTurn1[self.enemyShipCount>=1]
-                #term1[self.enemyZoC==1] += mineTurn1[self.enemyZoC==1]
-                #logging.info("ship {} term1 {}".format(shipID, term1.astype(np.int)))
-                term2 = np.minimum(self.haliteCollectionTarget - ships[i].halite_amount-mineTurn1NI, self.smoothInspirationMap) / (dist+1+4+depoDistDecayed)
-                #term1[(self.inspirationBonus==1)] = mineTurn1[(self.inspirationBonus==1)]
-                
-                #if self.numPlayers == 3:
-                #    term1[(self.friendlyShipCount>1)] = mineTurn1[(self.friendlyShipCount>1)] + term2[(self.friendlyShipCount>1)]
-                #else:
-                #    term1[(self.inspirationBonus==1)] = mineTurn1[(self.inspirationBonus==1)] + term2[(self.inspirationBonus==1)]
-                #+ term2[(self.inspirationBonus==1)]
-                
-                #term2 = 0
-                term3 = 0
-                if self.numPlayers >= 5:
-                    term3 = self.npMap.copy()
-                    term3[term3<1]=1
-                    turns = (np.log(0.1) - np.log(term3))/np.log(0.75)
-                    term3 = term3/turns
-                    term3[self.inspirationBonus==1]=0
-                else:
-                    term3 = 0
+                # opportunity cost
+                # trying to encourage my ships to go hunt and not just mine inspired spots
+                term3 = self.npMap.copy()
+                term3[term3<1]=1
+                turns = (np.log(0.1) - np.log(term3))/np.log(0.75)
+                term3 = term3/turns/2
+                term3[self.inspirationBonus==1]=0
 
-                h = -(term1 + term2 + term3 - 5000*avoid)
+                h = -(term1 + term3 - 5000*avoid)
+
+            # 64x64 maps crash my solver, so i only look at 16 dist around each ship
             if self.width > 63:
                 h *= self.dist16Indicator[shipX, shipY] # kill far away points
+            
+            # prep for solver
             distMatrix[i,:] = h.ravel()
             distResults[i,:] = dist.ravel()
             
         # shrink targets for 64x
-        if self.width >55 and np.sum(distMatrix)>0 and self.turnsLeft>50:
+        # i hate 64x maps
+        if self.width >55 and np.sum(distMatrix)>0:
             # shrink targets
             matrixLabels = self.matrixID.copy().ravel() # which cell the destination will be 
             columnHaliteMean = distMatrix.min(0)
@@ -995,6 +883,7 @@ class GameMap:
             matrixLabelsFinal = matrixLabels
 
         # find closest destination
+        # this is the solver, it matches destination for each ship
         row_ind, col_ind = optimize.linear_sum_assignment(solveMatrix)
         
         # convert to ship orders
