@@ -21,7 +21,7 @@ Hpt = halite * miningSpeed (25% or 75% if inspired) / distance + average halite 
 Distance = distance to square + 1 + depoDistMarginal  
 depoDistMarginal = (depoDistAll - depoDistAll[shipY][shipX]) * ship.halite_amount/1000  
 depoDistAll – minimum distance between depo and each square  
-Average halite is based on neighboring squares, discounted, with teh most weight being the direct neighbors.
+Average halite is based on neighboring squares, discounted, with the most weight being the direct neighbors.
 
 For 4p I use the same logic but calculated my hpt if I mined the square for 2,3 or 4 turns and took the max hpt. This yielded better in 2p, however it ended up inspiring enemies more than it helped me. I also added a term that encouraged my ships to take non-inspired halite b/c I was over fitted to inspired squares.
 
