@@ -1,7 +1,7 @@
 # Halite III
-What started as a weekend to weeklong project became the most addicting thing I’ve done since my online poker days. The only reason I made it as far as a I did was numpy, scipy and a force of will. So in this I’ll try to go over a few functions that really helped me that I think can help others next year (hopefully!). 
+What started as a weekend to weeklong project became the most addicting thing I’ve done since my online poker days. My bot finished 16th (barely). The only reason I made it as far as a I did was numpy, scipy and a force of will. So in this I’ll try to go over a few functions that really helped me that I think can help others next year (hopefully!). Note that I will add to this a bit later in the week.
 
-If my code can teach you one thing, its that you should learn to code before trying a programming competition! But first a disclaimer, my code was not meant to be re-read, certainty not innocents who aren’t myself. To put my python experience into perspective I had to google what a dictionary was… I put this here since almost all the top 20 people have posted their code and maybe it can help someone. Skip to the bottom for my funny moments, which is the best part of this writeup imho.
+If my code can teach you one thing, its that you should learn to code before trying a programming competition! But first a disclaimer, my code was not meant to be re-read, certainty not innocents who aren’t myself. To put my python experience into perspective I had to google what a dictionary was… I published this code here since almost all the top 20 people have posted their code and maybe it can help someone. Skip to the bottom for some funny moments, which I think is the best part of this writeup, imho.
 
 ## Bot basics
 * Give macro orders – exploring, forced to mine, returning, build dropoff, attack, etc
@@ -36,6 +36,9 @@ Each ship checks if its in a dropoff zone, and if so it hunts for the highest ha
 
 ## Ship building
 For my journey to top 100 I just built more ships when I was down in score and stopped if I was up. For 4p I used average enemy score, this is pretty terrible though. Later I did something pretty simple, I just looked at the moving average of halite mined on the map (w/out inspiration or recovered halite from downed enemies). And I extrapolated that out till the end of the game and checked if you could mine enough to justify a ship. I put a few constraints on this but generally I think it did pretty well.
+
+## 4p collisions
+TBA, but basically early on avoid enemies since losing a ship costs a lot, in opporunity terms. Later on get more aggressive. 
 
 ## Parameter tuning
 So I see a lot of CLOPs and fancy words and phrases in a lot of other post-mortems, this is new to me so I did not use (or know) any of this. I tried to come up with some rough functions that would help but basically I manually tuned the remaining. So nothing too exciting here.
