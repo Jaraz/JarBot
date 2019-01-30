@@ -3,20 +3,20 @@ What started as a weekend to weeklong project became the most addicting thing I�
 
 If my code can teach you one thing, its that you should learn to code before trying a programming competition! But first a disclaimer, my code was not meant to be re-read, certainty not innocents who aren’t myself. To put my python experience into perspective I had to google what a dictionary was… I put this here since almost all the top 20 people have posted their code and maybe it can help someone. Skip to the bottom for my funny moments, which is the best part of this writeup imho.
 
-## Bot basics:
+## Bot basics
 * Give macro orders – exploring, forced to mine, returning, build dropoff, attack, etc
 * Find target squares – find best halite squares, move for better drop-offs, etc
 * Execute movement – Use the beautiful linear_sum_assignments
 * Ship build check – simple check
 
-## What I learned:
+## What I learned
 Conceptually this game was made a lot easier for me when I moved to numpy. A few matrix manipulations and you can tell you if your ship is inspired or if you have control of a section of the map. It also made debugging relatively easy, run a small map. Most of interesting stuff is just using linear-sum-assignments.
 
 ## Maximize halite per turn
 My strategy was to just maximize halite per turn (hpt). Of course this easier said than done! For a while I just scanned around my ship but there had to be a better way. Going through all the numpy docs brought me to linear_sum_assignments and I love this little guy. Basically you build a matrix # ships x (width*height), each row has the ships estimates for HPT on a per square basis. Then it returns the best fit. 
 
 ##### First, hpt formulas:
-For 2p, 
+For 2p,  
 Hpt = halite * miningSpeed (25% or 75% if inspired) / distance + average halite / (distance + 1)  
 Distance = distance to square + 1 + depoDistMarginal  
 depoDistMarginal = (depoDistAll - depoDistAll[shipY][shipX]) * ship.halite_amount/1000  
