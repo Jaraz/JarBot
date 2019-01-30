@@ -1,0 +1,3719 @@
+INFO:root:minHalite 156.25, lenght 56, denom 196.0
+INFO:root:map size: 56, max turns: 475
+INFO:root:NEARBY: avg 166.68595041322314, stdev 159.13095771544755
+INFO:root:Successfully created bot! My Player ID is 3.
+INFO:root:=============== TURN 001 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07691610500000001
+INFO:root:choose destinations 0.0003491960000000516
+INFO:root:resolve destinations 0.00010336199999994022
+INFO:root:=============== TURN 002 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04401445000000004
+INFO:root:len 469
+INFO:root:choose destinations 0.0011127690000000134
+INFO:root:resolve destinations 0.0002902209999999794
+INFO:root:=============== TURN 003 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05017053199999999
+INFO:root:len 477
+INFO:root:choose destinations 0.001081730000000003
+INFO:root:resolve destinations 0.0003541619999999357
+INFO:root:=============== TURN 004 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04437978599999992
+INFO:root:len 546
+INFO:root:choose destinations 0.0017397689999999466
+INFO:root:resolve destinations 0.0005574709999999206
+INFO:root:=============== TURN 005 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04882713800000005
+INFO:root:len 543
+INFO:root:choose destinations 0.0023382119999999507
+INFO:root:resolve destinations 0.0005310869999999301
+INFO:root:=============== TURN 006 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04796330599999998
+INFO:root:len 601
+INFO:root:choose destinations 0.0017407000000000394
+INFO:root:resolve destinations 0.0004916669999999179
+INFO:root:=============== TURN 007 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050720243
+INFO:root:len 375
+INFO:root:choose destinations 0.0028295689999999762
+INFO:root:resolve destinations 0.0007033569999999045
+INFO:root:=============== TURN 008 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04473580999999993
+INFO:root:len 640
+INFO:root:choose destinations 0.0019859129999999503
+INFO:root:resolve destinations 0.0005503319999999867
+INFO:root:=============== TURN 009 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04631200000000013
+INFO:root:len 204
+INFO:root:choose destinations 0.0021259009999998746
+INFO:root:resolve destinations 0.0005230170000001255
+INFO:root:=============== TURN 010 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045087488000000064
+INFO:root:len 465
+INFO:root:choose destinations 0.0032849200000000245
+INFO:root:resolve destinations 0.0007055300000000653
+INFO:root:=============== TURN 011 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04591934899999983
+INFO:root:len 281
+INFO:root:choose destinations 0.0032296689999999906
+INFO:root:resolve destinations 0.0006648679999998741
+INFO:root:=============== TURN 012 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045509315999999966
+INFO:root:len 233
+INFO:root:choose destinations 0.0033094409999998575
+INFO:root:resolve destinations 0.0006316559999999249
+INFO:root:=============== TURN 013 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04522282100000008
+INFO:root:len 234
+INFO:root:choose destinations 0.003251087000000208
+INFO:root:resolve destinations 0.0006865950000001231
+INFO:root:=============== TURN 014 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048924912000000154
+INFO:root:len 187
+INFO:root:choose destinations 0.003171314999999897
+INFO:root:resolve destinations 0.00077381700000001
+INFO:root:=============== TURN 015 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04768177699999998
+INFO:root:len 210
+INFO:root:choose destinations 0.003347618999999913
+INFO:root:resolve destinations 0.0010025789999998924
+INFO:root:=============== TURN 016 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0484202090000001
+INFO:root:len 243
+INFO:root:choose destinations 0.0025036529999999946
+INFO:root:resolve destinations 0.0006304140000001901
+INFO:root:=============== TURN 017 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048608929999999884
+INFO:root:len 174
+INFO:root:choose destinations 0.0031390339999999295
+INFO:root:resolve destinations 0.0008206870000000421
+INFO:root:=============== TURN 018 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.044696700000000034
+INFO:root:len 219
+INFO:root:choose destinations 0.003332099999999949
+INFO:root:resolve destinations 0.0006263790000000657
+INFO:root:=============== TURN 019 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04741638800000003
+INFO:root:len 268
+INFO:root:choose destinations 0.0030558480000000277
+INFO:root:resolve destinations 0.0005925450000001664
+INFO:root:=============== TURN 020 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0442491089999999
+INFO:root:len 304
+INFO:root:choose destinations 0.0024996179999998702
+INFO:root:resolve destinations 0.0007651260000001159
+INFO:root:=============== TURN 021 ================
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.052975890000000136
+INFO:root:len 323
+INFO:root:choose destinations 0.0024161209999999933
+INFO:root:resolve destinations 0.0006372430000001206
+INFO:root:=============== TURN 022 ================
+INFO:root:turn 21 mining speed 449.0; MA 396.9; total 8387.0 temp 513573
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045074140999999956
+INFO:root:len 381
+INFO:root:choose destinations 0.002455231000000113
+INFO:root:resolve destinations 0.000913806000000017
+INFO:root:=============== TURN 023 ================
+INFO:root:turn 22 mining speed 591.0; MA 419.35; total 8978.0 temp 512982
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04642436299999986
+INFO:root:len 433
+INFO:root:choose destinations 0.0024558530000000633
+INFO:root:resolve destinations 0.0006400370000001487
+INFO:root:=============== TURN 024 ================
+INFO:root:turn 23 mining speed 367.0; MA 448.9; total 9345.0 temp 512615
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04424445300000013
+INFO:root:len 394
+INFO:root:choose destinations 0.00200701900000011
+INFO:root:resolve destinations 0.0006530729999996154
+INFO:root:=============== TURN 025 ================
+INFO:root:turn 24 mining speed 364.0; MA 463.45; total 9709.0 temp 512251
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04574645900000007
+INFO:root:len 429
+INFO:root:choose destinations 0.0015510489999996935
+INFO:root:resolve destinations 0.0006726270000001477
+INFO:root:=============== TURN 026 ================
+INFO:root:turn 25 mining speed 119.0; MA 477.65; total 9828.0 temp 512132
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0550179850000001
+INFO:root:len 451
+INFO:root:choose destinations 0.0014942449999999496
+INFO:root:resolve destinations 0.0008371380000000705
+INFO:root:=============== TURN 027 ================
+INFO:root:turn 26 mining speed 214.0; MA 480.8; total 10042.0 temp 511918
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04632348400000019
+INFO:root:len 714
+INFO:root:choose destinations 0.0020237810000001133
+INFO:root:resolve destinations 0.000891457000000262
+INFO:root:=============== TURN 028 ================
+INFO:root:turn 27 mining speed 258.0; MA 476.1; total 10300.0 temp 511660
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053489594999999834
+INFO:root:len 394
+INFO:root:choose destinations 0.0015228019999997677
+INFO:root:resolve destinations 0.0007880950000003217
+INFO:root:=============== TURN 029 ================
+INFO:root:turn 28 mining speed 207.0; MA 480.7; total 10507.0 temp 511453
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04535970499999964
+INFO:root:len 387
+INFO:root:choose destinations 0.0014985920000003539
+INFO:root:resolve destinations 0.0006872159999997685
+INFO:root:=============== TURN 030 ================
+INFO:root:turn 29 mining speed 183.0; MA 481.65; total 10690.0 temp 511270
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04599508600000002
+INFO:root:len 340
+INFO:root:choose destinations 0.0014542049999999307
+INFO:root:resolve destinations 0.0009349119999999544
+INFO:root:=============== TURN 031 ================
+INFO:root:turn 30 mining speed 167.0; MA 460.6; total 10857.0 temp 511103
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04894167500000002
+INFO:root:len 722
+INFO:root:choose destinations 0.0021960509999998656
+INFO:root:resolve destinations 0.0006748010000001692
+INFO:root:=============== TURN 032 ================
+INFO:root:turn 31 mining speed 164.0; MA 444.95; total 11021.0 temp 510939
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049216995999999735
+INFO:root:len 719
+INFO:root:choose destinations 0.002025954000000052
+INFO:root:resolve destinations 0.0008200660000001747
+INFO:root:=============== TURN 033 ================
+INFO:root:turn 32 mining speed 158.0; MA 438.65; total 11179.0 temp 510781
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0485046360000001
+INFO:root:len 729
+INFO:root:choose destinations 0.0030896810000000663
+INFO:root:resolve destinations 0.0007651259999996718
+INFO:root:=============== TURN 034 ================
+INFO:root:turn 33 mining speed 110.0; MA 421.85; total 11289.0 temp 510671
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049611509
+INFO:root:len 757
+INFO:root:choose destinations 0.002187670000000086
+INFO:root:resolve destinations 0.001050070000000236
+INFO:root:=============== TURN 035 ================
+INFO:root:turn 34 mining speed 256.0; MA 396.9; total 11545.0 temp 510415
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04568003400000009
+INFO:root:len 688
+INFO:root:choose destinations 0.0027727669999997318
+INFO:root:resolve destinations 0.0010761430000001404
+INFO:root:=============== TURN 036 ================
+INFO:root:turn 35 mining speed 81.0; MA 377.65; total 11626.0 temp 510334
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.044818996000000055
+INFO:root:len 876
+INFO:root:choose destinations 0.0029326199999997193
+INFO:root:resolve destinations 0.0008722119999999833
+INFO:root:=============== TURN 037 ================
+INFO:root:turn 36 mining speed 136.0; MA 365.95; total 11762.0 temp 510198
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.044975125000000116
+INFO:root:len 548
+INFO:root:choose destinations 0.0026706459999998877
+INFO:root:resolve destinations 0.0011953340000001589
+INFO:root:=============== TURN 038 ================
+INFO:root:turn 37 mining speed 251.0; MA 333.05; total 12013.0 temp 509947
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045694001999999845
+INFO:root:len 856
+INFO:root:choose destinations 0.004000072000000188
+INFO:root:resolve destinations 0.0008548310000002779
+INFO:root:=============== TURN 039 ================
+INFO:root:turn 38 mining speed 284.0; MA 294.35; total 12297.0 temp 509663
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04426028300000029
+INFO:root:len 853
+INFO:root:choose destinations 0.0034742620000001168
+INFO:root:resolve destinations 0.0009215660000001513
+INFO:root:=============== TURN 040 ================
+INFO:root:turn 39 mining speed 318.0; MA 275.55; total 12615.0 temp 509345
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.052113920000000036
+INFO:root:len 961
+INFO:root:choose destinations 0.005030896999999701
+INFO:root:resolve destinations 0.0009280840000003288
+INFO:root:=============== TURN 041 ================
+INFO:root:turn 40 mining speed 151.0; MA 262.1; total 12766.0 temp 509194
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04695979599999989
+INFO:root:len 882
+INFO:root:choose destinations 0.004762094000000161
+INFO:root:resolve destinations 0.000926221999999921
+INFO:root:=============== TURN 042 ================
+INFO:root:turn 41 mining speed 391.0; MA 241.4; total 13157.0 temp 508803
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04592959299999988
+INFO:root:len 740
+INFO:root:choose destinations 0.00343391000000004
+INFO:root:resolve destinations 0.0009454660000001169
+INFO:root:=============== TURN 043 ================
+INFO:root:turn 42 mining speed 550.0; MA 238.5; total 13707.0 temp 508253
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05389931699999995
+INFO:root:len 805
+INFO:root:choose destinations 0.006166014000000164
+INFO:root:resolve destinations 0.0011376009999999326
+INFO:root:=============== TURN 044 ================
+INFO:root:turn 43 mining speed 472.0; MA 236.45; total 14179.0 temp 507781
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0457368370000002
+INFO:root:len 530
+INFO:root:choose destinations 0.004730432999999756
+INFO:root:resolve destinations 0.0009628480000003492
+INFO:root:=============== TURN 045 ================
+INFO:root:turn 44 mining speed 480.0; MA 241.7; total 14659.0 temp 507301
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05136400299999977
+INFO:root:len 619
+INFO:root:choose destinations 0.006348217000000211
+INFO:root:resolve destinations 0.0010100290000001344
+INFO:root:=============== TURN 046 ================
+INFO:root:turn 45 mining speed 519.0; MA 247.5; total 15178.0 temp 506782
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04490311299999972
+INFO:root:len 646
+INFO:root:choose destinations 0.009368680000000129
+INFO:root:resolve destinations 0.0017068669999997788
+INFO:root:=============== TURN 047 ================
+INFO:root:turn 46 mining speed 467.0; MA 267.5; total 15645.0 temp 506315
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05824454999999995
+INFO:root:len 578
+INFO:root:choose destinations 0.005971086000000181
+INFO:root:resolve destinations 0.0010441720000002874
+INFO:root:=============== TURN 048 ================
+INFO:root:turn 47 mining speed 713.0; MA 280.15; total 16358.0 temp 505602
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04690671900000032
+INFO:root:len 481
+INFO:root:choose destinations 0.004407620999999917
+INFO:root:resolve destinations 0.0011807459999997327
+INFO:root:=============== TURN 049 ================
+INFO:root:turn 48 mining speed 762.0; MA 302.9; total 17120.0 temp 504840
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05009510500000003
+INFO:root:len 534
+INFO:root:choose destinations 0.005570674999999969
+INFO:root:resolve destinations 0.0012959029999999316
+INFO:root:=============== TURN 050 ================
+INFO:root:turn 49 mining speed 636.0; MA 330.65; total 17756.0 temp 504204
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048639968999999894
+INFO:root:len 537
+INFO:root:choose destinations 0.005649206000000184
+INFO:root:resolve destinations 0.0013617070000000453
+INFO:root:=============== TURN 051 ================
+INFO:root:turn 50 mining speed 472.0; MA 353.3; total 18228.0 temp 503732
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046967866000000136
+INFO:root:len 568
+INFO:root:choose destinations 0.005805645000000137
+INFO:root:resolve destinations 0.0010379640000000023
+INFO:root:next 10 turns 258.44444444444446 one 353.3 two 241.4 flag 10958.044444444444
+INFO:root:=============== TURN 052 ================
+INFO:root:turn 51 mining speed 425.0; MA 368.55; total 18653.0 temp 503307
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04442479300000013
+INFO:root:len 578
+INFO:root:choose destinations 0.005723389999999995
+INFO:root:resolve destinations 0.0012170620000002685
+INFO:root:next 10 turns 277.0 one 368.55 two 238.5 flag 11717.1
+INFO:root:=============== TURN 053 ================
+INFO:root:turn 52 mining speed 722.0; MA 381.6; total 19375.0 temp 502585
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04532090599999972
+INFO:root:len 413
+INFO:root:choose destinations 0.005097632000000019
+INFO:root:resolve destinations 0.0009771270000000776
+INFO:root:next 10 turns 292.6388888888889 one 381.6 two 236.45 flag 12349.361111111113
+INFO:root:=============== TURN 054 ================
+INFO:root:turn 53 mining speed 945.0; MA 409.8; total 20320.0 temp 501640
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04488386799999988
+INFO:root:len 413
+INFO:root:choose destinations 0.005757844000000123
+INFO:root:resolve destinations 0.0011472229999998085
+INFO:root:next 10 turns 321.0555555555556 one 409.8 two 241.7 flag 13516.438888888892
+INFO:root:=============== TURN 055 ================
+INFO:root:turn 54 mining speed 955.0; MA 451.55; total 21275.0 temp 500685
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04410849900000002
+INFO:root:len 468
+INFO:root:choose destinations 0.005323910999999626
+INFO:root:resolve destinations 0.0010227550000001528
+INFO:root:next 10 turns 364.22222222222223 one 451.55 two 247.5 flag 15297.333333333334
+INFO:root:=============== TURN 056 ================
+INFO:root:turn 55 mining speed 728.0; MA 486.5; total 22003.0 temp 499957
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04822900500000005
+INFO:root:len 443
+INFO:root:choose destinations 0.00797872700000024
+INFO:root:resolve destinations 0.001781982999999876
+INFO:root:next 10 turns 391.94444444444446 one 486.5 two 267.5 flag 16422.472222222223
+INFO:root:=============== TURN 057 ================
+INFO:root:turn 56 mining speed 482.0; MA 518.85; total 22485.0 temp 499475
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054385087
+INFO:root:len 429
+INFO:root:choose destinations 0.004925361999999822
+INFO:root:resolve destinations 0.001068071999999809
+INFO:root:next 10 turns 420.86111111111114 one 518.85 two 280.15 flag 17591.994444444448
+INFO:root:=============== TURN 058 ================
+INFO:root:turn 57 mining speed 561.0; MA 536.15; total 23046.0 temp 498914
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04538329600000024
+INFO:root:len 452
+INFO:root:choose destinations 0.003965927999999952
+INFO:root:resolve destinations 0.001054724999999923
+INFO:root:next 10 turns 427.44444444444446 one 536.15 two 302.9 flag 17824.433333333334
+INFO:root:=============== TURN 059 ================
+INFO:root:turn 58 mining speed 640.0; MA 551.65; total 23686.0 temp 498274
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046393944000000076
+INFO:root:len 523
+INFO:root:choose destinations 0.003981758999999752
+INFO:root:resolve destinations 0.0010575189999997292
+INFO:root:next 10 turns 429.25 one 551.65 two 330.65 flag 17856.8
+INFO:root:=============== TURN 060 ================
+INFO:root:turn 59 mining speed 473.0; MA 569.45; total 24159.0 temp 497801
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04707309100000012
+INFO:root:len 564
+INFO:root:choose destinations 0.0036611200000002952
+INFO:root:resolve destinations 0.0011152520000003996
+INFO:root:next 10 turns 436.44444444444457 one 569.45 two 353.3 flag 18112.444444444453
+INFO:root:=============== TURN 061 ================
+INFO:root:turn 60 mining speed 507.0; MA 577.2; total 24666.0 temp 497294
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04584081899999992
+INFO:root:len 596
+INFO:root:choose destinations 0.003499092999999842
+INFO:root:resolve destinations 0.001081730000000114
+INFO:root:next 10 turns 436.5833333333334 one 577.2 two 368.55 flag 18074.550000000007
+INFO:root:=============== TURN 062 ================
+INFO:root:turn 61 mining speed 535.0; MA 595.0; total 25201.0 temp 496759
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05473304099999954
+INFO:root:len 620
+INFO:root:choose destinations 0.003950098999999874
+INFO:root:resolve destinations 0.0011742279999999994
+INFO:root:next 10 turns 449.1111111111111 one 595.0 two 381.6 flag 18548.28888888889
+INFO:root:=============== TURN 063 ================
+INFO:root:turn 62 mining speed 583.0; MA 602.2; total 25784.0 temp 496176
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04831126000000019
+INFO:root:len 608
+INFO:root:choose destinations 0.003545342000000673
+INFO:root:resolve destinations 0.0010674509999999415
+INFO:root:next 10 turns 441.44444444444457 one 602.2 two 409.8 flag 18187.51111111112
+INFO:root:=============== TURN 064 ================
+INFO:root:turn 63 mining speed 908.0; MA 603.85; total 26692.0 temp 495268
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049275660000000165
+INFO:root:len 639
+INFO:root:choose destinations 0.003539445000000363
+INFO:root:resolve destinations 0.001163673999999837
+INFO:root:next 10 turns 420.08333333333337 one 603.85 two 451.55 flag 17265.425000000003
+INFO:root:=============== TURN 065 ================
+INFO:root:turn 64 mining speed 908.0; MA 625.65; total 27600.0 temp 494360
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04827742700000037
+INFO:root:len 600
+INFO:root:choose destinations 0.003168832000000066
+INFO:root:resolve destinations 0.0018378539999996946
+INFO:root:next 10 turns 424.8888888888889 one 625.65 two 486.5 flag 17420.444444444445
+INFO:root:=============== TURN 066 ================
+INFO:root:turn 65 mining speed 758.0; MA 647.05; total 28358.0 temp 493602
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0475954870000006
+INFO:root:len 972
+INFO:root:choose destinations 0.004871043000000519
+INFO:root:resolve destinations 0.0011422569999997023
+INFO:root:next 10 turns 430.6944444444444 one 647.05 two 518.85 flag 17615.402777777777
+INFO:root:=============== TURN 067 ================
+INFO:root:turn 66 mining speed 515.0; MA 659.0; total 28873.0 temp 493087
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045551220000000114
+INFO:root:len 966
+INFO:root:choose destinations 0.003632563000000033
+INFO:root:resolve destinations 0.0011214600000002406
+INFO:root:next 10 turns 411.5 one 659.0 two 536.15 flag 16789.2
+INFO:root:=============== TURN 068 ================
+INFO:root:turn 67 mining speed 563.0; MA 661.4; total 29436.0 temp 492524
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047231391999999595
+INFO:root:len 982
+INFO:root:choose destinations 0.004368200999999239
+INFO:root:resolve destinations 0.0013607759999993974
+INFO:root:next 10 turns 385.575 one 661.4 two 551.65 flag 15692.902499999998
+INFO:root:=============== TURN 069 ================
+INFO:root:turn 68 mining speed 454.0; MA 653.9; total 29890.0 temp 492070
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04973504600000034
+INFO:root:len 984
+INFO:root:choose destinations 0.004427176999999283
+INFO:root:resolve destinations 0.0014526530000003035
+INFO:root:next 10 turns 335.6136363636363 one 653.9 two 569.45 flag 13625.913636363633
+INFO:root:=============== TURN 070 ================
+INFO:root:turn 69 mining speed 466.0; MA 638.5; total 30356.0 temp 491604
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04528272700000002
+INFO:root:len 1022
+INFO:root:choose destinations 0.004454801999999702
+INFO:root:resolve destinations 0.0017077979999999826
+INFO:root:next 10 turns 318.09090909090907 one 638.5 two 577.2 flag 12882.681818181816
+INFO:root:=============== TURN 071 ================
+INFO:root:turn 70 mining speed 494.0; MA 630.0; total 30850.0 temp 491110
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04689864799999999
+INFO:root:len 1075
+INFO:root:choose destinations 0.005112530999999976
+INFO:root:resolve destinations 0.0014088869999993037
+INFO:root:next 10 turns 302.27272727272725 one 630.0 two 595.0 flag 12211.818181818182
+INFO:root:=============== TURN 072 ================
+INFO:root:turn 71 mining speed 388.0; MA 631.1; total 31238.0 temp 490722
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049350465999999926
+INFO:root:len 1045
+INFO:root:choose destinations 0.003001217999999639
+INFO:root:resolve destinations 0.0017959499999999906
+INFO:root:next 10 turns 300.0 one 631.1 two 602.2 flag 12090.0
+INFO:root:=============== TURN 073 ================
+INFO:root:turn 72 mining speed 253.0; MA 629.25; total 31491.0 temp 490469
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04704329199999968
+INFO:root:len 1070
+INFO:root:choose destinations 0.0038467369999999335
+INFO:root:resolve destinations 0.0014067140000006972
+INFO:root:next 10 turns 284.6304347826087 one 629.25 two 603.85 flag 11442.143478260869
+INFO:root:=============== TURN 074 ================
+INFO:root:turn 73 mining speed 96.0; MA 605.8; total 31587.0 temp 490373
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06861053200000011
+INFO:root:len 1065
+INFO:root:choose destinations 0.0035195799999998556
+INFO:root:resolve destinations 0.0014442720000005238
+INFO:root:next 10 turns 254.76086956521735 one 605.8 two 625.65 flag 10215.910869565216
+INFO:root:=============== TURN 075 ================
+INFO:root:turn 74 mining speed 252.0; MA 563.35; total 31839.0 temp 490121
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06312987100000012
+INFO:root:len 1146
+INFO:root:choose destinations 0.0065217289999992545
+INFO:root:resolve destinations 0.0015960560000003454
+INFO:root:next 10 turns 208.5434782608696 one 563.35 two 647.05 flag 8341.739130434784
+INFO:root:=============== TURN 076 ================
+INFO:root:turn 75 mining speed 246.0; MA 528.2; total 32085.0 temp 489875
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06306748100000004
+INFO:root:len 1146
+INFO:root:choose destinations 0.005627168000000182
+INFO:root:resolve destinations 0.001883482000000214
+INFO:root:next 10 turns 165.58333333333337 one 528.2 two 659.0 flag 6606.7750000000015
+INFO:root:=============== TURN 077 ================
+INFO:root:turn 76 mining speed 134.0; MA 504.1; total 32219.0 temp 489741
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06121721099999977
+INFO:root:len 1163
+INFO:root:choose destinations 0.007524927999999598
+INFO:root:resolve destinations 0.001551670000000449
+INFO:root:next 10 turns 138.72000000000003 one 504.1 two 661.4 flag 5521.056000000001
+INFO:root:=============== TURN 078 ================
+INFO:root:turn 77 mining speed 343.0; MA 486.7; total 32562.0 temp 489398
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06021432200000021
+INFO:root:len 1152
+INFO:root:choose destinations 0.006776562999999847
+INFO:root:resolve destinations 0.00195021800000017
+INFO:root:next 10 turns 127.8 one 486.7 two 653.9 flag 5073.66
+INFO:root:=============== TURN 079 ================
+INFO:root:turn 78 mining speed 148.0; MA 475.8; total 32710.0 temp 489250
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07205064900000036
+INFO:root:len 1162
+INFO:root:choose destinations 0.007882503999999457
+INFO:root:resolve destinations 0.0018145750000000405
+INFO:root:next 10 turns 120.42307692307692 one 475.8 two 638.5 flag 4768.753846153846
+INFO:root:=============== TURN 080 ================
+INFO:root:turn 79 mining speed 299.0; MA 451.2; total 33009.0 temp 488951
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07591476800000052
+INFO:root:len 1216
+INFO:root:choose destinations 0.009751398000000577
+INFO:root:resolve destinations 0.002998735000000252
+INFO:root:next 10 turns 104.76923076923077 one 451.2 two 630.0 flag 4138.384615384615
+INFO:root:=============== TURN 081 ================
+INFO:root:turn 80 mining speed 397.0; MA 442.5; total 33406.0 temp 488554
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07820859299999938
+INFO:root:len 986
+INFO:root:choose destinations 0.006833366000000396
+INFO:root:resolve destinations 0.00205388899999992
+INFO:root:next 10 turns 97.65384615384616 one 442.5 two 631.1 flag 3847.5615384615385
+INFO:root:=============== TURN 082 ================
+INFO:root:turn 81 mining speed 403.0; MA 437.0; total 33809.0 temp 488151
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07139354099999995
+INFO:root:len 1307
+INFO:root:choose destinations 0.011284443000000088
+INFO:root:resolve destinations 0.0028519180000001754
+INFO:root:next 10 turns 94.13461538461539 one 437.0 two 629.25 flag 3699.4903846153848
+INFO:root:=============== TURN 083 ================
+INFO:root:turn 82 mining speed 388.0; MA 430.4; total 34197.0 temp 487763
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04972325100000052
+INFO:root:len 1231
+INFO:root:choose destinations 0.010016164999999688
+INFO:root:resolve destinations 0.0028227400000000458
+INFO:root:next 10 turns 94.44444444444444 one 430.4 two 605.8 flag 3702.222222222222
+INFO:root:=============== TURN 084 ================
+INFO:root:turn 83 mining speed 347.0; MA 420.65; total 34544.0 temp 487416
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06580144799999932
+INFO:root:len 1230
+INFO:root:choose destinations 0.012332959999999282
+INFO:root:resolve destinations 0.0018415789999997045
+INFO:root:next 10 turns 102.94444444444441 one 420.65 two 563.35 flag 4025.1277777777764
+INFO:root:=============== TURN 085 ================
+INFO:root:turn 84 mining speed 446.0; MA 392.6; total 34990.0 temp 486970
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06693687699999984
+INFO:root:len 1247
+INFO:root:choose destinations 0.01008072800000015
+INFO:root:resolve destinations 0.0027612819999998095
+INFO:root:next 10 turns 95.18518518518519 one 392.6 two 528.2 flag 3712.2222222222226
+INFO:root:=============== TURN 086 ================
+INFO:root:turn 85 mining speed 508.0; MA 369.5; total 35498.0 temp 486462
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06051633700000014
+INFO:root:len 1319
+INFO:root:choose destinations 0.011049163000000028
+INFO:root:resolve destinations 0.0021423529999999857
+INFO:root:next 10 turns 87.0 one 369.5 two 504.1 flag 3384.2999999999997
+INFO:root:=============== TURN 087 ================
+INFO:root:turn 86 mining speed 411.0; MA 357.0; total 35909.0 temp 486051
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.061950676999999565
+INFO:root:len 1221
+INFO:root:choose destinations 0.009621962999999845
+INFO:root:resolve destinations 0.0020734449999997295
+INFO:root:next 10 turns 81.17857142857143 one 357.0 two 486.7 flag 3149.7285714285717
+INFO:root:=============== TURN 088 ================
+INFO:root:turn 87 mining speed 576.0; MA 351.8; total 36485.0 temp 485475
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05750798000000046
+INFO:root:len 1243
+INFO:root:choose destinations 0.010272242000000098
+INFO:root:resolve destinations 0.0029860089999997896
+INFO:root:next 10 turns 81.35714285714286 one 351.8 two 475.8 flag 3148.5214285714287
+INFO:root:=============== TURN 089 ================
+INFO:root:turn 88 mining speed 577.0; MA 352.45; total 37062.0 temp 484898
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.062141569999999646
+INFO:root:len 1166
+INFO:root:choose destinations 0.010184399999999982
+INFO:root:resolve destinations 0.0024456090000004593
+INFO:root:next 10 turns 90.60714285714286 one 352.45 two 451.2 flag 3497.4357142857148
+INFO:root:=============== TURN 090 ================
+INFO:root:turn 89 mining speed 763.0; MA 358.6; total 37825.0 temp 484135
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05192985600000011
+INFO:root:len 1243
+INFO:root:choose destinations 0.012074090999999676
+INFO:root:resolve destinations 0.0022348500000006766
+INFO:root:next 10 turns 101.74074074074076 one 358.6 two 442.5 flag 3917.018518518519
+INFO:root:=============== TURN 091 ================
+INFO:root:turn 90 mining speed 473.0; MA 373.45; total 38298.0 temp 483662
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0459181080000004
+INFO:root:len 838
+INFO:root:choose destinations 0.009878039000000172
+INFO:root:resolve destinations 0.002044577999999575
+INFO:root:next 10 turns 110.67857142857143 one 373.45 two 437.0 flag 4250.057142857143
+INFO:root:=============== TURN 092 ================
+INFO:root:turn 91 mining speed 339.0; MA 372.4; total 38637.0 temp 483323
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050408915999999415
+INFO:root:len 1049
+INFO:root:choose destinations 0.011195670000000213
+INFO:root:resolve destinations 0.0030986820000000748
+INFO:root:next 10 turns 112.28571428571429 one 372.4 two 430.4 flag 4300.542857142857
+INFO:root:=============== TURN 093 ================
+INFO:root:turn 92 mining speed 736.0; MA 369.95; total 39373.0 temp 482587
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05046168299999998
+INFO:root:len 1217
+INFO:root:choose destinations 0.012061364000000019
+INFO:root:resolve destinations 0.0023391430000003766
+INFO:root:next 10 turns 114.01785714285714 one 369.95 two 420.65 flag 4355.482142857142
+INFO:root:=============== TURN 094 ================
+INFO:root:turn 93 mining speed 480.0; MA 394.1; total 39853.0 temp 482107
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047654462000000564
+INFO:root:len 916
+INFO:root:choose destinations 0.01032159499999974
+INFO:root:resolve destinations 0.002408671999999612
+INFO:root:next 10 turns 141.28571428571428 one 394.1 two 392.6 flag 5382.9857142857145
+INFO:root:=============== TURN 095 ================
+INFO:root:turn 94 mining speed 446.0; MA 413.3; total 40299.0 temp 481661
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0459063129999997
+INFO:root:len 959
+INFO:root:choose destinations 0.010296452999999595
+INFO:root:resolve destinations 0.0017385280000006276
+INFO:root:next 10 turns 163.25 one 413.3 two 369.5 flag 6203.5
+INFO:root:=============== TURN 096 ================
+INFO:root:turn 95 mining speed 595.0; MA 423.0; total 40894.0 temp 481066
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04516632899999973
+INFO:root:len 904
+INFO:root:choose destinations 0.009316532999999794
+INFO:root:resolve destinations 0.0025738030000006518
+INFO:root:next 10 turns 174.64285714285714 one 423.0 two 357.0 flag 6618.964285714286
+INFO:root:=============== TURN 097 ================
+INFO:root:turn 96 mining speed 1076.0; MA 440.45; total 41970.0 temp 479990
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045656443999999574
+INFO:root:len 905
+INFO:root:choose destinations 0.010884342999999852
+INFO:root:resolve destinations 0.002558282999999939
+INFO:root:next 10 turns 188.9642857142857 one 440.45 two 351.8 flag 7142.8499999999985
+INFO:root:=============== TURN 098 ================
+INFO:root:turn 97 mining speed 982.0; MA 487.55; total 42952.0 temp 479008
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0457439759999998
+INFO:root:len 851
+INFO:root:choose destinations 0.011266439999999989
+INFO:root:resolve destinations 0.0023059310000004274
+INFO:root:next 10 turns 222.37500000000003 one 487.55 two 352.45 flag 8383.537500000002
+INFO:root:=============== TURN 099 ================
+INFO:root:turn 98 mining speed 667.0; MA 519.5; total 43619.0 temp 478341
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04654790099999939
+INFO:root:len 834
+INFO:root:choose destinations 0.009786472000000046
+INFO:root:resolve destinations 0.0017773270000001062
+INFO:root:next 10 turns 243.0 one 519.5 two 358.6 flag 9136.800000000001
+INFO:root:=============== TURN 100 ================
+INFO:root:turn 99 mining speed 658.0; MA 545.45; total 44277.0 temp 477683
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045125665999999676
+INFO:root:len 745
+INFO:root:choose destinations 0.01041564500000014
+INFO:root:resolve destinations 0.0023956350000000626
+INFO:root:next 10 turns 256.23214285714283 one 545.45 two 373.45 flag 9608.705357142857
+INFO:root:=============== TURN 101 ================
+INFO:root:turn 100 mining speed 631.0; MA 563.4; total 44908.0 temp 477052
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04844286799999953
+INFO:root:len 743
+INFO:root:choose destinations 0.010360395000000189
+INFO:root:resolve destinations 0.0023171060000004573
+INFO:root:next 10 turns 269.42857142857144 one 563.4 two 372.4 flag 10076.628571428571
+INFO:root:=============== TURN 102 ================
+INFO:root:turn 101 mining speed 890.0; MA 575.1; total 45798.0 temp 476162
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04478640399999989
+INFO:root:len 729
+INFO:root:choose destinations 0.009748913999999331
+INFO:root:resolve destinations 0.0024114660000007504
+INFO:root:next 10 turns 269.05172413793105 one 575.1 two 369.95 flag 10035.629310344828
+INFO:root:=============== TURN 103 ================
+INFO:root:turn 102 mining speed 1354.0; MA 599.45; total 47152.0 temp 474808
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045007717000000724
+INFO:root:len 765
+INFO:root:choose destinations 0.009066042999999802
+INFO:root:resolve destinations 0.002228332000000499
+INFO:root:next 10 turns 277.51724137931035 one 599.45 two 394.1 flag 10323.641379310346
+INFO:root:=============== TURN 104 ================
+INFO:root:turn 103 mining speed 1085.0; MA 647.75; total 48237.0 temp 473723
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048415241999999914
+INFO:root:len 782
+INFO:root:choose destinations 0.010587604000000361
+INFO:root:resolve destinations 0.002269925000000228
+INFO:root:next 10 turns 304.2068965517241 one 647.75 two 413.3 flag 11286.075862068965
+INFO:root:=============== TURN 105 ================
+INFO:root:turn 104 mining speed 949.0; MA 684.65; total 49186.0 temp 472774
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.051740825000000434
+INFO:root:len 807
+INFO:root:choose destinations 0.011417912999999835
+INFO:root:resolve destinations 0.0035239249999996503
+INFO:root:next 10 turns 315.43333333333334 one 684.65 two 423.0 flag 11671.033333333333
+INFO:root:=============== TURN 106 ================
+INFO:root:turn 105 mining speed 1131.0; MA 709.8; total 50317.0 temp 471643
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04678938899999974
+INFO:root:len 804
+INFO:root:choose destinations 0.010076692000000165
+INFO:root:resolve destinations 0.0018465450000002548
+INFO:root:next 10 turns 326.38333333333327 one 709.8 two 440.45 flag 12043.544999999998
+INFO:root:=============== TURN 107 ================
+INFO:root:turn 106 mining speed 1187.0; MA 740.95; total 51504.0 temp 470456
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046109000999999594
+INFO:root:len 825
+INFO:root:choose destinations 0.009097083000000339
+INFO:root:resolve destinations 0.0018670309999997414
+INFO:root:next 10 turns 331.45000000000005 one 740.95 two 487.55 flag 12197.36
+INFO:root:=============== TURN 108 ================
+INFO:root:turn 107 mining speed 1016.0; MA 779.75; total 52520.0 temp 469440
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04614252400000041
+INFO:root:len 872
+INFO:root:choose destinations 0.008110644999999472
+INFO:root:resolve destinations 0.002059165999999557
+INFO:root:next 10 turns 346.6666666666667 one 779.75 two 519.5 flag 12722.666666666668
+INFO:root:=============== TURN 109 ================
+INFO:root:turn 108 mining speed 1044.0; MA 801.75; total 53564.0 temp 468396
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05152137400000001
+INFO:root:len 996
+INFO:root:choose destinations 0.008050738999999751
+INFO:root:resolve destinations 0.0021305570000000884
+INFO:root:next 10 turns 352.68333333333334 one 801.75 two 545.45 flag 12908.21
+INFO:root:=============== TURN 110 ================
+INFO:root:turn 109 mining speed 1047.0; MA 825.1; total 54611.0 temp 467349
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046738172999999605
+INFO:root:len 1019
+INFO:root:choose destinations 0.007594455999999639
+INFO:root:resolve destinations 0.0023341769999998263
+INFO:root:next 10 turns 362.2666666666667 one 825.1 two 563.4 flag 13222.733333333335
+INFO:root:=============== TURN 111 ================
+INFO:root:turn 110 mining speed 878.0; MA 839.3; total 55489.0 temp 466471
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04659383900000069
+INFO:root:len 909
+INFO:root:choose destinations 0.007095028999999364
+INFO:root:resolve destinations 0.002121555999999636
+INFO:root:next 10 turns 367.8333333333333 one 839.3 two 575.1 flag 13389.133333333333
+INFO:root:=============== TURN 112 ================
+INFO:root:turn 111 mining speed 620.0; MA 859.55; total 56109.0 temp 465851
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050019368000000064
+INFO:root:len 870
+INFO:root:choose destinations 0.010189677000000508
+INFO:root:resolve destinations 0.002760971999999917
+INFO:root:next 10 turns 373.2166666666666 one 859.55 two 599.45 flag 13547.764999999998
+INFO:root:=============== TURN 113 ================
+INFO:root:turn 112 mining speed 949.0; MA 873.6; total 57058.0 temp 464902
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04645198900000036
+INFO:root:len 794
+INFO:root:choose destinations 0.006352252000000114
+INFO:root:resolve destinations 0.002136455000000481
+INFO:root:next 10 turns 366.48333333333335 one 873.6 two 647.75 flag 13266.696666666667
+INFO:root:=============== TURN 114 ================
+INFO:root:turn 113 mining speed 962.0; MA 884.25; total 58020.0 temp 463940
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049716733000000346
+INFO:root:len 810
+INFO:root:choose destinations 0.006503415000000068
+INFO:root:resolve destinations 0.002087412999999927
+INFO:root:next 10 turns 349.6290322580645 one 884.25 two 684.65 flag 12621.60806451613
+INFO:root:=============== TURN 115 ================
+INFO:root:turn 114 mining speed 933.0; MA 908.35; total 58953.0 temp 463007
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04888735500000063
+INFO:root:len 798
+INFO:root:choose destinations 0.005217134000000456
+INFO:root:resolve destinations 0.0019188670000005459
+INFO:root:next 10 turns 357.06451612903226 one 908.35 two 709.8 flag 12854.322580645161
+INFO:root:=============== TURN 116 ================
+INFO:root:turn 115 mining speed 1102.0; MA 932.7; total 60055.0 temp 461905
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053539567999999704
+INFO:root:len 713
+INFO:root:choose destinations 0.005270832999999975
+INFO:root:resolve destinations 0.0019570470000003226
+INFO:root:next 10 turns 362.7258064516129 one 932.7 two 740.95 flag 13021.856451612903
+INFO:root:=============== TURN 117 ================
+INFO:root:turn 116 mining speed 655.0; MA 958.05; total 60710.0 temp 461250
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.052095607000000044
+INFO:root:len 715
+INFO:root:choose destinations 0.004184758000000066
+INFO:root:resolve destinations 0.0019809459999997614
+INFO:root:next 10 turns 366.56451612903226 one 958.05 two 779.75 flag 13123.009677419355
+INFO:root:=============== TURN 118 ================
+INFO:root:turn 117 mining speed 847.0; MA 937.0; total 61557.0 temp 460403
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045621678999999915
+INFO:root:len 1192
+INFO:root:choose destinations 0.004747195000000204
+INFO:root:resolve destinations 0.0019170050000001382
+INFO:root:next 10 turns 345.88709677419354 one 937.0 two 801.75 flag 12348.169354838708
+INFO:root:=============== TURN 119 ================
+INFO:root:turn 118 mining speed 848.0; MA 930.25; total 62405.0 temp 459555
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04558784599999921
+INFO:root:len 1316
+INFO:root:choose destinations 0.004222626000000673
+INFO:root:resolve destinations 0.0019371809999988443
+INFO:root:next 10 turns 334.0 one 930.25 two 825.1 flag 11890.4
+INFO:root:=============== TURN 120 ================
+INFO:root:turn 119 mining speed 479.0; MA 939.3; total 62884.0 temp 459076
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04844814399999997
+INFO:root:len 444
+INFO:root:choose destinations 0.00310861500000037
+INFO:root:resolve destinations 0.001942147000001171
+INFO:root:next 10 turns 335.258064516129 one 939.3 two 839.3 flag 11901.66129032258
+INFO:root:=============== TURN 121 ================
+INFO:root:turn 120 mining speed 638.0; MA 930.35; total 63522.0 temp 458438
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04675586599999981
+INFO:root:len 1324
+INFO:root:choose destinations 0.004558473999999535
+INFO:root:resolve destinations 0.0019983279999991055
+INFO:root:next 10 turns 322.9516129032258 one 930.35 two 859.55 flag 11432.487096774194
+INFO:root:=============== TURN 122 ================
+INFO:root:turn 121 mining speed 611.0; MA 930.7; total 64133.0 temp 457827
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047107234000000275
+INFO:root:len 453
+INFO:root:choose destinations 0.002719377999998329
+INFO:root:resolve destinations 0.0019384220000002728
+INFO:root:next 10 turns 308.6875 one 930.7 two 873.6 flag 10896.668749999999
+INFO:root:=============== TURN 123 ================
+INFO:root:turn 122 mining speed 443.0; MA 916.75; total 64576.0 temp 457384
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04905838200000012
+INFO:root:len 1060
+INFO:root:choose destinations 0.0026880289999997586
+INFO:root:resolve destinations 0.0020107449999997584
+INFO:root:next 10 turns 296.640625 one 916.75 two 884.25 flag 10441.75
+INFO:root:=============== TURN 124 ================
+INFO:root:turn 123 mining speed 282.0; MA 871.2; total 64858.0 temp 457102
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049060244999999725
+INFO:root:len 1203
+INFO:root:choose destinations 0.003552792000000693
+INFO:root:resolve destinations 0.0025418319999985783
+INFO:root:next 10 turns 260.640625 one 871.2 two 908.35 flag 9148.4859375
+INFO:root:=============== TURN 125 ================
+INFO:root:turn 124 mining speed 474.0; MA 831.05; total 65332.0 temp 456628
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046843398000000036
+INFO:root:len 1201
+INFO:root:choose destinations 0.002867127000000025
+INFO:root:resolve destinations 0.0026237760000000776
+INFO:root:next 10 turns 227.93749999999994 one 831.05 two 932.7 flag 7977.812499999998
+INFO:root:=============== TURN 126 ================
+INFO:root:turn 125 mining speed 318.0; MA 807.3; total 65650.0 temp 456310
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05070534400000071
+INFO:root:len 1410
+INFO:root:choose destinations 0.005286973000000472
+INFO:root:resolve destinations 0.003370899000000094
+INFO:root:next 10 turns 211.79032258064515 one 807.3 two 958.05 flag 7391.482258064516
+INFO:root:=============== TURN 127 ================
+INFO:root:turn 126 mining speed 450.0; MA 766.65; total 66100.0 temp 455860
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0460410239999991
+INFO:root:len 1413
+INFO:root:choose destinations 0.004423452000001049
+INFO:root:resolve destinations 0.0018766530000000614
+INFO:root:next 10 turns 192.3548387096774 one 766.65 two 937.0 flag 6693.948387096774
+INFO:root:=============== TURN 128 ================
+INFO:root:turn 127 mining speed 212.0; MA 729.8; total 66312.0 temp 455648
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04499778299999946
+INFO:root:len 1407
+INFO:root:choose destinations 0.0046335900000009644
+INFO:root:resolve destinations 0.002533450999999687
+INFO:root:next 10 turns 170.758064516129 one 729.8 two 930.25 flag 5925.304838709676
+INFO:root:=============== TURN 129 ================
+INFO:root:turn 128 mining speed 443.0; MA 689.6; total 66755.0 temp 455205
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05427055100000011
+INFO:root:len 1281
+INFO:root:choose destinations 0.005229240000000246
+INFO:root:resolve destinations 0.0022879289999995223
+INFO:root:next 10 turns 141.90322580645164 one 689.6 two 939.3 flag 4909.851612903227
+INFO:root:=============== TURN 130 ================
+INFO:root:turn 129 mining speed 356.0; MA 659.55; total 67111.0 temp 454849
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049528632999999544
+INFO:root:len 1530
+INFO:root:choose destinations 0.006785254000000407
+INFO:root:resolve destinations 0.0022481970000001184
+INFO:root:next 10 turns 125.40322580645159 one 659.55 two 930.35 flag 4326.41129032258
+INFO:root:=============== TURN 131 ================
+INFO:root:turn 130 mining speed 346.0; MA 625.0; total 67457.0 temp 454503
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0470768159999988
+INFO:root:len 1522
+INFO:root:choose destinations 0.005313978000000219
+INFO:root:resolve destinations 0.0020389909999991573
+INFO:root:next 10 turns 102.99999999999999 one 625.0 two 930.7 flag 3543.2
+INFO:root:=============== TURN 132 ================
+INFO:root:turn 131 mining speed 370.0; MA 598.4; total 67827.0 temp 454133
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04845000699999957
+INFO:root:len 1295
+INFO:root:choose destinations 0.004788476999999958
+INFO:root:resolve destinations 0.001802469000001139
+INFO:root:next 10 turns 87.51562499999999 one 598.4 two 916.75 flag 3001.7859374999994
+INFO:root:=============== TURN 133 ================
+INFO:root:turn 132 mining speed 551.0; MA 585.9; total 68378.0 temp 453582
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04888828600000039
+INFO:root:len 1386
+INFO:root:choose destinations 0.006003987999999794
+INFO:root:resolve destinations 0.003340480000000312
+INFO:root:next 10 turns 93.93749999999997 one 585.9 two 871.2 flag 3212.662499999999
+INFO:root:=============== TURN 134 ================
+INFO:root:turn 133 mining speed 470.0; MA 566.0; total 68848.0 temp 453112
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047116856000000595
+INFO:root:len 1361
+INFO:root:choose destinations 0.0055228740000003995
+INFO:root:resolve destinations 0.002071581999999239
+INFO:root:next 10 turns 94.04687500000001 one 566.0 two 831.05 flag 3206.9984375000004
+INFO:root:=============== TURN 135 ================
+INFO:root:turn 134 mining speed 520.0; MA 541.4; total 69368.0 temp 452592
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04630361900000146
+INFO:root:len 1300
+INFO:root:choose destinations 0.007460675999999111
+INFO:root:resolve destinations 0.0020759280000000047
+INFO:root:next 10 turns 86.09375 one 541.4 two 807.3 flag 2927.1875
+INFO:root:=============== TURN 136 ================
+INFO:root:turn 135 mining speed 559.0; MA 520.75; total 69927.0 temp 452033
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05547861199999993
+INFO:root:len 1609
+INFO:root:choose destinations 0.008737333999999208
+INFO:root:resolve destinations 0.002206294000000497
+INFO:root:next 10 turns 85.890625 one 520.75 two 766.65 flag 2911.6921875000003
+INFO:root:=============== TURN 137 ================
+INFO:root:turn 136 mining speed 659.0; MA 493.6; total 70586.0 temp 451374
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050516001999998394
+INFO:root:len 1260
+INFO:root:choose destinations 0.006942003999999002
+INFO:root:resolve destinations 0.0018620649999991912
+INFO:root:next 10 turns 80.43750000000003 one 493.6 two 729.8 flag 2718.787500000001
+INFO:root:=============== TURN 138 ================
+INFO:root:turn 137 mining speed 708.0; MA 493.8; total 71294.0 temp 450666
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05993620700000157
+INFO:root:len 999
+INFO:root:choose destinations 0.008227663999999635
+INFO:root:resolve destinations 0.0019514590000007104
+INFO:root:next 10 turns 93.125 one 493.8 two 689.6 flag 3138.3125
+INFO:root:=============== TURN 139 ================
+INFO:root:turn 138 mining speed 691.0; MA 486.85; total 71985.0 temp 449975
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05662335200000079
+INFO:root:len 1373
+INFO:root:choose destinations 0.008528126999999941
+INFO:root:resolve destinations 0.0019995699999988403
+INFO:root:next 10 turns 98.17187500000003 one 486.85 two 659.55 flag 3298.5750000000007
+INFO:root:=============== TURN 140 ================
+INFO:root:turn 139 mining speed 510.0; MA 479.0; total 72495.0 temp 449465
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04672513700000103
+INFO:root:len 1036
+INFO:root:choose destinations 0.00757366000000026
+INFO:root:resolve destinations 0.0019517689999997145
+INFO:root:next 10 turns 104.0625 one 479.0 two 625.0 flag 3486.09375
+INFO:root:=============== TURN 141 ================
+INFO:root:turn 140 mining speed 691.0; MA 480.55; total 73186.0 temp 448774
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046312931000001
+INFO:root:len 1335
+INFO:root:choose destinations 0.008625591999999571
+INFO:root:resolve destinations 0.001865169000000222
+INFO:root:next 10 turns 113.34375000000001 one 480.55 two 598.4 flag 3785.6812500000005
+INFO:root:=============== TURN 142 ================
+INFO:root:turn 141 mining speed 811.0; MA 483.2; total 73997.0 temp 447963
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047630562000000154
+INFO:root:len 1438
+INFO:root:choose destinations 0.009174992999998466
+INFO:root:resolve destinations 0.0018589609999999368
+INFO:root:next 10 turns 118.90625 one 483.2 two 585.9 flag 3959.578125
+INFO:root:=============== TURN 143 ================
+INFO:root:turn 142 mining speed 637.0; MA 493.2; total 74634.0 temp 447326
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04548913999999904
+INFO:root:len 1159
+INFO:root:choose destinations 0.008890360000000541
+INFO:root:resolve destinations 0.0019443199999997773
+INFO:root:next 10 turns 131.375 one 493.2 two 566.0 flag 4361.65
+INFO:root:=============== TURN 144 ================
+INFO:root:turn 143 mining speed 684.0; MA 502.9; total 75318.0 temp 446642
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04952708099999903
+INFO:root:len 1458
+INFO:root:choose destinations 0.008325749000000826
+INFO:root:resolve destinations 0.0025449360000013854
+INFO:root:next 10 turns 145.125 one 502.9 two 541.4 flag 4803.6375
+INFO:root:=============== TURN 145 ================
+INFO:root:turn 144 mining speed 774.0; MA 523.0; total 76092.0 temp 445868
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04708178200000113
+INFO:root:len 1671
+INFO:root:choose destinations 0.01055594400000004
+INFO:root:resolve destinations 0.0028661950000010705
+INFO:root:next 10 turns 164.140625 one 523.0 two 520.75 flag 5416.640625
+INFO:root:=============== TURN 146 ================
+INFO:root:turn 145 mining speed 698.0; MA 538.0; total 76790.0 temp 445170
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04568375899999921
+INFO:root:len 1664
+INFO:root:choose destinations 0.010595364000000274
+INFO:root:resolve destinations 0.0029143069999992832
+INFO:root:next 10 turns 182.0 one 538.0 two 493.6 flag 5987.8
+INFO:root:=============== TURN 147 ================
+INFO:root:turn 146 mining speed 873.0; MA 557.0; total 77663.0 temp 444297
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04666212700000116
+INFO:root:len 1468
+INFO:root:choose destinations 0.01177735100000099
+INFO:root:resolve destinations 0.0019468040000010234
+INFO:root:next 10 turns 193.8125 one 557.0 two 493.8 flag 6357.05
+INFO:root:=============== TURN 148 ================
+INFO:root:turn 147 mining speed 607.0; MA 578.15; total 78270.0 temp 443690
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04839165200000117
+INFO:root:len 1651
+INFO:root:choose destinations 0.00840645300000098
+INFO:root:resolve destinations 0.002087411999999844
+INFO:root:next 10 turns 209.20312499999997 one 578.15 two 486.85 flag 6840.942187499999
+INFO:root:=============== TURN 149 ================
+INFO:root:turn 148 mining speed 1026.0; MA 597.9; total 79296.0 temp 442664
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0469346539999993
+INFO:root:len 1436
+INFO:root:choose destinations 0.01136918100000095
+INFO:root:resolve destinations 0.0023347979999996937
+INFO:root:next 10 turns 224.0 one 597.9 two 479.0 flag 7302.4
+INFO:root:=============== TURN 150 ================
+INFO:root:turn 149 mining speed 854.0; MA 627.05; total 80150.0 temp 441810
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04609410299999972
+INFO:root:len 1089
+INFO:root:choose destinations 0.011670264999999347
+INFO:root:resolve destinations 0.0032212890000007377
+INFO:root:next 10 turns 241.734375 one 627.05 two 480.55 flag 7856.367187499999
+INFO:root:=============== TURN 151 ================
+INFO:root:turn 150 mining speed 792.0; MA 651.95; total 80942.0 temp 441018
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04604381799999935
+INFO:root:len 1128
+INFO:root:choose destinations 0.00963686200000069
+INFO:root:resolve destinations 0.0021454560000009337
+INFO:root:next 10 turns 256.46875 one 651.95 two 483.2 flag 8309.5875
+INFO:root:=============== TURN 152 ================
+INFO:root:turn 151 mining speed 1184.0; MA 674.25; total 82126.0 temp 439834
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05050948299999902
+INFO:root:len 1055
+INFO:root:choose destinations 0.015187361000000621
+INFO:root:resolve destinations 0.0036480829999998576
+INFO:root:next 10 turns 267.28125 one 674.25 two 493.2 flag 8633.184374999999
+INFO:root:=============== TURN 153 ================
+INFO:root:turn 152 mining speed 874.0; MA 714.95; total 83000.0 temp 438960
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045978013999999234
+INFO:root:len 920
+INFO:root:choose destinations 0.009258488999998704
+INFO:root:resolve destinations 0.002521035000000893
+INFO:root:next 10 turns 289.68750000000006 one 714.95 two 502.9 flag 9327.937500000002
+INFO:root:=============== TURN 154 ================
+INFO:root:turn 153 mining speed 1060.0; MA 731.1; total 84060.0 temp 437900
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050688893000000235
+INFO:root:len 633
+INFO:root:choose destinations 0.008534024999999446
+INFO:root:resolve destinations 0.0035326149999992396
+INFO:root:next 10 turns 293.5 one 731.1 two 523.0 flag 9421.35
+INFO:root:=============== TURN 155 ================
+INFO:root:turn 154 mining speed 986.0; MA 760.6; total 85046.0 temp 436914
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045998190000000605
+INFO:root:len 881
+INFO:root:choose destinations 0.011305860000000223
+INFO:root:resolve destinations 0.001911729000001472
+INFO:root:next 10 turns 307.25 one 760.6 two 538.0 flag 9832.0
+INFO:root:=============== TURN 156 ================
+INFO:root:turn 155 mining speed 1060.0; MA 783.9; total 86106.0 temp 435854
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045903207999998585
+INFO:root:len 826
+INFO:root:choose destinations 0.009436346000001095
+INFO:root:resolve destinations 0.0027063419999997507
+INFO:root:next 10 turns 315.875 one 783.9 two 557.0 flag 10076.4125
+INFO:root:=============== TURN 157 ================
+INFO:root:turn 156 mining speed 878.0; MA 808.95; total 86984.0 temp 434976
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04490093999999978
+INFO:root:len 790
+INFO:root:choose destinations 0.008106300000001454
+INFO:root:resolve destinations 0.0027373810000010934
+INFO:root:next 10 turns 324.921875 one 808.95 two 578.15 flag 10332.515625
+INFO:root:=============== TURN 158 ================
+INFO:root:turn 157 mining speed 1173.0; MA 819.9; total 88157.0 temp 433803
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04879113199999985
+INFO:root:len 784
+INFO:root:choose destinations 0.008841937999999772
+INFO:root:resolve destinations 0.002812186999999966
+INFO:root:next 10 turns 325.59375 one 819.9 two 597.9 flag 10321.321875000001
+INFO:root:=============== TURN 159 ================
+INFO:root:turn 158 mining speed 999.0; MA 843.15; total 89156.0 temp 432804
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05120942699999986
+INFO:root:len 726
+INFO:root:choose destinations 0.009062938999999659
+INFO:root:resolve destinations 0.0019284899999991723
+INFO:root:next 10 turns 331.015625 one 843.15 two 627.05 flag 10460.09375
+INFO:root:=============== TURN 160 ================
+INFO:root:turn 159 mining speed 867.0; MA 858.55; total 90023.0 temp 431937
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050044200000000316
+INFO:root:len 827
+INFO:root:choose destinations 0.00877985899999878
+INFO:root:resolve destinations 0.0019902580000010772
+INFO:root:next 10 turns 332.85937499999994 one 858.55 two 651.95 flag 10485.070312499998
+INFO:root:=============== TURN 161 ================
+INFO:root:turn 160 mining speed 823.0; MA 876.4; total 90846.0 temp 431114
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05832680400000001
+INFO:root:len 823
+INFO:root:choose destinations 0.007954515999999856
+INFO:root:resolve destinations 0.002577838000000554
+INFO:root:next 10 turns 337.046875 one 876.4 two 674.25 flag 10583.271875
+INFO:root:=============== TURN 162 ================
+INFO:root:turn 161 mining speed 662.0; MA 883.0; total 91508.0 temp 430452
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046712410999999676
+INFO:root:len 850
+INFO:root:choose destinations 0.0071319670000011826
+INFO:root:resolve destinations 0.002789837999999989
+INFO:root:next 10 turns 328.453125 one 883.0 two 714.95 flag 10280.582812499999
+INFO:root:=============== TURN 163 ================
+INFO:root:turn 162 mining speed 1043.0; MA 875.55; total 92551.0 temp 429409
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05788666299999967
+INFO:root:len 800
+INFO:root:choose destinations 0.007207702999998844
+INFO:root:resolve destinations 0.002102001000000797
+INFO:root:next 10 turns 318.74999999999994 one 875.55 two 731.1 flag 9944.999999999998
+INFO:root:=============== TURN 164 ================
+INFO:root:turn 163 mining speed 661.0; MA 895.85; total 93212.0 temp 428748
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046842467000001164
+INFO:root:len 1332
+INFO:root:choose destinations 0.01017757099999983
+INFO:root:resolve destinations 0.001976910999999859
+INFO:root:next 10 turns 322.21875 one 895.85 two 760.6 flag 10021.003125
+INFO:root:=============== TURN 165 ================
+INFO:root:turn 164 mining speed 586.0; MA 894.7; total 93798.0 temp 428162
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045280554000001416
+INFO:root:len 1254
+INFO:root:choose destinations 0.008535576999999961
+INFO:root:resolve destinations 0.001930042000001464
+INFO:root:next 10 turns 314.21875000000006 one 894.7 two 783.9 flag 9740.781250000002
+INFO:root:=============== TURN 166 ================
+INFO:root:turn 165 mining speed 830.0; MA 885.3; total 94628.0 temp 427332
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05003985399999955
+INFO:root:len 1327
+INFO:root:choose destinations 0.010043170000001211
+INFO:root:resolve destinations 0.0019197989999995002
+INFO:root:next 10 turns 300.51562499999994 one 885.3 two 808.95 flag 9285.9328125
+INFO:root:=============== TURN 167 ================
+INFO:root:turn 166 mining speed 902.0; MA 891.9; total 95530.0 temp 426430
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04873805499999939
+INFO:root:len 1681
+INFO:root:choose destinations 0.007684161000000245
+INFO:root:resolve destinations 0.0018254379999991244
+INFO:root:next 10 turns 301.21875 one 891.9 two 819.9 flag 9277.5375
+INFO:root:=============== TURN 168 ================
+INFO:root:turn 167 mining speed 723.0; MA 893.35; total 96253.0 temp 425707
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04729874800000111
+INFO:root:len 1239
+INFO:root:choose destinations 0.01099049799999996
+INFO:root:resolve destinations 0.003940164999999496
+INFO:root:next 10 turns 294.859375 one 893.35 two 843.15 flag 9052.1828125
+INFO:root:=============== TURN 169 ================
+INFO:root:turn 168 mining speed 690.0; MA 899.15; total 96943.0 temp 425017
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05107595699999834
+INFO:root:len 899
+INFO:root:choose destinations 0.007338069000001113
+INFO:root:resolve destinations 0.0019601500000003824
+INFO:root:next 10 turns 293.671875 one 899.15 two 858.55 flag 8986.359375
+INFO:root:=============== TURN 170 ================
+INFO:root:turn 169 mining speed 666.0; MA 882.35; total 97609.0 temp 424351
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05139814699999867
+INFO:root:len 1318
+INFO:root:choose destinations 0.010054032999999407
+INFO:root:resolve destinations 0.0034832630000014575
+INFO:root:next 10 turns 277.59375 one 882.35 two 876.4 flag 8466.609375
+INFO:root:=============== TURN 171 ================
+INFO:root:turn 170 mining speed 756.0; MA 872.95; total 98365.0 temp 423595
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04978501999999985
+INFO:root:len 1059
+INFO:root:choose destinations 0.006898548999998866
+INFO:root:resolve destinations 0.0026079469999995553
+INFO:root:next 10 turns 269.65625 one 872.95 two 883.0 flag 8197.55
+INFO:root:=============== TURN 172 ================
+INFO:root:turn 171 mining speed 556.0; MA 871.15; total 98921.0 temp 423039
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05606401899999902
+INFO:root:len 690
+INFO:root:choose destinations 0.008680220999998767
+INFO:root:resolve destinations 0.0022323680000013724
+INFO:root:next 10 turns 270.859375 one 871.15 two 875.55 flag 8207.0390625
+INFO:root:=============== TURN 173 ================
+INFO:root:turn 172 mining speed 582.0; MA 839.75; total 99503.0 temp 422457
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045002129000000224
+INFO:root:len 985
+INFO:root:choose destinations 0.009345090000000056
+INFO:root:resolve destinations 0.0028233610000008014
+INFO:root:next 10 turns 244.890625 one 839.75 two 895.85 flag 7395.696875
+INFO:root:=============== TURN 174 ================
+INFO:root:turn 173 mining speed 795.0; MA 825.15; total 100298.0 temp 421662
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047245671000000655
+INFO:root:len 820
+INFO:root:choose destinations 0.010005301999999716
+INFO:root:resolve destinations 0.0024415749999988634
+INFO:root:next 10 turns 236.12499999999997 one 825.15 two 894.7 flag 7107.362499999999
+INFO:root:=============== TURN 175 ================
+INFO:root:turn 174 mining speed 485.0; MA 811.9; total 100783.0 temp 421177
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04561267799999946
+INFO:root:len 689
+INFO:root:choose destinations 0.007695645000000084
+INFO:root:resolve destinations 0.002015400999999528
+INFO:root:next 10 turns 230.78125 one 811.9 two 885.3 flag 6923.4375
+INFO:root:=============== TURN 176 ================
+INFO:root:turn 175 mining speed 678.0; MA 786.85; total 101461.0 temp 420499
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04636352600000038
+INFO:root:len 780
+INFO:root:choose destinations 0.008079914999999716
+INFO:root:resolve destinations 0.002372666000001189
+INFO:root:next 10 turns 213.06250000000003 one 786.85 two 891.9 flag 6370.56875
+INFO:root:=============== TURN 177 ================
+INFO:root:turn 176 mining speed 776.0; MA 767.75; total 102237.0 temp 419723
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04659632300000105
+INFO:root:len 727
+INFO:root:choose destinations 0.006840815000000333
+INFO:root:resolve destinations 0.003367794999999063
+INFO:root:next 10 turns 200.671875 one 767.75 two 893.35 flag 5980.021874999999
+INFO:root:=============== TURN 178 ================
+INFO:root:turn 177 mining speed 572.0; MA 762.65; total 102809.0 temp 419151
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04702373800000004
+INFO:root:len 1275
+INFO:root:choose destinations 0.01075552800000068
+INFO:root:resolve destinations 0.002669404000000597
+INFO:root:next 10 turns 195.671875 one 762.65 two 899.15 flag 5811.4546875
+INFO:root:=============== TURN 179 ================
+INFO:root:turn 178 mining speed 417.0; MA 732.6; total 103226.0 temp 418734
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04578743100000082
+INFO:root:len 1643
+INFO:root:choose destinations 0.007490784999999889
+INFO:root:resolve destinations 0.003049329000001322
+INFO:root:next 10 turns 182.140625 one 732.6 two 882.35 flag 5391.3625
+INFO:root:=============== TURN 180 ================
+INFO:root:turn 179 mining speed 737.0; MA 703.5; total 103963.0 temp 417997
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04659259800000015
+INFO:root:len 1182
+INFO:root:choose destinations 0.010470274999999418
+INFO:root:resolve destinations 0.0022401280000003965
+INFO:root:next 10 turns 166.890625 one 703.5 two 872.95 flag 4923.2734375
+INFO:root:=============== TURN 181 ================
+INFO:root:turn 180 mining speed 633.0; MA 697.0; total 104596.0 temp 417364
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046256128999999646
+INFO:root:len 1645
+INFO:root:choose destinations 0.009992264999999279
+INFO:root:resolve destinations 0.0029664539999991746
+INFO:root:next 10 turns 163.390625 one 697.0 two 871.15 flag 4803.684375
+INFO:root:=============== TURN 182 ================
+INFO:root:turn 181 mining speed 710.0; MA 687.5; total 105306.0 temp 416654
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05037632400000014
+INFO:root:len 576
+INFO:root:choose destinations 0.007762690999999933
+INFO:root:resolve destinations 0.0018387860000004252
+INFO:root:next 10 turns 167.265625 one 687.5 two 839.75 flag 4900.8828125
+INFO:root:=============== TURN 183 ================
+INFO:root:turn 182 mining speed 648.0; MA 689.9; total 105954.0 temp 416006
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045651167000000825
+INFO:root:len 1411
+INFO:root:choose destinations 0.00922900099999957
+INFO:root:resolve destinations 0.0019263169999987895
+INFO:root:next 10 turns 173.328125 one 689.9 two 825.15 flag 5061.18125
+INFO:root:=============== TURN 184 ================
+INFO:root:turn 183 mining speed 576.0; MA 670.15; total 106530.0 temp 415430
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04672730999999963
+INFO:root:len 1295
+INFO:root:choose destinations 0.008164964000000552
+INFO:root:resolve destinations 0.001952389999999582
+INFO:root:next 10 turns 165.125 one 670.15 two 811.9 flag 4805.1375
+INFO:root:=============== TURN 185 ================
+INFO:root:turn 184 mining speed 957.0; MA 665.9; total 107487.0 temp 414473
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.051463019999999915
+INFO:root:len 1025
+INFO:root:choose destinations 0.006840505000001329
+INFO:root:resolve destinations 0.0020771699999997395
+INFO:root:next 10 turns 170.29687499999997 one 665.9 two 786.85 flag 4938.609374999999
+INFO:root:=============== TURN 186 ================
+INFO:root:turn 185 mining speed 797.0; MA 684.45; total 108284.0 temp 413676
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05065443900000055
+INFO:root:len 915
+INFO:root:choose destinations 0.010035719999999415
+INFO:root:resolve destinations 0.0029316900000004864
+INFO:root:next 10 turns 187.85937500000003 one 684.45 two 767.75 flag 5429.135937500001
+INFO:root:=============== TURN 187 ================
+INFO:root:turn 186 mining speed 754.0; MA 682.8; total 109038.0 temp 412922
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045707970000000486
+INFO:root:len 498
+INFO:root:choose destinations 0.004604102000000054
+INFO:root:resolve destinations 0.0031104769999998894
+INFO:root:next 10 turns 188.42187499999997 one 682.8 two 762.65 flag 5426.549999999999
+INFO:root:=============== TURN 188 ================
+INFO:root:turn 187 mining speed 538.0; MA 675.4; total 109576.0 temp 412384
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05484447299999928
+INFO:root:len 761
+INFO:root:choose destinations 0.006545007999999797
+INFO:root:resolve destinations 0.0024719929999985624
+INFO:root:next 10 turns 193.18749999999997 one 675.4 two 732.6 flag 5544.48125
+INFO:root:=============== TURN 189 ================
+INFO:root:turn 188 mining speed 505.0; MA 666.15; total 110081.0 temp 411879
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049157709999999355
+INFO:root:len 746
+INFO:root:choose destinations 0.006157944000001692
+INFO:root:resolve destinations 0.002073754999999622
+INFO:root:next 10 turns 196.5 one 666.15 two 703.5 flag 5619.9
+INFO:root:=============== TURN 190 ================
+INFO:root:turn 189 mining speed 839.0; MA 656.9; total 110920.0 temp 411040
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.052254529000000716
+INFO:root:len 707
+INFO:root:choose destinations 0.006827157000000028
+INFO:root:resolve destinations 0.0035692430000011655
+INFO:root:next 10 turns 192.75 one 656.9 two 697.0 flag 5493.375
+INFO:root:=============== TURN 191 ================
+INFO:root:turn 190 mining speed 752.0; MA 665.55; total 111672.0 temp 410288
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04753557999999991
+INFO:root:len 802
+INFO:root:choose destinations 0.007078888999998867
+INFO:root:resolve destinations 0.002626570000000328
+INFO:root:next 10 turns 201.12499999999997 one 665.55 two 687.5 flag 5711.949999999999
+INFO:root:=============== TURN 192 ================
+INFO:root:turn 191 mining speed 603.0; MA 665.35; total 112275.0 temp 409685
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049829405999998855
+INFO:root:len 818
+INFO:root:choose destinations 0.0074504330000007
+INFO:root:resolve destinations 0.002498375999998359
+INFO:root:next 10 turns 200.25000000000003 one 665.35 two 689.9 flag 5667.075000000001
+INFO:root:=============== TURN 193 ================
+INFO:root:turn 192 mining speed 450.0; MA 667.7; total 112725.0 temp 409235
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050814292000000094
+INFO:root:len 822
+INFO:root:choose destinations 0.008398071000000229
+INFO:root:resolve destinations 0.0025235190000003627
+INFO:root:next 10 turns 207.89062500000003 one 667.7 two 670.15 flag 5862.515625000001
+INFO:root:=============== TURN 194 ================
+INFO:root:turn 193 mining speed 429.0; MA 661.1; total 113154.0 temp 408806
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047766205000000284
+INFO:root:len 674
+INFO:root:choose destinations 0.006936727999999448
+INFO:root:resolve destinations 0.0018105390000009436
+INFO:root:next 10 turns 205.09375000000003 one 661.1 two 665.9 flag 5763.134375000001
+INFO:root:=============== TURN 195 ================
+INFO:root:turn 194 mining speed 822.0; MA 642.8; total 113976.0 temp 407984
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054003299999999754
+INFO:root:len 797
+INFO:root:choose destinations 0.008262118000001095
+INFO:root:resolve destinations 0.0020017430000009995
+INFO:root:next 10 turns 187.85937499999994 one 642.8 two 684.45 flag 5260.062499999999
+INFO:root:=============== TURN 196 ================
+INFO:root:turn 195 mining speed 749.0; MA 659.65; total 114725.0 temp 407235
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04826283900000128
+INFO:root:len 702
+INFO:root:choose destinations 0.007495129999998795
+INFO:root:resolve destinations 0.0020998289999987207
+INFO:root:next 10 turns 198.90625 one 659.65 two 682.8 flag 5549.484375
+INFO:root:=============== TURN 197 ================
+INFO:root:turn 196 mining speed 716.0; MA 663.2; total 115441.0 temp 406519
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049956669000000176
+INFO:root:len 669
+INFO:root:choose destinations 0.007382455999998427
+INFO:root:resolve destinations 0.0019263169999987895
+INFO:root:next 10 turns 203.43750000000003 one 663.2 two 675.4 flag 5655.562500000001
+INFO:root:=============== TURN 198 ================
+INFO:root:turn 197 mining speed 592.0; MA 660.2; total 116033.0 temp 405927
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045417438999999504
+INFO:root:len 673
+INFO:root:choose destinations 0.007739102000000386
+INFO:root:resolve destinations 0.0020399219999998053
+INFO:root:next 10 turns 204.45312500000003 one 660.2 two 666.15 flag 5663.351562500001
+INFO:root:=============== TURN 199 ================
+INFO:root:turn 198 mining speed 503.0; MA 661.2; total 116536.0 temp 405424
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048044320000000695
+INFO:root:len 776
+INFO:root:choose destinations 0.007908577999998556
+INFO:root:resolve destinations 0.00217897899999997
+INFO:root:next 10 turns 207.96875000000003 one 661.2 two 656.9 flag 5739.937500000001
+INFO:root:=============== TURN 200 ================
+INFO:root:turn 199 mining speed 622.0; MA 665.5; total 117158.0 temp 404802
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048076911999999083
+INFO:root:len 585
+INFO:root:choose destinations 0.007765175000001179
+INFO:root:resolve destinations 0.0019275589999985243
+INFO:root:next 10 turns 207.953125 one 665.5 two 665.55 flag 5718.7109375
+INFO:root:=============== TURN 201 ================
+INFO:root:turn 200 mining speed 586.0; MA 659.75; total 117744.0 temp 404216
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05325524599999909
+INFO:root:len 759
+INFO:root:choose destinations 0.007751517000000874
+INFO:root:resolve destinations 0.00257007800000153
+INFO:root:next 10 turns 204.421875 one 659.75 two 665.35 flag 5601.159375
+INFO:root:=============== TURN 202 ================
+INFO:root:turn 201 mining speed 761.0; MA 657.4; total 118505.0 temp 403455
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06153785099999887
+INFO:root:len 617
+INFO:root:choose destinations 0.008200348999999107
+INFO:root:resolve destinations 0.0026451939999994067
+INFO:root:next 10 turns 202.21874999999997 one 657.4 two 667.7 flag 5520.571875
+INFO:root:=============== TURN 203 ================
+INFO:root:turn 202 mining speed 454.0; MA 659.95; total 118959.0 temp 403001
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04739404000000036
+INFO:root:len 784
+INFO:root:choose destinations 0.0067774939999996064
+INFO:root:resolve destinations 0.0021426630000007663
+INFO:root:next 10 turns 205.87500000000003 one 659.95 two 661.1 flag 5599.8
+INFO:root:=============== TURN 204 ================
+INFO:root:turn 203 mining speed 845.0; MA 650.25; total 119804.0 temp 402156
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05114796800000043
+INFO:root:len 644
+INFO:root:choose destinations 0.007084165999998504
+INFO:root:resolve destinations 0.0020216079999997305
+INFO:root:next 10 turns 205.53125 one 650.25 two 642.8 flag 5569.896875
+INFO:root:=============== TURN 205 ================
+INFO:root:turn 204 mining speed 710.0; MA 663.7; total 120514.0 temp 401446
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04968569299999892
+INFO:root:len 767
+INFO:root:choose destinations 0.00706429999999969
+INFO:root:resolve destinations 0.0025762860000000387
+INFO:root:next 10 turns 208.67187500000003 one 663.7 two 659.65 flag 5634.140625000001
+INFO:root:=============== TURN 206 ================
+INFO:root:turn 205 mining speed 700.0; MA 651.35; total 121214.0 temp 400746
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050823294999998936
+INFO:root:len 663
+INFO:root:choose destinations 0.006471443999998883
+INFO:root:resolve destinations 0.002309035000001458
+INFO:root:next 10 turns 199.84375 one 651.35 two 663.2 flag 5375.796875
+INFO:root:=============== TURN 207 ================
+INFO:root:turn 206 mining speed 572.0; MA 646.5; total 121786.0 temp 400174
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050458268999999945
+INFO:root:len 847
+INFO:root:choose destinations 0.0068448500000002355
+INFO:root:resolve destinations 0.002071581999999239
+INFO:root:next 10 turns 197.75 one 646.5 two 660.2 flag 5299.7
+INFO:root:=============== TURN 208 ================
+INFO:root:turn 207 mining speed 984.0; MA 637.4; total 122770.0 temp 399190
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05146643500000003
+INFO:root:len 806
+INFO:root:choose destinations 0.007407598000000348
+INFO:root:resolve destinations 0.0020451979999993597
+INFO:root:next 10 turns 191.74999999999997 one 637.4 two 661.2 flag 5119.724999999999
+INFO:root:=============== TURN 209 ================
+INFO:root:turn 208 mining speed 811.0; MA 659.7; total 123581.0 temp 398379
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04883303599999955
+INFO:root:len 813
+INFO:root:choose destinations 0.007092236000000085
+INFO:root:resolve destinations 0.002107588000001215
+INFO:root:next 10 turns 204.34375000000003 one 659.7 two 665.5 flag 5435.543750000001
+INFO:root:=============== TURN 210 ================
+INFO:root:turn 209 mining speed 801.0; MA 675.0; total 124382.0 temp 397578
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050114970999999287
+INFO:root:len 793
+INFO:root:choose destinations 0.006763215999999517
+INFO:root:resolve destinations 0.0018962080000015646
+INFO:root:next 10 turns 215.703125 one 675.0 two 659.75 flag 5716.1328125
+INFO:root:=============== TURN 211 ================
+INFO:root:turn 210 mining speed 649.0; MA 673.1; total 125031.0 temp 396929
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04899847599999951
+INFO:root:len 835
+INFO:root:choose destinations 0.007352348000001285
+INFO:root:resolve destinations 0.0019741179999996916
+INFO:root:next 10 turns 215.25000000000003 one 673.1 two 657.4 flag 5682.6
+INFO:root:=============== TURN 212 ================
+INFO:root:turn 211 mining speed 784.0; MA 667.95; total 125815.0 temp 396145
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05529113199999891
+INFO:root:len 761
+INFO:root:choose destinations 0.006905997999998803
+INFO:root:resolve destinations 0.0019579769999999996
+INFO:root:next 10 turns 211.234375 one 667.95 two 659.95 flag 5555.4640625
+INFO:root:=============== TURN 213 ================
+INFO:root:turn 212 mining speed 928.0; MA 677.0; total 126743.0 temp 395217
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04608696300000048
+INFO:root:len 834
+INFO:root:choose destinations 0.00786015600000134
+INFO:root:resolve destinations 0.001972256000000172
+INFO:root:next 10 turns 219.921875 one 677.0 two 650.25 flag 5761.953125
+INFO:root:=============== TURN 214 ================
+INFO:root:turn 213 mining speed 557.0; MA 700.9; total 127300.0 temp 394660
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04833516100000068
+INFO:root:len 730
+INFO:root:choose destinations 0.007316963000000953
+INFO:root:resolve destinations 0.0019530110000012257
+INFO:root:next 10 turns 230.65624999999997 one 700.9 two 663.7 flag 6020.128124999999
+INFO:root:=============== TURN 215 ================
+INFO:root:turn 214 mining speed 694.0; MA 707.3; total 127994.0 temp 393966
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04631386199999987
+INFO:root:len 846
+INFO:root:choose destinations 0.00895740499999853
+INFO:root:resolve destinations 0.002094551000000777
+INFO:root:next 10 turns 238.51562499999997 one 707.3 two 651.35 flag 6201.406249999999
+INFO:root:=============== TURN 216 ================
+INFO:root:turn 215 mining speed 736.0; MA 700.9; total 128730.0 temp 393230
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05019318999999989
+INFO:root:len 839
+INFO:root:choose destinations 0.0071360019999993085
+INFO:root:resolve destinations 0.0017618070000011699
+INFO:root:next 10 turns 236.03125 one 700.9 two 646.5 flag 6113.209374999999
+INFO:root:=============== TURN 217 ================
+INFO:root:turn 216 mining speed 859.0; MA 700.25; total 129589.0 temp 392371
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048477941999999885
+INFO:root:len 891
+INFO:root:choose destinations 0.009157300000000035
+INFO:root:resolve destinations 0.0018940360000012646
+INFO:root:next 10 turns 238.46875 one 700.25 two 637.4 flag 6152.493750000001
+INFO:root:=============== TURN 218 ================
+INFO:root:turn 217 mining speed 946.0; MA 707.4; total 130535.0 temp 391425
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05114113900000028
+INFO:root:len 958
+INFO:root:choose destinations 0.011486821000000091
+INFO:root:resolve destinations 0.001958908999998954
+INFO:root:next 10 turns 235.96874999999997 one 707.4 two 659.7 flag 6064.396874999999
+INFO:root:=============== TURN 219 ================
+INFO:root:turn 218 mining speed 591.0; MA 725.1; total 131126.0 temp 390834
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05176099999999906
+INFO:root:len 809
+INFO:root:choose destinations 0.006699584999999786
+INFO:root:resolve destinations 0.002672198000000847
+INFO:root:next 10 turns 242.25 one 725.1 two 675.0 flag 6201.6
+INFO:root:=============== TURN 220 ================
+INFO:root:turn 219 mining speed 888.0; MA 729.5; total 132014.0 temp 389946
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04692472099999989
+INFO:root:len 1032
+INFO:root:choose destinations 0.007963827000001089
+INFO:root:resolve destinations 0.0024682679999994406
+INFO:root:next 10 turns 245.59375 one 729.5 two 673.1 flag 6262.640625
+INFO:root:=============== TURN 221 ================
+INFO:root:turn 220 mining speed 687.0; MA 742.8; total 132701.0 temp 389259
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04951249199999985
+INFO:root:len 890
+INFO:root:choose destinations 0.00789429900000016
+INFO:root:resolve destinations 0.0020675469999993368
+INFO:root:next 10 turns 255.51562499999994 one 742.8 two 667.95 flag 6490.096874999999
+INFO:root:=============== TURN 222 ================
+INFO:root:turn 221 mining speed 701.0; MA 747.85; total 133402.0 temp 388558
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04714758600000124
+INFO:root:len 1250
+INFO:root:choose destinations 0.00998791900000029
+INFO:root:resolve destinations 0.0020883439999987985
+INFO:root:next 10 turns 255.84375 one 747.85 two 677.0 flag 6472.846875
+INFO:root:=============== TURN 223 ================
+INFO:root:turn 222 mining speed 654.0; MA 744.85; total 134056.0 temp 387904
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047171485999999874
+INFO:root:len 1578
+INFO:root:choose destinations 0.010892723000001325
+INFO:root:resolve destinations 0.00191700499999925
+INFO:root:next 10 turns 246.50000000000003 one 744.85 two 700.9 flag 6211.8
+INFO:root:=============== TURN 224 ================
+INFO:root:turn 223 mining speed 577.0; MA 754.85; total 134633.0 temp 387327
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045731560000000115
+INFO:root:len 959
+INFO:root:choose destinations 0.007329999999999615
+INFO:root:resolve destinations 0.0022053619999997665
+INFO:root:next 10 turns 250.75000000000003 one 754.85 two 707.3 flag 6293.825000000001
+INFO:root:=============== TURN 225 ================
+INFO:root:turn 224 mining speed 728.0; MA 741.45; total 135361.0 temp 386599
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04556860199999946
+INFO:root:len 1374
+INFO:root:choose destinations 0.00930597900000052
+INFO:root:resolve destinations 0.0023456619999997486
+INFO:root:next 10 turns 244.37500000000003 one 741.45 two 700.9 flag 6109.375000000001
+INFO:root:=============== TURN 226 ================
+INFO:root:turn 225 mining speed 647.0; MA 742.35; total 136008.0 temp 385952
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050816154999999696
+INFO:root:len 1243
+INFO:root:choose destinations 0.009500287999999912
+INFO:root:resolve destinations 0.0019766009999990786
+INFO:root:next 10 turns 245.140625 one 742.35 two 700.25 flag 6104.001562500001
+INFO:root:=============== TURN 227 ================
+INFO:root:turn 226 mining speed 404.0; MA 739.7; total 136412.0 temp 385548
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04629182400000076
+INFO:root:len 1356
+INFO:root:choose destinations 0.008870495000000034
+INFO:root:resolve destinations 0.0019644959999993716
+INFO:root:next 10 turns 241.25000000000003 one 739.7 two 707.4 flag 5983.000000000001
+INFO:root:=============== TURN 228 ================
+INFO:root:turn 227 mining speed 527.0; MA 731.3; total 136939.0 temp 385021
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05550592699999868
+INFO:root:len 1003
+INFO:root:choose destinations 0.008062843999999458
+INFO:root:resolve destinations 0.0019682210000002698
+INFO:root:next 10 turns 230.46874999999997 one 731.3 two 725.1 flag 5692.578124999999
+INFO:root:=============== TURN 229 ================
+INFO:root:turn 228 mining speed 654.0; MA 708.45; total 137593.0 temp 384367
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04587247999999988
+INFO:root:len 1001
+INFO:root:choose destinations 0.007234708000000367
+INFO:root:resolve destinations 0.001865169000000222
+INFO:root:next 10 turns 214.81250000000003 one 708.45 two 729.5 flag 5284.387500000001
+INFO:root:=============== TURN 230 ================
+INFO:root:turn 229 mining speed 586.0; MA 700.6; total 138179.0 temp 383781
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04608696300000048
+INFO:root:len 1135
+INFO:root:choose destinations 0.01038243300000019
+INFO:root:resolve destinations 0.0019629429999987735
+INFO:root:next 10 turns 205.75000000000003 one 700.6 two 742.8 flag 5040.875000000001
+INFO:root:=============== TURN 231 ================
+INFO:root:turn 230 mining speed 497.0; MA 689.85; total 138676.0 temp 383284
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04556984400000097
+INFO:root:len 1187
+INFO:root:choose destinations 0.011841913999999676
+INFO:root:resolve destinations 0.0019973980000003166
+INFO:root:next 10 turns 197.453125 one 689.85 two 747.85 flag 4817.85625
+INFO:root:=============== TURN 232 ================
+INFO:root:turn 231 mining speed 345.0; MA 682.25; total 139021.0 temp 382939
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04807753199999887
+INFO:root:len 1142
+INFO:root:choose destinations 0.011860848999999618
+INFO:root:resolve destinations 0.00192445499999927
+INFO:root:next 10 turns 193.640625 one 682.25 two 744.85 flag 4705.467187499999
+INFO:root:=============== TURN 233 ================
+INFO:root:turn 232 mining speed 389.0; MA 660.3; total 139410.0 temp 382550
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04756041299999936
+INFO:root:len 1102
+INFO:root:choose destinations 0.0077993179999999995
+INFO:root:resolve destinations 0.0018710659999996437
+INFO:root:next 10 turns 176.79687499999997 one 660.3 two 754.85 flag 4278.484374999999
+INFO:root:=============== TURN 234 ================
+INFO:root:turn 233 mining speed 353.0; MA 633.35; total 139763.0 temp 382197
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047872671000000366
+INFO:root:len 1102
+INFO:root:choose destinations 0.012429493999999153
+INFO:root:resolve destinations 0.0035860039999988658
+INFO:root:next 10 turns 164.140625 one 633.35 two 741.45 flag 3955.7890625
+INFO:root:=============== TURN 235 ================
+INFO:root:turn 234 mining speed 456.0; MA 623.15; total 140219.0 temp 381741
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04833391899999917
+INFO:root:len 1055
+INFO:root:choose destinations 0.012612937000000102
+INFO:root:resolve destinations 0.004353612999999257
+INFO:root:next 10 turns 157.48437499999997 one 623.15 two 742.35 flag 3779.6249999999995
+INFO:root:=============== TURN 236 ================
+INFO:root:turn 235 mining speed 422.0; MA 611.25; total 140641.0 temp 381319
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05241128000000117
+INFO:root:len 1075
+INFO:root:choose destinations 0.008831694000001278
+INFO:root:resolve destinations 0.00208710200000084
+INFO:root:next 10 turns 150.875 one 611.25 two 739.7 flag 3605.9125
+INFO:root:=============== TURN 237 ================
+INFO:root:turn 236 mining speed 196.0; MA 595.55; total 140837.0 temp 381123
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04638463199999876
+INFO:root:len 1060
+INFO:root:choose destinations 0.008474119000000613
+INFO:root:resolve destinations 0.002002364000000867
+INFO:root:next 10 turns 143.6875 one 595.55 two 731.3 flag 3419.7625000000003
+INFO:root:=============== TURN 238 ================
+INFO:root:turn 237 mining speed 202.0; MA 562.4; total 141039.0 temp 380921
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046562488999999374
+INFO:root:len 854
+INFO:root:choose destinations 0.00752989399999926
+INFO:root:resolve destinations 0.0019402839999997923
+INFO:root:next 10 turns 130.10937499999997 one 562.4 two 708.45 flag 3083.5921874999995
+INFO:root:=============== TURN 239 ================
+INFO:root:turn 238 mining speed 422.0; MA 525.2; total 141461.0 temp 380499
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04569120799999915
+INFO:root:len 913
+INFO:root:choose destinations 0.00641898800000007
+INFO:root:resolve destinations 0.0020250219999997654
+INFO:root:next 10 turns 109.31250000000003 one 525.2 two 700.6 flag 2579.7750000000005
+INFO:root:=============== TURN 240 ================
+INFO:root:turn 239 mining speed 566.0; MA 516.75; total 142027.0 temp 379933
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05267325300000003
+INFO:root:len 722
+INFO:root:choose destinations 0.007699370999999289
+INFO:root:resolve destinations 0.002235471000000544
+INFO:root:next 10 turns 107.390625 one 516.75 two 689.85 flag 2523.6796875
+INFO:root:=============== TURN 241 ================
+INFO:root:turn 240 mining speed 238.0; MA 500.65; total 142265.0 temp 379695
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04959350599999901
+INFO:root:len 1053
+INFO:root:choose destinations 0.006334250000000097
+INFO:root:resolve destinations 0.0022128119999997864
+INFO:root:next 10 turns 99.70312499999999 one 500.65 two 682.25 flag 2333.0531249999995
+INFO:root:=============== TURN 242 ================
+INFO:root:turn 241 mining speed 551.0; MA 478.2; total 142816.0 temp 379144
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05194661700000047
+INFO:root:len 1072
+INFO:root:choose destinations 0.00696931899999953
+INFO:root:resolve destinations 0.002044577999999575
+INFO:root:next 10 turns 92.53125 one 478.2 two 660.3 flag 2155.978125
+INFO:root:=============== TURN 243 ================
+INFO:root:turn 242 mining speed 443.0; MA 470.7; total 143259.0 temp 378701
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04685115799999906
+INFO:root:len 563
+INFO:root:choose destinations 0.00572214800000026
+INFO:root:resolve destinations 0.002014778999999578
+INFO:root:next 10 turns 96.26562499999999 one 470.7 two 633.35 flag 2233.3624999999997
+INFO:root:=============== TURN 244 ================
+INFO:root:turn 243 mining speed 290.0; MA 460.15; total 143549.0 temp 378411
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04680304599999907
+INFO:root:len 1055
+INFO:root:choose destinations 0.006822502000000341
+INFO:root:resolve destinations 0.002275823000001509
+INFO:root:next 10 turns 92.859375 one 460.15 two 623.15 flag 2145.0515625
+INFO:root:=============== TURN 245 ================
+INFO:root:turn 244 mining speed 330.0; MA 445.8; total 143879.0 temp 378081
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049997331000000145
+INFO:root:len 1076
+INFO:root:choose destinations 0.007431498999999064
+INFO:root:resolve destinations 0.0027730779999988187
+INFO:root:next 10 turns 87.609375 one 445.8 two 611.25 flag 2015.0156250000002
+INFO:root:=============== TURN 246 ================
+INFO:root:turn 245 mining speed 291.0; MA 425.9; total 144170.0 temp 377790
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04999143300000064
+INFO:root:len 1066
+INFO:root:choose destinations 0.008191657999999435
+INFO:root:resolve destinations 0.003427701999999755
+INFO:root:next 10 turns 80.078125 one 425.9 two 595.55 flag 1833.7890625
+INFO:root:=============== TURN 247 ================
+INFO:root:turn 246 mining speed 553.0; MA 408.1; total 144723.0 temp 377237
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0445595050000005
+INFO:root:len 1080
+INFO:root:choose destinations 0.0076028370000003065
+INFO:root:resolve destinations 0.0028100139999995832
+INFO:root:next 10 turns 79.31250000000003 one 408.1 two 562.4 flag 1808.3250000000007
+INFO:root:=============== TURN 248 ================
+INFO:root:turn 247 mining speed 498.0; MA 415.55; total 145221.0 temp 376739
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06120945099999986
+INFO:root:len 1132
+INFO:root:choose destinations 0.007682919999998816
+INFO:root:resolve destinations 0.0022373340000001463
+INFO:root:next 10 turns 95.59375 one 415.55 two 525.2 flag 2169.9781249999996
+INFO:root:=============== TURN 249 ================
+INFO:root:turn 248 mining speed 602.0; MA 414.1; total 145823.0 temp 376137
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04541216299999995
+INFO:root:len 1132
+INFO:root:choose destinations 0.009522946000000587
+INFO:root:resolve destinations 0.002259993000000904
+INFO:root:next 10 turns 97.32812500000001 one 414.1 two 516.75 flag 2199.6156250000004
+INFO:root:=============== TURN 250 ================
+INFO:root:turn 249 mining speed 351.0; MA 411.5; total 146174.0 temp 375786
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054461134000002076
+INFO:root:len 1158
+INFO:root:choose destinations 0.009585956000002227
+INFO:root:resolve destinations 0.0019384220000020491
+INFO:root:next 10 turns 100.734375 one 411.5 two 500.65 flag 2266.5234375
+INFO:root:=============== TURN 251 ================
+INFO:root:turn 250 mining speed 337.0; MA 399.75; total 146511.0 temp 375449
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.055736239999998105
+INFO:root:len 1137
+INFO:root:choose destinations 0.009349435000000739
+INFO:root:resolve destinations 0.0018999329999971337
+INFO:root:next 10 turns 100.40625 one 399.75 two 478.2 flag 2249.1
+INFO:root:=============== TURN 252 ================
+INFO:root:turn 251 mining speed 504.0; MA 391.75; total 147015.0 temp 374945
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06283158100000108
+INFO:root:len 968
+INFO:root:choose destinations 0.009128432999997216
+INFO:root:resolve destinations 0.0020318510000016943
+INFO:root:next 10 turns 97.75 one 391.75 two 470.7 flag 2179.8250000000003
+INFO:root:=============== TURN 253 ================
+INFO:root:turn 252 mining speed 435.0; MA 399.7; total 147450.0 temp 374510
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05668791400000117
+INFO:root:len 975
+INFO:root:choose destinations 0.007322549000001288
+INFO:root:resolve destinations 0.0018955869999999209
+INFO:root:next 10 turns 106.015625 one 399.7 two 460.15 flag 2353.546875
+INFO:root:=============== TURN 254 ================
+INFO:root:turn 253 mining speed 561.0; MA 402.0; total 148011.0 temp 373949
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05206208399999923
+INFO:root:len 776
+INFO:root:choose destinations 0.009172198000001686
+INFO:root:resolve destinations 0.002031540999997361
+INFO:root:next 10 turns 111.9375 one 402.0 two 445.8 flag 2473.81875
+INFO:root:=============== TURN 255 ================
+INFO:root:turn 254 mining speed 615.0; MA 412.4; total 148626.0 temp 373334
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0503418699999969
+INFO:root:len 782
+INFO:root:choose destinations 0.00634076799999761
+INFO:root:resolve destinations 0.0019663580000006675
+INFO:root:next 10 turns 124.65625 one 412.4 two 425.9 flag 2742.4375
+INFO:root:=============== TURN 256 ================
+INFO:root:turn 255 mining speed 580.0; MA 420.35; total 149206.0 temp 372754
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05388876499999995
+INFO:root:len 678
+INFO:root:choose destinations 0.009323051999999166
+INFO:root:resolve destinations 0.003632872999997261
+INFO:root:next 10 turns 135.1875 one 420.35 two 408.1 flag 2960.6062500000003
+INFO:root:=============== TURN 257 ================
+INFO:root:turn 256 mining speed 528.0; MA 428.25; total 149734.0 temp 372226
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050914549999998115
+INFO:root:len 588
+INFO:root:choose destinations 0.006555560999998988
+INFO:root:resolve destinations 0.0025331410000006827
+INFO:root:next 10 turns 137.796875 one 428.25 two 415.55 flag 3003.9718749999997
+INFO:root:=============== TURN 258 ================
+INFO:root:turn 257 mining speed 523.0; MA 444.85; total 150257.0 temp 371703
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05512382899999935
+INFO:root:len 602
+INFO:root:choose destinations 0.007050331999998605
+INFO:root:resolve destinations 0.0020113649999977667
+INFO:root:next 10 turns 148.625 one 444.85 two 414.1 flag 3225.1625000000004
+INFO:root:=============== TURN 259 ================
+INFO:root:turn 258 mining speed 508.0; MA 460.9; total 150765.0 temp 371195
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053789437999999024
+INFO:root:len 1111
+INFO:root:choose destinations 0.010168260000000373
+INFO:root:resolve destinations 0.0023487660000007793
+INFO:root:next 10 turns 159.46875 one 460.9 two 411.5 flag 3444.525
+INFO:root:=============== TURN 260 ================
+INFO:root:turn 259 mining speed 478.0; MA 465.2; total 151243.0 temp 370717
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.056590760999998935
+INFO:root:len 1143
+INFO:root:choose destinations 0.009688698000001494
+INFO:root:resolve destinations 0.0023496970000032036
+INFO:root:next 10 turns 165.828125 one 465.2 two 399.75 flag 3565.3046875
+INFO:root:=============== TURN 261 ================
+INFO:root:turn 260 mining speed 1056.0; MA 460.8; total 152299.0 temp 369661
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046901440999999267
+INFO:root:len 624
+INFO:root:choose destinations 0.006843918999997811
+INFO:root:resolve destinations 0.0022078460000010125
+INFO:root:next 10 turns 165.578125 one 460.8 two 391.75 flag 3543.3718750000003
+INFO:root:=============== TURN 262 ================
+INFO:root:turn 261 mining speed 741.0; MA 501.7; total 153040.0 temp 368920
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053813026999996794
+INFO:root:len 1103
+INFO:root:choose destinations 0.005865550999999414
+INFO:root:resolve destinations 0.002575355000001167
+INFO:root:next 10 turns 188.65625 one 501.7 two 399.7 flag 4018.378125
+INFO:root:=============== TURN 263 ================
+INFO:root:turn 262 mining speed 863.0; MA 511.2; total 153903.0 temp 368057
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04904162200000073
+INFO:root:len 1208
+INFO:root:choose destinations 0.009212551000000957
+INFO:root:resolve destinations 0.002250680999999588
+INFO:root:next 10 turns 193.875 one 511.2 two 402.0 flag 4110.15
+INFO:root:=============== TURN 264 ================
+INFO:root:turn 263 mining speed 727.0; MA 532.2; total 154630.0 temp 367330
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.055795215999999925
+INFO:root:len 1112
+INFO:root:choose destinations 0.0073942510000009065
+INFO:root:resolve destinations 0.0028093939999997986
+INFO:root:next 10 turns 203.75000000000003 one 532.2 two 412.4 flag 4299.125000000001
+INFO:root:=============== TURN 265 ================
+INFO:root:turn 264 mining speed 577.0; MA 554.05; total 155207.0 temp 366753
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04553383799999722
+INFO:root:len 1202
+INFO:root:choose destinations 0.006778426000000337
+INFO:root:resolve destinations 0.0024511959999991006
+INFO:root:next 10 turns 214.92187499999997 one 554.05 two 420.35 flag 4513.359374999999
+INFO:root:=============== TURN 266 ================
+INFO:root:turn 265 mining speed 950.0; MA 566.4; total 156157.0 temp 365803
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047778000000000986
+INFO:root:len 1204
+INFO:root:choose destinations 0.010540423999998438
+INFO:root:resolve destinations 0.003339548999999664
+INFO:root:next 10 turns 220.171875 one 566.4 two 428.25 flag 4601.592187499999
+INFO:root:=============== TURN 267 ================
+INFO:root:turn 266 mining speed 739.0; MA 599.35; total 156896.0 temp 365064
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05286818199999743
+INFO:root:len 1108
+INFO:root:choose destinations 0.0064894469999998705
+INFO:root:resolve destinations 0.002979490000001306
+INFO:root:next 10 turns 235.578125 one 599.35 two 444.85 flag 4900.025000000001
+INFO:root:=============== TURN 268 ================
+INFO:root:turn 267 mining speed 626.0; MA 608.65; total 157522.0 temp 364438
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05819581800000151
+INFO:root:len 1179
+INFO:root:choose destinations 0.007952653000000254
+INFO:root:resolve destinations 0.0021625279999994973
+INFO:root:next 10 turns 236.375 one 608.65 two 460.9 flag 4892.9625
+INFO:root:=============== TURN 269 ================
+INFO:root:turn 268 mining speed 688.0; MA 615.05; total 158210.0 temp 363750
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05689401800000127
+INFO:root:len 1227
+INFO:root:choose destinations 0.007738481000000519
+INFO:root:resolve destinations 0.0019486650000004602
+INFO:root:next 10 turns 239.03124999999994 one 615.05 two 465.2 flag 4924.043749999999
+INFO:root:=============== TURN 270 ================
+INFO:root:turn 269 mining speed 644.0; MA 619.35; total 158854.0 temp 363106
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04952863300000132
+INFO:root:len 737
+INFO:root:choose destinations 0.005160641999999882
+INFO:root:resolve destinations 0.001759944999999874
+INFO:root:next 10 turns 243.09375000000003 one 619.35 two 460.8 flag 4983.421875000001
+INFO:root:=============== TURN 271 ================
+INFO:root:turn 270 mining speed 356.0; MA 634.0; total 159210.0 temp 362750
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05193047600000256
+INFO:root:len 1159
+INFO:root:choose destinations 0.008887875999999295
+INFO:root:resolve destinations 0.002297550000001536
+INFO:root:next 10 turns 239.46875 one 634.0 two 501.7 flag 4885.162499999999
+INFO:root:=============== TURN 272 ================
+INFO:root:turn 271 mining speed 611.0; MA 634.95; total 159821.0 temp 362139
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05497732199999916
+INFO:root:len 844
+INFO:root:choose destinations 0.005228929000001159
+INFO:root:resolve destinations 0.0019775330000015856
+INFO:root:next 10 turns 237.09375 one 634.95 two 511.2 flag 4813.003125
+INFO:root:=============== TURN 273 ================
+INFO:root:turn 272 mining speed 533.0; MA 640.3; total 160354.0 temp 361606
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04723977300000115
+INFO:root:len 1192
+INFO:root:choose destinations 0.006777185000000685
+INFO:root:resolve destinations 0.002045818999999227
+INFO:root:next 10 turns 233.87499999999994 one 640.3 two 532.2 flag 4724.274999999999
+INFO:root:=============== TURN 274 ================
+INFO:root:turn 273 mining speed 543.0; MA 645.2; total 160897.0 temp 361063
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04945351699999989
+INFO:root:len 1303
+INFO:root:choose destinations 0.006927726000000689
+INFO:root:resolve destinations 0.0025045840000004205
+INFO:root:next 10 turns 230.10937500000006 one 645.2 two 554.05 flag 4625.198437500001
+INFO:root:=============== TURN 275 ================
+INFO:root:turn 274 mining speed 541.0; MA 644.3; total 161438.0 temp 360522
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.07095122699999834
+INFO:root:len 971
+INFO:root:choose destinations 0.008800655000001711
+INFO:root:resolve destinations 0.0024102240000019037
+INFO:root:next 10 turns 225.68749999999997 one 644.3 two 566.4 flag 4513.75
+INFO:root:=============== TURN 276 ================
+INFO:root:turn 275 mining speed 271.0; MA 640.6; total 161709.0 temp 360251
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046075168000001554
+INFO:root:len 1133
+INFO:root:choose destinations 0.008338165000001396
+INFO:root:resolve destinations 0.0025756659999984777
+INFO:root:next 10 turns 213.078125 one 640.6 two 599.35 flag 4240.2546875
+INFO:root:=============== TURN 277 ================
+INFO:root:turn 276 mining speed 793.0; MA 625.15; total 162502.0 temp 359458
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045065449999999174
+INFO:root:len 972
+INFO:root:choose destinations 0.006352563000000089
+INFO:root:resolve destinations 0.002405257999999577
+INFO:root:next 10 turns 200.515625 one 625.15 two 608.65 flag 3970.209375
+INFO:root:=============== TURN 278 ================
+INFO:root:turn 277 mining speed 615.0; MA 638.4; total 163117.0 temp 358843
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04890815099999912
+INFO:root:len 747
+INFO:root:choose destinations 0.005994986999997565
+INFO:root:resolve destinations 0.00204333599999984
+INFO:root:next 10 turns 206.796875 one 638.4 two 615.05 flag 4073.8984375
+INFO:root:=============== TURN 279 ================
+INFO:root:turn 278 mining speed 443.0; MA 643.0; total 163560.0 temp 358400
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04727702099999931
+INFO:root:len 647
+INFO:root:choose destinations 0.005421995999999041
+INFO:root:resolve destinations 0.0024493340000013575
+INFO:root:next 10 turns 208.328125 one 643.0 two 619.35 flag 4083.23125
+INFO:root:=============== TURN 280 ================
+INFO:root:turn 279 mining speed 608.0; MA 639.75; total 164168.0 temp 357792
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04953266799999767
+INFO:root:len 688
+INFO:root:choose destinations 0.006892030999999577
+INFO:root:resolve destinations 0.002535935000000933
+INFO:root:next 10 turns 201.71875 one 639.75 two 634.0 flag 3933.515625
+INFO:root:=============== TURN 281 ================
+INFO:root:turn 280 mining speed 527.0; MA 646.25; total 164695.0 temp 357265
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04553756299999989
+INFO:root:len 1273
+INFO:root:choose destinations 0.008457977999999144
+INFO:root:resolve destinations 0.0027265169999992622
+INFO:root:next 10 turns 205.484375 one 646.25 two 634.95 flag 3986.396875
+INFO:root:=============== TURN 282 ================
+INFO:root:turn 281 mining speed 618.0; MA 619.8; total 165313.0 temp 356647
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0451551539999997
+INFO:root:len 663
+INFO:root:choose destinations 0.005187026000001538
+INFO:root:resolve destinations 0.0017351139999988163
+INFO:root:next 10 turns 187.28125 one 619.8 two 640.3 flag 3614.528125
+INFO:root:=============== TURN 283 ================
+INFO:root:turn 282 mining speed 500.0; MA 613.65; total 165813.0 temp 356147
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054298487000000506
+INFO:root:len 1320
+INFO:root:choose destinations 0.008864286999997972
+INFO:root:resolve destinations 0.0028376399999991975
+INFO:root:next 10 turns 181.90624999999997 one 613.65 two 645.2 flag 3492.5999999999995
+INFO:root:=============== TURN 284 ================
+INFO:root:turn 283 mining speed 677.0; MA 595.5; total 166490.0 temp 355470
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046978420000002075
+INFO:root:len 1318
+INFO:root:choose destinations 0.010896137999999667
+INFO:root:resolve destinations 0.0029472090000020046
+INFO:root:next 10 turns 170.84375 one 595.5 two 644.3 flag 3263.1156250000004
+INFO:root:=============== TURN 285 ================
+INFO:root:turn 284 mining speed 446.0; MA 593.0; total 166936.0 temp 355024
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04676890200000017
+INFO:root:len 1387
+INFO:root:choose destinations 0.009779023000000109
+INFO:root:resolve destinations 0.001972566000002729
+INFO:root:next 10 turns 170.4375 one 593.0 two 640.6 flag 3238.3125
+INFO:root:=============== TURN 286 ================
+INFO:root:turn 285 mining speed 414.0; MA 586.45; total 167350.0 temp 354610
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0456694810000009
+INFO:root:len 1163
+INFO:root:choose destinations 0.010913830999999874
+INFO:root:resolve destinations 0.0020855500000003246
+INFO:root:next 10 turns 171.17187500000003 one 586.45 two 625.15 flag 3235.1484375000005
+INFO:root:=============== TURN 287 ================
+INFO:root:turn 286 mining speed 207.0; MA 559.65; total 167557.0 temp 354403
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045990429999999805
+INFO:root:len 1325
+INFO:root:choose destinations 0.008314885000000771
+INFO:root:resolve destinations 0.0018704459999980827
+INFO:root:next 10 turns 150.28125 one 559.65 two 638.4 flag 2825.2875
+INFO:root:=============== TURN 288 ================
+INFO:root:turn 287 mining speed 594.0; MA 533.05; total 168151.0 temp 353809
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04574801100000059
+INFO:root:len 1066
+INFO:root:choose destinations 0.010049687999998724
+INFO:root:resolve destinations 0.002025642999999633
+INFO:root:next 10 turns 132.21874999999997 one 533.05 two 643.0 flag 2472.4906249999995
+INFO:root:=============== TURN 289 ================
+INFO:root:turn 288 mining speed 427.0; MA 531.45; total 168578.0 temp 353382
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05071341400000051
+INFO:root:len 1348
+INFO:root:choose destinations 0.012985102000001802
+INFO:root:resolve destinations 0.0020234700000010264
+INFO:root:next 10 turns 132.23437500000003 one 531.45 two 639.75 flag 2459.5593750000007
+INFO:root:=============== TURN 290 ================
+INFO:root:turn 289 mining speed 457.0; MA 518.4; total 169035.0 temp 352925
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05491555300000073
+INFO:root:len 1115
+INFO:root:choose destinations 0.010285900000003068
+INFO:root:resolve destinations 0.0019856019999977548
+INFO:root:next 10 turns 122.04687499999999 one 518.4 two 646.25 flag 2257.8671874999995
+INFO:root:=============== TURN 291 ================
+INFO:root:turn 290 mining speed 442.0; MA 509.05; total 169477.0 temp 352483
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04571572899999765
+INFO:root:len 1134
+INFO:root:choose destinations 0.008664390999999938
+INFO:root:resolve destinations 0.0018865860000012447
+INFO:root:next 10 turns 124.46875000000003 one 509.05 two 619.8 flag 2290.2250000000004
+INFO:root:=============== TURN 292 ================
+INFO:root:turn 291 mining speed 550.0; MA 513.35; total 170027.0 temp 351933
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049110529000000014
+INFO:root:len 1362
+INFO:root:choose destinations 0.012557687000001039
+INFO:root:resolve destinations 0.0028156009999982246
+INFO:root:next 10 turns 129.07812500000003 one 513.35 two 613.65 flag 2362.1296875000003
+INFO:root:=============== TURN 293 ================
+INFO:root:turn 292 mining speed 366.0; MA 510.3; total 170393.0 temp 351567
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045129080999998905
+INFO:root:len 1429
+INFO:root:choose destinations 0.008877013000002876
+INFO:root:resolve destinations 0.0019216609999972434
+INFO:root:next 10 turns 132.84375 one 510.3 two 595.5 flag 2417.75625
+INFO:root:=============== TURN 294 ================
+INFO:root:turn 293 mining speed 322.0; MA 501.95; total 170715.0 temp 351245
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04772616400000018
+INFO:root:len 862
+INFO:root:choose destinations 0.006310348999999604
+INFO:root:resolve destinations 0.0020939310000009925
+INFO:root:next 10 turns 128.40625 one 501.95 two 593.0 flag 2324.153125
+INFO:root:=============== TURN 295 ================
+INFO:root:turn 294 mining speed 584.0; MA 490.9; total 171299.0 temp 350661
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05294143600000112
+INFO:root:len 1194
+INFO:root:choose destinations 0.010922832000002103
+INFO:root:resolve destinations 0.00207748000000052
+INFO:root:next 10 turns 123.54687499999997 one 490.9 two 586.45 flag 2223.8437499999995
+INFO:root:=============== TURN 296 ================
+INFO:root:turn 295 mining speed 384.0; MA 493.05; total 171683.0 temp 350277
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050210571999997455
+INFO:root:len 1464
+INFO:root:choose destinations 0.00854706200000166
+INFO:root:resolve destinations 0.0020119869999994933
+INFO:root:next 10 turns 133.265625 one 493.05 two 559.65 flag 2385.4546875
+INFO:root:=============== TURN 297 ================
+INFO:root:turn 296 mining speed 475.0; MA 498.7; total 172158.0 temp 349802
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04840003400000015
+INFO:root:len 1197
+INFO:root:choose destinations 0.007304236000003073
+INFO:root:resolve destinations 0.0021330400000003635
+INFO:root:next 10 turns 145.109375 one 498.7 two 533.05 flag 2582.946875
+INFO:root:=============== TURN 298 ================
+INFO:root:turn 297 mining speed 407.0; MA 482.8; total 172565.0 temp 349395
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04913784399999699
+INFO:root:len 666
+INFO:root:choose destinations 0.004609689999998778
+INFO:root:resolve destinations 0.001723939000001451
+INFO:root:next 10 turns 135.671875 one 482.8 two 531.45 flag 2401.3921875
+INFO:root:=============== TURN 299 ================
+INFO:root:turn 298 mining speed 587.0; MA 472.4; total 173152.0 temp 348808
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05169581699999881
+INFO:root:len 953
+INFO:root:choose destinations 0.00611293700000104
+INFO:root:resolve destinations 0.00206506399999995
+INFO:root:next 10 turns 133.25 one 472.4 two 518.4 flag 2345.2
+INFO:root:=============== TURN 300 ================
+INFO:root:turn 299 mining speed 492.0; MA 479.6; total 173644.0 temp 348316
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048491600000001966
+INFO:root:len 1325
+INFO:root:choose destinations 0.007078888999998867
+INFO:root:resolve destinations 0.0020824470000029294
+INFO:root:next 10 turns 140.671875 one 479.6 two 509.05 flag 2461.7578125
+INFO:root:=============== TURN 301 ================
+INFO:root:turn 300 mining speed 570.0; MA 473.8; total 174214.0 temp 347746
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04726832999999786
+INFO:root:len 1162
+INFO:root:choose destinations 0.010600950999997139
+INFO:root:resolve destinations 0.0030415690000005213
+INFO:root:next 10 turns 135.703125 one 473.8 two 513.35 flag 2361.234375
+INFO:root:=============== TURN 302 ================
+INFO:root:turn 301 mining speed 474.0; MA 475.95; total 174688.0 temp 347272
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04703087699999742
+INFO:root:len 1168
+INFO:root:choose destinations 0.006544387000001706
+INFO:root:resolve destinations 0.0022994129999993618
+INFO:root:next 10 turns 138.0 one 475.95 two 510.3 flag 2387.4
+INFO:root:=============== TURN 303 ================
+INFO:root:turn 302 mining speed 496.0; MA 468.75; total 175184.0 temp 346776
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053808992000000444
+INFO:root:len 693
+INFO:root:choose destinations 0.006256339000000111
+INFO:root:resolve destinations 0.002412085999999647
+INFO:root:next 10 turns 136.109375 one 468.75 two 501.95 flag 2341.08125
+INFO:root:=============== TURN 304 ================
+INFO:root:turn 303 mining speed 685.0; MA 468.55; total 175869.0 temp 346091
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0455537029999995
+INFO:root:len 892
+INFO:root:choose destinations 0.008206246000000306
+INFO:root:resolve destinations 0.0021286950000032334
+INFO:root:next 10 turns 139.4375 one 468.55 two 490.9 flag 2384.38125
+INFO:root:=============== TURN 305 ================
+INFO:root:turn 304 mining speed 469.0; MA 468.95; total 176338.0 temp 345622
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04657645699999691
+INFO:root:len 754
+INFO:root:choose destinations 0.006811638000002063
+INFO:root:resolve destinations 0.0034422910000024842
+INFO:root:next 10 turns 139.015625 one 468.95 two 493.05 flag 2363.265625
+INFO:root:=============== TURN 306 ================
+INFO:root:turn 305 mining speed 443.0; MA 470.1; total 176781.0 temp 345179
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049324392999999134
+INFO:root:len 750
+INFO:root:choose destinations 0.006679719999997502
+INFO:root:resolve destinations 0.0024698199999981796
+INFO:root:next 10 turns 137.96875000000003 one 470.1 two 498.7 flag 2331.6718750000005
+INFO:root:=============== TURN 307 ================
+INFO:root:turn 306 mining speed 554.0; MA 471.55; total 177335.0 temp 344625
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045544702000000825
+INFO:root:len 1299
+INFO:root:choose destinations 0.007402631999998022
+INFO:root:resolve destinations 0.001957667000002772
+INFO:root:next 10 turns 143.84375 one 471.55 two 482.8 flag 2416.5750000000003
+INFO:root:=============== TURN 308 ================
+INFO:root:turn 307 mining speed 441.0; MA 488.9; total 177776.0 temp 344184
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04588768900000062
+INFO:root:len 1299
+INFO:root:choose destinations 0.007332792999999782
+INFO:root:resolve destinations 0.001957046000001128
+INFO:root:next 10 turns 157.9375 one 488.9 two 472.4 flag 2637.55625
+INFO:root:=============== TURN 309 ================
+INFO:root:turn 308 mining speed 388.0; MA 481.25; total 178164.0 temp 343796
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0457964319999995
+INFO:root:len 1106
+INFO:root:choose destinations 0.006722553999999548
+INFO:root:resolve destinations 0.0021904639999981157
+INFO:root:next 10 turns 150.90625 one 481.25 two 479.6 flag 2505.04375
+INFO:root:=============== TURN 310 ================
+INFO:root:turn 309 mining speed 428.0; MA 479.3; total 178592.0 temp 343368
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04635328200000188
+INFO:root:len 1318
+INFO:root:choose destinations 0.008855594999999994
+INFO:root:resolve destinations 0.0020178840000006915
+INFO:root:next 10 turns 151.5 one 479.3 two 473.8 flag 2499.75
+INFO:root:=============== TURN 311 ================
+INFO:root:turn 310 mining speed 241.0; MA 477.85; total 178833.0 temp 343127
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046098447999998626
+INFO:root:len 1457
+INFO:root:choose destinations 0.008805932000001349
+INFO:root:resolve destinations 0.0019772220000007223
+INFO:root:next 10 turns 149.92187500000003 one 477.85 two 475.95 flag 2458.7187500000005
+INFO:root:=============== TURN 312 ================
+INFO:root:turn 311 mining speed 374.0; MA 467.8; total 179207.0 temp 342753
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0453354939999997
+INFO:root:len 1087
+INFO:root:choose destinations 0.006278688000001864
+INFO:root:resolve destinations 0.001904899999999543
+INFO:root:next 10 turns 145.890625 one 467.8 two 468.75 flag 2378.0171875
+INFO:root:=============== TURN 313 ================
+INFO:root:turn 312 mining speed 547.0; MA 459.0; total 179754.0 temp 342206
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.052752093999998806
+INFO:root:len 1292
+INFO:root:choose destinations 0.0068327450000005285
+INFO:root:resolve destinations 0.001922903000000531
+INFO:root:next 10 turns 140.453125 one 459.0 two 468.55 flag 2275.340625
+INFO:root:=============== TURN 314 ================
+INFO:root:turn 313 mining speed 566.0; MA 468.05; total 180320.0 temp 341640
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05389590399999733
+INFO:root:len 1060
+INFO:root:choose destinations 0.007446086999998158
+INFO:root:resolve destinations 0.002037749000002975
+INFO:root:next 10 turns 145.984375 one 468.05 two 468.95 flag 2350.3484375
+INFO:root:=============== TURN 315 ================
+INFO:root:turn 314 mining speed 456.0; MA 480.25; total 180776.0 temp 341184
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04592928199999946
+INFO:root:len 1349
+INFO:root:choose destinations 0.006388258000001201
+INFO:root:resolve destinations 0.0019222819999988872
+INFO:root:next 10 turns 153.25 one 480.25 two 470.1 flag 2452.0
+INFO:root:=============== TURN 316 ================
+INFO:root:turn 315 mining speed 406.0; MA 473.85; total 181182.0 temp 340778
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.051819044000001924
+INFO:root:len 1112
+INFO:root:choose destinations 0.007260780999999383
+INFO:root:resolve destinations 0.002058545000000578
+INFO:root:next 10 turns 148.796875 one 473.85 two 471.55 flag 2365.8703124999997
+INFO:root:=============== TURN 317 ================
+INFO:root:turn 316 mining speed 462.0; MA 474.95; total 181644.0 temp 340316
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05252085000000051
+INFO:root:len 784
+INFO:root:choose destinations 0.0064431980000030364
+INFO:root:resolve destinations 0.0020616490000016086
+INFO:root:next 10 turns 144.0625 one 474.95 two 488.9 flag 2276.1875
+INFO:root:=============== TURN 318 ================
+INFO:root:turn 317 mining speed 619.0; MA 474.3; total 182263.0 temp 339697
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04620584499999936
+INFO:root:len 1293
+INFO:root:choose destinations 0.007592284000001115
+INFO:root:resolve destinations 0.0030816109999989294
+INFO:root:next 10 turns 146.046875 one 474.3 two 481.25 flag 2292.9359375
+INFO:root:=============== TURN 319 ================
+INFO:root:turn 318 mining speed 616.0; MA 484.9; total 182879.0 temp 339081
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046906718000002456
+INFO:root:len 788
+INFO:root:choose destinations 0.005187645999999546
+INFO:root:resolve destinations 0.0016873129999979142
+INFO:root:next 10 turns 153.28124999999997 one 484.9 two 479.3 flag 2391.1874999999995
+INFO:root:=============== TURN 320 ================
+INFO:root:turn 319 mining speed 509.0; MA 486.35; total 183388.0 temp 338572
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05762593100000046
+INFO:root:len 1007
+INFO:root:choose destinations 0.006639058000001086
+INFO:root:resolve destinations 0.0020113649999977667
+INFO:root:next 10 turns 154.640625 one 486.35 two 477.85 flag 2396.9296875
+INFO:root:=============== TURN 321 ================
+INFO:root:turn 320 mining speed 328.0; MA 487.2; total 183716.0 temp 338244
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047010701000001376
+INFO:root:len 997
+INFO:root:choose destinations 0.007754310999999348
+INFO:root:resolve destinations 0.002070961000001148
+INFO:root:next 10 turns 158.3125 one 487.2 two 467.8 flag 2438.0125000000003
+INFO:root:=============== TURN 322 ================
+INFO:root:turn 321 mining speed 489.0; MA 475.1; total 184205.0 temp 337755
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05163994600000166
+INFO:root:len 1370
+INFO:root:choose destinations 0.007920992999999044
+INFO:root:resolve destinations 0.002029678999999618
+INFO:root:next 10 turns 153.5 one 475.1 two 459.0 flag 2348.5499999999997
+INFO:root:=============== TURN 323 ================
+INFO:root:turn 322 mining speed 378.0; MA 475.85; total 184583.0 temp 337377
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04914932899999869
+INFO:root:len 1203
+INFO:root:choose destinations 0.0070813720000018066
+INFO:root:resolve destinations 0.002022539000002155
+INFO:root:next 10 turns 151.140625 one 475.85 two 468.05 flag 2297.3375
+INFO:root:=============== TURN 324 ================
+INFO:root:turn 323 mining speed 411.0; MA 469.95; total 184994.0 temp 336966
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048883319999998065
+INFO:root:len 1365
+INFO:root:choose destinations 0.006497516999999675
+INFO:root:resolve destinations 0.0019008649999996408
+INFO:root:next 10 turns 143.640625 one 469.95 two 480.25 flag 2168.9734375
+INFO:root:=============== TURN 325 ================
+INFO:root:turn 324 mining speed 509.0; MA 456.25; total 185503.0 temp 336457
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04941564800000009
+INFO:root:len 1533
+INFO:root:choose destinations 0.007762070000001842
+INFO:root:resolve destinations 0.0019899479999985203
+INFO:root:next 10 turns 137.078125 one 456.25 two 473.85 flag 2056.171875
+INFO:root:=============== TURN 326 ================
+INFO:root:turn 325 mining speed 350.0; MA 458.25; total 185853.0 temp 336107
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04556394599999791
+INFO:root:len 1388
+INFO:root:choose destinations 0.007517478000000466
+INFO:root:resolve destinations 0.0020597870000003127
+INFO:root:next 10 turns 137.984375 one 458.25 two 474.95 flag 2055.9671875
+INFO:root:=============== TURN 327 ================
+INFO:root:turn 326 mining speed 445.0; MA 453.6; total 186298.0 temp 335662
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04780158999999884
+INFO:root:len 1347
+INFO:root:choose destinations 0.005410510999997342
+INFO:root:resolve destinations 0.00206258099999701
+INFO:root:next 10 turns 135.28125 one 453.6 two 474.3 flag 2002.1625
+INFO:root:=============== TURN 328 ================
+INFO:root:turn 327 mining speed 359.0; MA 448.15; total 186657.0 temp 335303
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04730868199999705
+INFO:root:len 1153
+INFO:root:choose destinations 0.005287593999998563
+INFO:root:resolve destinations 0.0019008649999996408
+INFO:root:next 10 turns 128.5625 one 448.15 two 484.9 flag 1889.8687499999999
+INFO:root:=============== TURN 329 ================
+INFO:root:turn 328 mining speed 403.0; MA 444.05; total 187060.0 temp 334900
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048075358999998485
+INFO:root:len 963
+INFO:root:choose destinations 0.006538179999999727
+INFO:root:resolve destinations 0.0020771699999997395
+INFO:root:next 10 turns 125.546875 one 444.05 two 486.35 flag 1832.984375
+INFO:root:=============== TURN 330 ================
+INFO:root:turn 329 mining speed 576.0; MA 444.8; total 187636.0 temp 334324
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0485533690000004
+INFO:root:len 681
+INFO:root:choose destinations 0.005508907000002949
+INFO:root:resolve destinations 0.0018586509999991563
+INFO:root:next 10 turns 125.75000000000001 one 444.8 two 487.2 flag 1823.3750000000002
+INFO:root:=============== TURN 331 ================
+INFO:root:turn 330 mining speed 566.0; MA 452.2; total 188202.0 temp 333758
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049562155000000274
+INFO:root:len 1356
+INFO:root:choose destinations 0.00782446000000192
+INFO:root:resolve destinations 0.0023171049999994864
+INFO:root:next 10 turns 134.15625 one 452.2 two 475.1 flag 1931.8500000000001
+INFO:root:=============== TURN 332 ================
+INFO:root:turn 331 mining speed 473.0; MA 468.45; total 188675.0 temp 333285
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045412782999999735
+INFO:root:len 1226
+INFO:root:choose destinations 0.007685401999999897
+INFO:root:resolve destinations 0.002065995000002374
+INFO:root:next 10 turns 144.078125 one 468.45 two 475.85 flag 2060.3171875000003
+INFO:root:=============== TURN 333 ================
+INFO:root:turn 332 mining speed 498.0; MA 473.4; total 189173.0 temp 332787
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050291275999999385
+INFO:root:len 1402
+INFO:root:choose destinations 0.008975407999997742
+INFO:root:resolve destinations 0.003495989000001032
+INFO:root:next 10 turns 149.015625 one 473.4 two 469.95 flag 2116.021875
+INFO:root:=============== TURN 334 ================
+INFO:root:turn 333 mining speed 449.0; MA 470.95; total 189622.0 temp 332338
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04581660799999909
+INFO:root:len 1478
+INFO:root:choose destinations 0.007157109000001327
+INFO:root:resolve destinations 0.002011055000000539
+INFO:root:next 10 turns 151.765625 one 470.95 two 456.25 flag 2139.8953125
+INFO:root:=============== TURN 335 ================
+INFO:root:turn 334 mining speed 566.0; MA 465.1; total 190188.0 temp 331772
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05008113800000302
+INFO:root:ship 23 halite 666 max enemy 24.5 enemyMa 5 friendly 2 enemy 1
+INFO:root:len 1356
+INFO:root:choose destinations 0.01366580100000192
+INFO:root:resolve destinations 0.0020957929999987357
+INFO:root:next 10 turns 147.484375 one 465.1 two 458.25 flag 2064.78125
+INFO:root:=============== TURN 336 ================
+INFO:root:turn 335 mining speed 419.0; MA 470.6; total 190607.0 temp 331353
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048754814999998786
+INFO:root:len 1328
+INFO:root:choose destinations 0.0063780149999992375
+INFO:root:resolve destinations 0.001956735000000265
+INFO:root:next 10 turns 152.375 one 470.6 two 453.6 flag 2118.0125000000003
+INFO:root:=============== TURN 337 ================
+INFO:root:turn 336 mining speed 549.0; MA 471.25; total 191156.0 temp 330804
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.053132330000000394
+INFO:root:ship 23 halite 701 max enemy 101.75 enemyMa 20 friendly 2 enemy 1
+INFO:root:len 1198
+INFO:root:choose destinations 0.007065852000000206
+INFO:root:resolve destinations 0.001991810999999899
+INFO:root:next 10 turns 154.484375 one 471.25 two 448.15 flag 2131.884375
+INFO:root:=============== TURN 338 ================
+INFO:root:turn 337 mining speed 669.0; MA 475.6; total 191825.0 temp 330135
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04745208399999967
+INFO:root:len 1404
+INFO:root:choose destinations 0.007833771999997907
+INFO:root:resolve destinations 0.0020256439999997156
+INFO:root:next 10 turns 158.484375 one 475.6 two 444.05 flag 2171.2359375
+INFO:root:=============== TURN 339 ================
+INFO:root:turn 338 mining speed 384.0; MA 478.1; total 192209.0 temp 329751
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048459629999999976
+INFO:root:ship 23 halite 707 max enemy 195.75 enemyMa 96 friendly 2 enemy 2
+INFO:root:len 1286
+INFO:root:choose destinations 0.007898334000000062
+INFO:root:resolve destinations 0.001895277000002693
+INFO:root:next 10 turns 159.8125 one 478.1 two 444.8 flag 2173.45
+INFO:root:=============== TURN 340 ================
+INFO:root:turn 339 mining speed 613.0; MA 466.5; total 192822.0 temp 329138
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04653517500000248
+INFO:root:len 1421
+INFO:root:choose destinations 0.010411921000002877
+INFO:root:resolve destinations 0.0019970869999994534
+INFO:root:next 10 turns 150.25 one 466.5 two 452.2 flag 2028.375
+INFO:root:=============== TURN 341 ================
+INFO:root:turn 340 mining speed 174.0; MA 471.7; total 192996.0 temp 328964
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04529234900000034
+INFO:root:len 1398
+INFO:root:choose destinations 0.01131424100000089
+INFO:root:resolve destinations 0.0022441630000002988
+INFO:root:next 10 turns 148.421875 one 471.7 two 468.45 flag 1988.8531249999999
+INFO:root:=============== TURN 342 ================
+INFO:root:turn 341 mining speed 317.0; MA 464.0; total 193313.0 temp 328647
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048220003000000844
+INFO:root:ship 16 halite 346 max enemy 365.0 enemyMa 266 friendly 2 enemy 2
+INFO:root:len 1412
+INFO:root:choose destinations 0.008635524000002448
+INFO:root:resolve destinations 0.0018639269999987107
+INFO:root:next 10 turns 142.0625 one 464.0 two 473.4 flag 1889.43125
+INFO:root:=============== TURN 343 ================
+INFO:root:turn 342 mining speed 338.0; MA 455.4; total 193651.0 temp 328309
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05170326700000061
+INFO:root:len 1366
+INFO:root:choose destinations 0.01212871999999976
+INFO:root:resolve destinations 0.0020076409999987277
+INFO:root:next 10 turns 137.453125 one 455.4 two 470.95 flag 1814.3812500000001
+INFO:root:=============== TURN 344 ================
+INFO:root:turn 343 mining speed 459.0; MA 453.4; total 194110.0 temp 327850
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04503906600000107
+INFO:root:ship 16 halite 430 max enemy 144.75 enemyMa 63 friendly 1 enemy 3
+INFO:root:len 1100
+INFO:root:choose destinations 0.0073116859999977635
+INFO:root:resolve destinations 0.0017394589999994992
+INFO:root:next 10 turns 138.03124999999997 one 453.4 two 465.1 flag 1808.2093749999997
+INFO:root:=============== TURN 345 ================
+INFO:root:turn 344 mining speed 387.0; MA 455.8; total 194497.0 temp 327463
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04581815999999961
+INFO:root:len 1468
+INFO:root:choose destinations 0.011678957000000878
+INFO:root:resolve destinations 0.0020228499999994654
+INFO:root:next 10 turns 137.8125 one 455.8 two 470.6 flag 1791.5625
+INFO:root:=============== TURN 346 ================
+INFO:root:turn 345 mining speed 407.0; MA 449.7; total 194904.0 temp 327056
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04517781399999876
+INFO:root:len 1255
+INFO:root:choose destinations 0.009206031999998032
+INFO:root:resolve destinations 0.003353516999997197
+INFO:root:next 10 turns 133.796875 one 449.7 two 471.25 flag 1725.9796875
+INFO:root:=============== TURN 347 ================
+INFO:root:turn 346 mining speed 459.0; MA 452.55; total 195363.0 temp 326597
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04731830300000084
+INFO:root:len 1011
+INFO:root:choose destinations 0.006850126999999873
+INFO:root:resolve destinations 0.002570698999999621
+INFO:root:next 10 turns 134.21875 one 452.55 two 475.6 flag 1718.0
+INFO:root:=============== TURN 348 ================
+INFO:root:turn 347 mining speed 592.0; MA 453.25; total 195955.0 temp 326005
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04633062399999943
+INFO:root:len 826
+INFO:root:choose destinations 0.00876247600000113
+INFO:root:resolve destinations 0.002870852000000923
+INFO:root:next 10 turns 133.875 one 453.25 two 478.1 flag 1700.2124999999999
+INFO:root:=============== TURN 349 ================
+INFO:root:turn 348 mining speed 262.0; MA 464.9; total 196217.0 temp 325743
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04828115199999772
+INFO:root:len 749
+INFO:root:choose destinations 0.006914379000001247
+INFO:root:resolve destinations 0.0018983820000002538
+INFO:root:next 10 turns 144.78125 one 464.9 two 466.5 flag 1824.24375
+INFO:root:=============== TURN 350 ================
+INFO:root:turn 349 mining speed 468.0; MA 457.85; total 196685.0 temp 325275
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049044415000000896
+INFO:root:len 834
+INFO:root:choose destinations 0.008066568000000274
+INFO:root:resolve destinations 0.001972254999998313
+INFO:root:next 10 turns 138.75000000000003 one 457.85 two 471.7 flag 1734.3750000000005
+INFO:root:=============== TURN 351 ================
+INFO:root:turn 350 mining speed 476.0; MA 452.45; total 197161.0 temp 324799
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047710954999999444
+INFO:root:len 863
+INFO:root:choose destinations 0.00896485499999855
+INFO:root:resolve destinations 0.002229574000001122
+INFO:root:next 10 turns 137.78125 one 452.45 two 464.0 flag 1708.4875
+INFO:root:=============== TURN 352 ================
+INFO:root:turn 351 mining speed 288.0; MA 447.95; total 197449.0 temp 324511
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049871620000001116
+INFO:root:len 746
+INFO:root:choose destinations 0.0076903689999987535
+INFO:root:resolve destinations 0.0025514539999988983
+INFO:root:next 10 turns 137.65625 one 447.95 two 455.4 flag 1693.171875
+INFO:root:=============== TURN 353 ================
+INFO:root:turn 352 mining speed 416.0; MA 438.7; total 197865.0 temp 324095
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04625643900000043
+INFO:root:len 694
+INFO:root:choose destinations 0.007921614000000687
+INFO:root:resolve destinations 0.0020144689999987975
+INFO:root:next 10 turns 132.5 one 438.7 two 453.4 flag 1616.5
+INFO:root:=============== TURN 354 ================
+INFO:root:turn 353 mining speed 243.0; MA 434.6; total 198108.0 temp 323852
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0501720830000032
+INFO:root:len 720
+INFO:root:choose destinations 0.006788668999998748
+INFO:root:resolve destinations 0.0020436460000006207
+INFO:root:next 10 turns 129.1875 one 434.6 two 455.8 flag 1563.1687499999998
+INFO:root:=============== TURN 355 ================
+INFO:root:turn 354 mining speed 273.0; MA 424.3; total 198381.0 temp 323579
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04545530800000108
+INFO:root:len 716
+INFO:root:choose destinations 0.00881648500000054
+INFO:root:resolve destinations 0.002095482999997955
+INFO:root:next 10 turns 124.65625000000001 one 424.3 two 449.7 flag 1495.8750000000002
+INFO:root:=============== TURN 356 ================
+INFO:root:turn 355 mining speed 235.0; MA 409.65; total 198616.0 temp 323344
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047765893999997644
+INFO:root:len 727
+INFO:root:choose destinations 0.007589801000001728
+INFO:root:resolve destinations 0.002039612000000801
+INFO:root:next 10 turns 114.60937499999999 one 409.65 two 452.55 flag 1363.8515624999998
+INFO:root:=============== TURN 357 ================
+INFO:root:turn 356 mining speed 301.0; MA 400.45; total 198917.0 temp 323043
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047231703000001346
+INFO:root:len 1339
+INFO:root:choose destinations 0.008295951000000912
+INFO:root:resolve destinations 0.002048302999998697
+INFO:root:next 10 turns 108.640625 one 400.45 two 453.25 flag 1281.959375
+INFO:root:=============== TURN 358 ================
+INFO:root:turn 357 mining speed 243.0; MA 388.05; total 199160.0 temp 322800
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04555711699999776
+INFO:root:len 1224
+INFO:root:choose destinations 0.00814354699999953
+INFO:root:resolve destinations 0.0019793949999993288
+INFO:root:next 10 turns 97.25000000000001 one 388.05 two 464.9 flag 1137.8250000000003
+INFO:root:=============== TURN 359 ================
+INFO:root:turn 358 mining speed 356.0; MA 366.75; total 199516.0 temp 322444
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047786381000001654
+INFO:root:len 1447
+INFO:root:choose destinations 0.008050737999997892
+INFO:root:resolve destinations 0.0020247129999972913
+INFO:root:next 10 turns 86.140625 one 366.75 two 457.85 flag 999.2312499999999
+INFO:root:=============== TURN 360 ================
+INFO:root:turn 359 mining speed 213.0; MA 365.35; total 199729.0 temp 322231
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05071651799999799
+INFO:root:len 1235
+INFO:root:choose destinations 0.007964138000001952
+INFO:root:resolve destinations 0.002039612000000801
+INFO:root:next 10 turns 86.95312500000001 one 365.35 two 452.45 flag 999.9609375000002
+INFO:root:=============== TURN 361 ================
+INFO:root:turn 360 mining speed 239.0; MA 345.35; total 199968.0 temp 321992
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04723387599999995
+INFO:root:len 756
+INFO:root:choose destinations 0.006103314000000637
+INFO:root:resolve destinations 0.001836612000001736
+INFO:root:next 10 turns 75.85937500000001 one 345.35 two 447.95 flag 864.7968750000002
+INFO:root:=============== TURN 362 ================
+INFO:root:turn 361 mining speed 300.0; MA 348.6; total 200268.0 temp 321692
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04827183999999818
+INFO:root:len 1336
+INFO:root:choose destinations 0.008992169000002548
+INFO:root:resolve destinations 0.0020001909999969314
+INFO:root:next 10 turns 80.78125000000001 one 348.6 two 438.7 flag 912.8281250000002
+INFO:root:=============== TURN 363 ================
+INFO:root:turn 362 mining speed 340.0; MA 347.75; total 200608.0 temp 321352
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04633993499999889
+INFO:root:len 1223
+INFO:root:choose destinations 0.009181511000001308
+INFO:root:resolve destinations 0.0020911370000007423
+INFO:root:next 10 turns 81.53125 one 347.75 two 434.6 flag 913.1499999999999
+INFO:root:=============== TURN 364 ================
+INFO:root:turn 363 mining speed 266.0; MA 347.85; total 200874.0 temp 321086
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.057336641999999216
+INFO:root:len 1509
+INFO:root:choose destinations 0.008958647000000042
+INFO:root:resolve destinations 0.0019042779999978166
+INFO:root:next 10 turns 84.81250000000001 one 347.85 two 424.3 flag 941.4187500000002
+INFO:root:=============== TURN 365 ================
+INFO:root:turn 364 mining speed 398.0; MA 338.2; total 201272.0 temp 320688
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04546399899999898
+INFO:root:len 1656
+INFO:root:choose destinations 0.009980158999997712
+INFO:root:resolve destinations 0.0021113130000003366
+INFO:root:next 10 turns 83.359375 one 338.2 two 409.65 flag 916.953125
+INFO:root:=============== TURN 366 ================
+INFO:root:turn 365 mining speed 269.0; MA 338.75; total 201541.0 temp 320419
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04924275799999833
+INFO:root:len 1436
+INFO:root:choose destinations 0.009457143000002333
+INFO:root:resolve destinations 0.0033752449999973066
+INFO:root:next 10 turns 86.578125 one 338.75 two 400.45 flag 943.7015625
+INFO:root:=============== TURN 367 ================
+INFO:root:turn 366 mining speed 365.0; MA 331.85; total 201906.0 temp 320054
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04734654900000024
+INFO:root:len 1412
+INFO:root:choose destinations 0.009502149999999432
+INFO:root:resolve destinations 0.0022941359999997246
+INFO:root:next 10 turns 86.14062500000001 one 331.85 two 388.05 flag 930.3187500000001
+INFO:root:=============== TURN 368 ================
+INFO:root:turn 367 mining speed 385.0; MA 327.15; total 202291.0 temp 319669
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05168650499999927
+INFO:root:len 861
+INFO:root:choose destinations 0.009346951999997799
+INFO:root:resolve destinations 0.0032079420000030723
+INFO:root:next 10 turns 89.85937499999999 one 327.15 two 366.75 flag 961.4953124999998
+INFO:root:=============== TURN 369 ================
+INFO:root:turn 368 mining speed 158.0; MA 316.8; total 202449.0 temp 319511
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04792667999999978
+INFO:root:len 1172
+INFO:root:choose destinations 0.007548206999999252
+INFO:root:resolve destinations 0.002406499000002782
+INFO:root:next 10 turns 83.828125 one 316.8 two 365.35 flag 888.578125
+INFO:root:=============== TURN 370 ================
+INFO:root:turn 369 mining speed 460.0; MA 311.6; total 202909.0 temp 319051
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0583786410000009
+INFO:root:len 952
+INFO:root:choose destinations 0.008685807999999184
+INFO:root:resolve destinations 0.00206258099999701
+INFO:root:next 10 turns 86.828125 one 311.6 two 345.35 flag 911.6953125000001
+INFO:root:=============== TURN 371 ================
+INFO:root:turn 370 mining speed 288.0; MA 311.2; total 203197.0 temp 318763
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04583957799999894
+INFO:root:len 870
+INFO:root:choose destinations 0.007287165000001039
+INFO:root:resolve destinations 0.0019890169999996488
+INFO:root:next 10 turns 85.56249999999999 one 311.2 two 348.6 flag 889.8499999999999
+INFO:root:=============== TURN 372 ================
+INFO:root:turn 371 mining speed 622.0; MA 301.8; total 203819.0 temp 318141
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04740800799999789
+INFO:root:len 1300
+INFO:root:choose destinations 0.008046081999999899
+INFO:root:resolve destinations 0.001847476999998321
+INFO:root:next 10 turns 79.953125 one 301.8 two 347.75 flag 823.5171875
+INFO:root:=============== TURN 373 ================
+INFO:root:turn 372 mining speed 436.0; MA 318.5; total 204255.0 temp 317705
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04838544500000097
+INFO:root:len 1515
+INFO:root:choose destinations 0.009181822000002171
+INFO:root:resolve destinations 0.0027575569999989114
+INFO:root:next 10 turns 90.359375 one 318.5 two 347.85 flag 921.665625
+INFO:root:=============== TURN 374 ================
+INFO:root:turn 373 mining speed 363.0; MA 319.5; total 204618.0 temp 317342
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04985051400000273
+INFO:root:len 1405
+INFO:root:choose destinations 0.009333604000001827
+INFO:root:resolve destinations 0.0020576140000017062
+INFO:root:next 10 turns 94.0 one 319.5 two 338.2 flag 949.4000000000001
+INFO:root:=============== TURN 375 ================
+INFO:root:turn 374 mining speed 465.0; MA 325.5; total 205083.0 temp 316877
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045467412999997237
+INFO:root:len 718
+INFO:root:choose destinations 0.006104867000001235
+INFO:root:resolve destinations 0.0024642330000013146
+INFO:root:next 10 turns 97.578125 one 325.5 two 338.75 flag 975.78125
+INFO:root:=============== TURN 376 ================
+INFO:root:turn 375 mining speed 569.0; MA 335.1; total 205652.0 temp 316308
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05037353100000175
+INFO:root:len 3102
+INFO:root:choose destinations 0.009980158999997712
+INFO:root:resolve destinations 0.002523829000001143
+INFO:root:next 10 turns 105.734375 one 335.1 two 331.85 flag 1046.7703125
+INFO:root:=============== TURN 377 ================
+INFO:root:turn 376 mining speed 553.0; MA 351.8; total 206205.0 temp 315755
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045968701999999695
+INFO:root:len 3108
+INFO:root:choose destinations 0.011746311999999648
+INFO:root:resolve destinations 0.004454802000001479
+INFO:root:next 10 turns 117.64062500000001 one 351.8 two 327.15 flag 1152.8781250000002
+INFO:root:=============== TURN 378 ================
+INFO:root:turn 377 mining speed 535.0; MA 364.4; total 206740.0 temp 315220
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04483265300000028
+INFO:root:len 3106
+INFO:root:choose destinations 0.01378375099999829
+INFO:root:resolve destinations 0.0025908739999991326
+INFO:root:next 10 turns 128.74999999999997 one 364.4 two 316.8 flag 1248.8749999999995
+INFO:root:=============== TURN 379 ================
+INFO:root:turn 378 mining speed 308.0; MA 379.0; total 207048.0 temp 314912
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045014545000000794
+INFO:root:len 3107
+INFO:root:choose destinations 0.009698319999998262
+INFO:root:resolve destinations 0.002560765999998438
+INFO:root:next 10 turns 139.5 one 379.0 two 311.6 flag 1339.1999999999998
+INFO:root:=============== TURN 380 ================
+INFO:root:turn 379 mining speed 671.0; MA 376.6; total 207719.0 temp 314241
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05107626699999912
+INFO:root:len 3108
+INFO:root:choose destinations 0.008718089999998568
+INFO:root:resolve destinations 0.002618500000000523
+INFO:root:next 10 turns 138.12500000000003 one 376.6 two 311.2 flag 1312.1875000000002
+INFO:root:=============== TURN 381 ================
+INFO:root:turn 380 mining speed 573.0; MA 399.5; total 208292.0 temp 313668
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04654076100000282
+INFO:root:len 3107
+INFO:root:choose destinations 0.012421733000000046
+INFO:root:resolve destinations 0.002765005999997072
+INFO:root:next 10 turns 155.375 one 399.5 two 301.8 flag 1460.5249999999999
+INFO:root:=============== TURN 382 ================
+INFO:root:turn 381 mining speed 446.0; MA 416.2; total 208738.0 temp 313222
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04600874299999802
+INFO:root:len 3106
+INFO:root:choose destinations 0.012634355000002984
+INFO:root:resolve destinations 0.0019915000000025884
+INFO:root:next 10 turns 160.59375 one 416.2 two 318.5 flag 1493.521875
+INFO:root:=============== TURN 383 ================
+INFO:root:turn 382 mining speed 222.0; MA 423.5; total 208960.0 temp 313000
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05038191099999878
+INFO:root:len 3106
+INFO:root:choose destinations 0.009716634000000113
+INFO:root:resolve destinations 0.0020197460000019873
+INFO:root:next 10 turns 164.84375 one 423.5 two 319.5 flag 1516.5625
+INFO:root:=============== TURN 384 ================
+INFO:root:turn 383 mining speed 528.0; MA 417.6; total 209488.0 temp 312472
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050739487000001304
+INFO:root:len 3112
+INFO:root:choose destinations 0.008152548999998288
+INFO:root:resolve destinations 0.002920204999998788
+INFO:root:next 10 turns 159.28125 one 417.6 two 325.5 flag 1449.459375
+INFO:root:=============== TURN 385 ================
+INFO:root:turn 384 mining speed 616.0; MA 430.7; total 210104.0 temp 311856
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04794499299999799
+INFO:root:len 3110
+INFO:root:choose destinations 0.007086339000000663
+INFO:root:resolve destinations 0.002613843999998977
+INFO:root:next 10 turns 164.46875 one 430.7 two 335.1 flag 1480.2187499999998
+INFO:root:=============== TURN 386 ================
+INFO:root:turn 385 mining speed 461.0; MA 441.6; total 210565.0 temp 311395
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050395567999999
+INFO:root:len 3116
+INFO:root:choose destinations 0.005852203999999972
+INFO:root:resolve destinations 0.0024993079999973133
+INFO:root:next 10 turns 166.06250000000003 one 441.6 two 351.8 flag 1477.9562500000002
+INFO:root:=============== TURN 387 ================
+INFO:root:turn 386 mining speed 492.0; MA 451.2; total 211057.0 temp 310903
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0570448689999985
+INFO:root:len 3120
+INFO:root:choose destinations 0.00509918400000231
+INFO:root:resolve destinations 0.0028450889999973583
+INFO:root:next 10 turns 168.125 one 451.2 two 364.4 flag 1479.5
+INFO:root:=============== TURN 388 ================
+INFO:root:turn 387 mining speed 498.0; MA 457.55; total 211555.0 temp 310405
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05143632600000103
+INFO:root:len 3118
+INFO:root:choose destinations 0.006873406999996945
+INFO:root:resolve destinations 0.0020656850000015936
+INFO:root:next 10 turns 167.53125 one 457.55 two 379.0 flag 1457.5218750000001
+INFO:root:=============== TURN 389 ================
+INFO:root:turn 388 mining speed 297.0; MA 463.2; total 211852.0 temp 310108
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04863127899999853
+INFO:root:len 3114
+INFO:root:choose destinations 0.007283750000002698
+INFO:root:resolve destinations 0.0025523850000013226
+INFO:root:next 10 turns 171.8125 one 463.2 two 376.6 flag 1477.5874999999999
+INFO:root:=============== TURN 390 ================
+INFO:root:turn 389 mining speed 485.0; MA 470.15; total 212337.0 temp 309623
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06317301600000036
+INFO:root:len 3112
+INFO:root:choose destinations 0.010018958999999938
+INFO:root:resolve destinations 0.004683564000000473
+INFO:root:next 10 turns 169.0 one 470.15 two 399.5 flag 1436.4999999999998
+INFO:root:=============== TURN 391 ================
+INFO:root:turn 390 mining speed 324.0; MA 471.4; total 212661.0 temp 309299
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04890225299999784
+INFO:root:len 3112
+INFO:root:choose destinations 0.0068029469999970615
+INFO:root:resolve destinations 0.0028143599999985724
+INFO:root:next 10 turns 164.56249999999997 one 471.4 two 416.2 flag 1382.3249999999998
+INFO:root:=============== TURN 392 ================
+INFO:root:turn 391 mining speed 460.0; MA 473.2; total 213121.0 temp 308839
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047671222999998264
+INFO:root:len 3116
+INFO:root:choose destinations 0.00787474400000221
+INFO:root:resolve destinations 0.0021317990000007114
+INFO:root:next 10 turns 163.40625 one 473.2 two 423.5 flag 1356.271875
+INFO:root:=============== TURN 393 ================
+INFO:root:turn 392 mining speed 210.0; MA 465.1; total 213331.0 temp 308629
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0521086430000004
+INFO:root:len 3116
+INFO:root:choose destinations 0.005599542999998874
+INFO:root:resolve destinations 0.0025014809999994725
+INFO:root:next 10 turns 160.1875 one 465.1 two 417.6 flag 1313.5375000000001
+INFO:root:=============== TURN 394 ================
+INFO:root:turn 393 mining speed 465.0; MA 453.8; total 213796.0 temp 308164
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.058142118999999326
+INFO:root:len 3116
+INFO:root:choose destinations 0.00696962900000031
+INFO:root:resolve destinations 0.002125281000001422
+INFO:root:next 10 turns 149.03125 one 453.8 two 430.7 flag 1207.153125
+INFO:root:=============== TURN 395 ================
+INFO:root:turn 394 mining speed 356.0; MA 458.9; total 214152.0 temp 307808
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05600224999999881
+INFO:root:len 3116
+INFO:root:choose destinations 0.006314073999998726
+INFO:root:resolve destinations 0.0021265220000010743
+INFO:root:next 10 turns 148.81249999999997 one 458.9 two 441.6 flag 1190.4999999999998
+INFO:root:=============== TURN 396 ================
+INFO:root:turn 395 mining speed 262.0; MA 453.45; total 214414.0 temp 307546
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048526674999997965
+INFO:root:len 3116
+INFO:root:choose destinations 0.005057900999997145
+INFO:root:resolve destinations 0.002736760999997756
+INFO:root:next 10 turns 142.40625 one 453.45 two 451.2 flag 1125.0093749999999
+INFO:root:=============== TURN 397 ================
+INFO:root:turn 396 mining speed 448.0; MA 438.1; total 214862.0 temp 307098
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05154279199999934
+INFO:root:len 3120
+INFO:root:choose destinations 0.0070832349999996325
+INFO:root:resolve destinations 0.0021886020000003725
+INFO:root:next 10 turns 130.828125 one 438.1 two 457.55 flag 1020.4593749999999
+INFO:root:=============== TURN 398 ================
+INFO:root:turn 397 mining speed 439.0; MA 432.85; total 215301.0 temp 306659
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04637749300000138
+INFO:root:len 3120
+INFO:root:choose destinations 0.007302064000000996
+INFO:root:resolve destinations 0.0021268330000019375
+INFO:root:next 10 turns 125.78125000000001 one 432.85 two 463.2 flag 968.5156250000001
+INFO:root:=============== TURN 399 ================
+INFO:root:turn 398 mining speed 443.0; MA 428.05; total 215744.0 temp 306216
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0505073110000005
+INFO:root:len 3124
+INFO:root:choose destinations 0.006505898000000343
+INFO:root:resolve destinations 0.0020576149999982363
+INFO:root:next 10 turns 120.60937500000001 one 428.05 two 470.15 flag 916.6312500000001
+INFO:root:=============== TURN 400 ================
+INFO:root:turn 399 mining speed 464.0; MA 434.8; total 216208.0 temp 305752
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04769450399999897
+INFO:root:len 3124
+INFO:root:choose destinations 0.007175111000002232
+INFO:root:resolve destinations 0.002023160000000246
+INFO:root:next 10 turns 124.43750000000001 one 434.8 two 471.4 flag 933.2812500000001
+INFO:root:=============== TURN 401 ================
+INFO:root:turn 400 mining speed 299.0; MA 424.45; total 216507.0 temp 305453
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049925629000000527
+INFO:root:len 3128
+INFO:root:choose destinations 0.007965069000000824
+INFO:root:resolve destinations 0.00232734899999798
+INFO:root:next 10 turns 117.40625 one 424.45 two 473.2 flag 868.80625
+INFO:root:=============== TURN 402 ================
+INFO:root:turn 401 mining speed 562.0; MA 410.75; total 217069.0 temp 304891
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05044740499999989
+INFO:root:len 3124
+INFO:root:choose destinations 0.006590015000000449
+INFO:root:resolve destinations 0.0021383170000000007
+INFO:root:next 10 turns 111.375 one 410.75 two 465.1 flag 813.0374999999999
+INFO:root:=============== TURN 403 ================
+INFO:root:turn 402 mining speed 354.0; MA 416.55; total 217423.0 temp 304537
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05442109299999842
+INFO:root:len 3124
+INFO:root:choose destinations 0.007883436000000188
+INFO:root:resolve destinations 0.002517931999999945
+INFO:root:next 10 turns 118.53125 one 416.55 two 453.8 flag 853.4250000000001
+INFO:root:=============== TURN 404 ================
+INFO:root:turn 403 mining speed 315.0; MA 423.15; total 217738.0 temp 304222
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.050982217000001384
+INFO:root:len 3120
+INFO:root:choose destinations 0.006754524999998068
+INFO:root:resolve destinations 0.0018800680000019554
+INFO:root:next 10 turns 121.0625 one 423.15 two 458.9 flag 859.5437499999999
+INFO:root:=============== TURN 405 ================
+INFO:root:turn 404 mining speed 420.0; MA 412.5; total 218158.0 temp 303802
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047633664999999326
+INFO:root:len 3120
+INFO:root:choose destinations 0.008841006999997347
+INFO:root:resolve destinations 0.0019415259999995271
+INFO:root:next 10 turns 116.109375 one 412.5 two 453.45 flag 812.765625
+INFO:root:=============== TURN 406 ================
+INFO:root:turn 405 mining speed 528.0; MA 402.7; total 218686.0 temp 303274
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04934829300000132
+INFO:root:len 3120
+INFO:root:choose destinations 0.012792966999999322
+INFO:root:resolve destinations 0.0020417849999994075
+INFO:root:next 10 turns 114.78124999999999 one 402.7 two 438.1 flag 791.9906249999999
+INFO:root:=============== TURN 407 ================
+INFO:root:turn 406 mining speed 489.0; MA 406.05; total 219175.0 temp 302785
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0464532300000009
+INFO:root:len 3124
+INFO:root:choose destinations 0.008700087000001133
+INFO:root:resolve destinations 0.0022426109999997834
+INFO:root:next 10 turns 118.515625 one 406.05 two 432.85 flag 805.90625
+INFO:root:=============== TURN 408 ================
+INFO:root:turn 407 mining speed 467.0; MA 405.9; total 219642.0 temp 302318
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04601588199999895
+INFO:root:len 3124
+INFO:root:choose destinations 0.0074224970000003054
+INFO:root:resolve destinations 0.0018363020000009556
+INFO:root:next 10 turns 119.92187499999999 one 405.9 two 428.05 flag 803.4765624999999
+INFO:root:=============== TURN 409 ================
+INFO:root:turn 408 mining speed 623.0; MA 404.35; total 220265.0 temp 301695
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04903510300000136
+INFO:root:len 3124
+INFO:root:choose destinations 0.00951115100000166
+INFO:root:resolve destinations 0.0020976560000001143
+INFO:root:next 10 turns 116.84375000000001 one 404.35 two 434.8 flag 771.16875
+INFO:root:=============== TURN 410 ================
+INFO:root:turn 409 mining speed 377.0; MA 420.65; total 220642.0 temp 301318
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04552483599999846
+INFO:root:len 3124
+INFO:root:choose destinations 0.005679314000001767
+INFO:root:resolve destinations 0.001861755000000187
+INFO:root:next 10 turns 130.265625 one 420.65 two 424.45 flag 846.7265625
+INFO:root:=============== TURN 411 ================
+INFO:root:turn 410 mining speed 526.0; MA 415.25; total 221168.0 temp 300792
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049527081000000805
+INFO:root:len 3124
+INFO:root:choose destinations 0.007789384999998816
+INFO:root:resolve destinations 0.002901580999999709
+INFO:root:next 10 turns 131.171875 one 415.25 two 410.75 flag 839.5
+INFO:root:=============== TURN 412 ================
+INFO:root:turn 411 mining speed 548.0; MA 425.35; total 221716.0 temp 300244
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048556161999997016
+INFO:root:len 3124
+INFO:root:choose destinations 0.008457047000000273
+INFO:root:resolve destinations 0.0019548730000025216
+INFO:root:next 10 turns 135.671875 one 425.35 two 416.55 flag 854.7328124999999
+INFO:root:=============== TURN 413 ================
+INFO:root:turn 412 mining speed 387.0; MA 429.75; total 222103.0 temp 299857
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04565365000000199
+INFO:root:len 3128
+INFO:root:choose destinations 0.005823958000000573
+INFO:root:resolve destinations 0.0018434409999983359
+INFO:root:next 10 turns 136.359375 one 429.75 two 423.15 flag 845.428125
+INFO:root:=============== TURN 414 ================
+INFO:root:turn 413 mining speed 305.0; MA 438.6; total 222408.0 temp 299552
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05313822700000159
+INFO:root:len 3120
+INFO:root:choose destinations 0.00800821499999671
+INFO:root:resolve destinations 0.0021336619999985373
+INFO:root:next 10 turns 145.21875 one 438.6 two 412.5 flag 885.834375
+INFO:root:=============== TURN 415 ================
+INFO:root:turn 414 mining speed 446.0; MA 430.6; total 222854.0 temp 299106
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04647247500000162
+INFO:root:len 3124
+INFO:root:choose destinations 0.006990425999997996
+INFO:root:resolve destinations 0.0021473189999987596
+INFO:root:next 10 turns 143.28125000000003 one 430.6 two 402.7 flag 859.6875000000002
+INFO:root:=============== TURN 416 ================
+INFO:root:turn 415 mining speed 329.0; MA 435.1; total 223183.0 temp 298777
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.056831006999999545
+INFO:root:len 3124
+INFO:root:choose destinations 0.006266892999999385
+INFO:root:resolve destinations 0.0020244019999999807
+INFO:root:next 10 turns 145.046875 one 435.1 two 406.05 flag 855.7765625
+INFO:root:=============== TURN 417 ================
+INFO:root:turn 416 mining speed 246.0; MA 438.45; total 223429.0 temp 298531
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04939112699999981
+INFO:root:len 3124
+INFO:root:choose destinations 0.0069916679999977305
+INFO:root:resolve destinations 0.001975048999998563
+INFO:root:next 10 turns 147.1875 one 438.45 two 405.9 flag 853.6875
+INFO:root:=============== TURN 418 ================
+INFO:root:turn 417 mining speed 409.0; MA 428.35; total 223838.0 temp 298122
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.047778309999998214
+INFO:root:len 3120
+INFO:root:choose destinations 0.00595556699999733
+INFO:root:resolve destinations 0.0020737550000013982
+INFO:root:next 10 turns 141.359375 one 428.35 two 404.35 flag 805.7484375
+INFO:root:=============== TURN 419 ================
+INFO:root:turn 418 mining speed 286.0; MA 426.85; total 224124.0 temp 297836
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049094389000000405
+INFO:root:len 3124
+INFO:root:choose destinations 0.008861802999998503
+INFO:root:resolve destinations 0.0020604079999984037
+INFO:root:next 10 turns 135.32812500000003 one 426.85 two 420.65 flag 757.8375000000001
+INFO:root:=============== TURN 420 ================
+INFO:root:turn 419 mining speed 275.0; MA 419.0; total 224399.0 temp 297561
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048053010000000285
+INFO:root:len 3116
+INFO:root:choose destinations 0.008715605999999099
+INFO:root:resolve destinations 0.002416120999999549
+INFO:root:next 10 turns 132.109375 one 419.0 two 415.25 flag 726.6015625
+INFO:root:=============== TURN 421 ================
+INFO:root:turn 420 mining speed 231.0; MA 409.55; total 224630.0 temp 297330
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04631448299999974
+INFO:root:len 3116
+INFO:root:choose destinations 0.006715105000001387
+INFO:root:resolve destinations 0.0019387330000029124
+INFO:root:next 10 turns 123.046875 one 409.55 two 425.35 flag 664.453125
+INFO:root:=============== TURN 422 ================
+INFO:root:turn 421 mining speed 207.0; MA 406.15; total 224837.0 temp 297123
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06110919300000006
+INFO:root:len 3116
+INFO:root:choose destinations 0.00791385399999811
+INFO:root:resolve destinations 0.0024490230000004942
+INFO:root:next 10 turns 119.54687499999999 one 406.15 two 429.75 flag 633.5984374999999
+INFO:root:=============== TURN 423 ================
+INFO:root:turn 422 mining speed 248.0; MA 388.4; total 225085.0 temp 296875
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04970959299999933
+INFO:root:len 3116
+INFO:root:choose destinations 0.007763932999999668
+INFO:root:resolve destinations 0.002493409999999585
+INFO:root:next 10 turns 105.68749999999997 one 388.4 two 438.6 flag 549.5749999999999
+INFO:root:=============== TURN 424 ================
+INFO:root:turn 423 mining speed 407.0; MA 383.1; total 225492.0 temp 296468
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.049035102999997804
+INFO:root:len 3116
+INFO:root:choose destinations 0.008270187999997347
+INFO:root:resolve destinations 0.002055440999999547
+INFO:root:next 10 turns 104.875 one 383.1 two 430.6 flag 534.8625000000001
+INFO:root:=============== TURN 425 ================
+INFO:root:turn 424 mining speed 300.0; MA 387.7; total 225792.0 temp 296168
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04500771600000064
+INFO:root:len 3116
+INFO:root:choose destinations 0.012429803999999933
+INFO:root:resolve destinations 0.0023025160000003098
+INFO:root:next 10 turns 106.34374999999999 one 387.7 two 435.1 flag 531.7187499999999
+INFO:root:=============== TURN 426 ================
+INFO:root:turn 425 mining speed 271.0; MA 381.7; total 226063.0 temp 295897
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.048589684999999605
+INFO:root:len 3112
+INFO:root:choose destinations 0.008715916999999962
+INFO:root:resolve destinations 0.001993051999999551
+INFO:root:next 10 turns 101.546875 one 381.7 two 438.45 flag 497.5796875
+INFO:root:=============== TURN 427 ================
+INFO:root:turn 426 mining speed 176.0; MA 368.85; total 226239.0 temp 295721
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04588924000000105
+INFO:root:len 3112
+INFO:root:choose destinations 0.007776659000001018
+INFO:root:resolve destinations 0.002761901999999594
+INFO:root:next 10 turns 96.671875 one 368.85 two 428.35 flag 464.02500000000003
+INFO:root:=============== TURN 428 ================
+INFO:root:turn 427 mining speed 239.0; MA 353.2; total 226478.0 temp 295482
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0627952640000018
+INFO:root:len 3114
+INFO:root:choose destinations 0.008866148999999268
+INFO:root:resolve destinations 0.0035763819999985458
+INFO:root:next 10 turns 87.35937499999999 one 353.2 two 426.85 flag 410.58906249999995
+INFO:root:=============== TURN 429 ================
+INFO:root:turn 428 mining speed 283.0; MA 341.8; total 226761.0 temp 295199
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045950078000000616
+INFO:root:len 3110
+INFO:root:choose destinations 0.007592284000001115
+INFO:root:resolve destinations 0.0019508379999990666
+INFO:root:next 10 turns 82.6875 one 341.8 two 419.0 flag 380.3625
+INFO:root:=============== TURN 430 ================
+INFO:root:turn 429 mining speed 239.0; MA 324.8; total 227000.0 temp 294960
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05053183199999722
+INFO:root:len 3108
+INFO:root:choose destinations 0.008612554999999134
+INFO:root:resolve destinations 0.0027752499999991187
+INFO:root:next 10 turns 75.015625 one 324.8 two 409.55 flag 337.5703125
+INFO:root:=============== TURN 431 ================
+INFO:root:turn 430 mining speed 340.0; MA 317.9; total 227340.0 temp 294620
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04730588700000027
+INFO:root:len 3110
+INFO:root:choose destinations 0.009955016999999344
+INFO:root:resolve destinations 0.0036213889999991977
+INFO:root:next 10 turns 71.765625 one 317.9 two 406.15 flag 315.76875
+INFO:root:=============== TURN 432 ================
+INFO:root:turn 431 mining speed 261.0; MA 308.6; total 227601.0 temp 294359
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04858471900000083
+INFO:root:len 3113
+INFO:root:choose destinations 0.008627764999999954
+INFO:root:resolve destinations 0.0028131180000023903
+INFO:root:next 10 turns 71.50000000000003 one 308.6 two 388.4 flag 307.4500000000001
+INFO:root:=============== TURN 433 ================
+INFO:root:turn 432 mining speed 257.0; MA 294.25; total 227858.0 temp 294102
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04722673699999902
+INFO:root:len 3115
+INFO:root:choose destinations 0.010515901999998079
+INFO:root:resolve destinations 0.0026687839999972596
+INFO:root:next 10 turns 64.1875 one 294.25 two 383.1 flag 269.58750000000003
+INFO:root:=============== TURN 434 ================
+INFO:root:turn 433 mining speed 238.0; MA 287.75; total 228096.0 temp 293864
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04986324000000053
+INFO:root:len 3114
+INFO:root:choose destinations 0.008179242000000642
+INFO:root:resolve destinations 0.0019244540000009636
+INFO:root:next 10 turns 58.6875 one 287.75 two 387.7 flag 240.61875
+INFO:root:=============== TURN 435 ================
+INFO:root:turn 434 mining speed 306.0; MA 284.4; total 228402.0 temp 293558
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04593952499999787
+INFO:root:len 3112
+INFO:root:choose destinations 0.00820966199999873
+INFO:root:resolve destinations 0.0020892749999994464
+INFO:root:next 10 turns 58.468749999999986 one 284.4 two 381.7 flag 233.87499999999994
+INFO:root:=============== TURN 436 ================
+INFO:root:turn 435 mining speed 300.0; MA 277.4; total 228702.0 temp 293258
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0556238769999986
+INFO:root:ship 1 halite 466 max enemy 192.25 enemyMa 25 friendly 2 enemy 1
+INFO:root:len 3114
+INFO:root:choose destinations 0.007572108000001521
+INFO:root:resolve destinations 0.00214762899999954
+INFO:root:next 10 turns 58.10937499999998 one 277.4 two 368.85 flag 226.62656249999992
+INFO:root:=============== TURN 437 ================
+INFO:root:turn 436 mining speed 358.0; MA 275.95; total 229060.0 temp 292900
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04796020199999873
+INFO:root:len 3120
+INFO:root:choose destinations 0.0056495149999982175
+INFO:root:resolve destinations 0.0019787740000012377
+INFO:root:next 10 turns 62.09375 one 275.95 two 353.2 flag 235.95624999999998
+INFO:root:=============== TURN 438 ================
+INFO:root:turn 437 mining speed 170.0; MA 281.55; total 229230.0 temp 292730
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04699673300000029
+INFO:root:len 3112
+INFO:root:choose destinations 0.005668450000001712
+INFO:root:resolve destinations 0.0023121390000007125
+INFO:root:next 10 turns 69.15625 one 281.55 two 341.8 flag 255.878125
+INFO:root:=============== TURN 439 ================
+INFO:root:turn 438 mining speed 210.0; MA 269.6; total 229440.0 temp 292520
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04666492000000133
+INFO:root:len 3116
+INFO:root:choose destinations 0.005695764000002157
+INFO:root:resolve destinations 0.001940284999999875
+INFO:root:next 10 turns 67.00000000000001 one 269.6 two 324.8 flag 241.20000000000005
+INFO:root:=============== TURN 440 ================
+INFO:root:turn 439 mining speed 231.0; MA 265.8; total 229671.0 temp 292289
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05125909000000206
+INFO:root:len 3112
+INFO:root:choose destinations 0.009175613000000027
+INFO:root:resolve destinations 0.0021457669999982443
+INFO:root:next 10 turns 66.78125000000001 one 265.8 two 317.9 flag 233.73437500000006
+INFO:root:=============== TURN 441 ================
+INFO:root:turn 440 mining speed 170.0; MA 263.6; total 229841.0 temp 292119
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04994301099999987
+INFO:root:len 3112
+INFO:root:choose destinations 0.006085311999999732
+INFO:root:resolve destinations 0.002522897999998719
+INFO:root:next 10 turns 68.3125 one 263.6 two 308.6 flag 232.2625
+INFO:root:=============== TURN 442 ================
+INFO:root:turn 441 mining speed 165.0; MA 260.55; total 230006.0 temp 291954
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04799745000000044
+INFO:root:len 3112
+INFO:root:choose destinations 0.00896144000000021
+INFO:root:resolve destinations 0.002281100000001146
+INFO:root:next 10 turns 70.890625 one 260.55 two 294.25 flag 233.9390625
+INFO:root:=============== TURN 443 ================
+INFO:root:turn 442 mining speed 230.0; MA 258.45; total 230236.0 temp 291724
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04634583300000017
+INFO:root:len 3112
+INFO:root:choose destinations 0.00560140500000017
+INFO:root:resolve destinations 0.001939664000001784
+INFO:root:next 10 turns 71.609375 one 258.45 two 287.75 flag 229.15
+INFO:root:=============== TURN 444 ================
+INFO:root:turn 443 mining speed 194.0; MA 257.55; total 230430.0 temp 291530
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046218259999999844
+INFO:root:len 3114
+INFO:root:choose destinations 0.00681970900000195
+INFO:root:resolve destinations 0.0020374390000021947
+INFO:root:next 10 turns 72.09375000000001 one 257.55 two 284.4 flag 223.49062500000005
+INFO:root:=============== TURN 445 ================
+INFO:root:turn 444 mining speed 253.0; MA 246.9; total 230683.0 temp 291277
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04683005000000051
+INFO:root:len 3114
+INFO:root:choose destinations 0.0052518990000010035
+INFO:root:resolve destinations 0.002154769000000556
+INFO:root:next 10 turns 67.62500000000001 one 246.9 two 277.4 flag 202.87500000000003
+INFO:root:=============== TURN 446 ================
+INFO:root:turn 445 mining speed 47.0; MA 244.55; total 230730.0 temp 291230
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.051923957999999715
+INFO:root:len 3110
+INFO:root:choose destinations 0.006269686999999635
+INFO:root:resolve destinations 0.002075306999998361
+INFO:root:next 10 turns 66.60937500000001 one 244.55 two 275.95 flag 193.16718750000004
+INFO:root:=============== TURN 447 ================
+INFO:root:turn 446 mining speed 69.0; MA 233.35; total 230799.0 temp 291161
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0464532300000009
+INFO:root:len 3112
+INFO:root:choose destinations 0.005313666999999356
+INFO:root:resolve destinations 0.00220101700000086
+INFO:root:next 10 turns 57.85937499999999 one 233.35 two 281.55 flag 162.00624999999997
+INFO:root:=============== TURN 448 ================
+INFO:root:turn 447 mining speed 93.0; MA 228.0; total 230892.0 temp 291068
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04553073299999966
+INFO:root:len 3112
+INFO:root:choose destinations 0.004375031000002139
+INFO:root:resolve destinations 0.001783225000000499
+INFO:root:next 10 turns 58.24999999999999 one 228.0 two 269.6 flag 157.27499999999998
+INFO:root:=============== TURN 449 ================
+INFO:root:turn 448 mining speed 143.0; MA 220.7; total 231035.0 temp 290925
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05177993400000247
+INFO:root:len 3107
+INFO:root:choose destinations 0.005334774000001374
+INFO:root:resolve destinations 0.0027991500000013048
+INFO:root:next 10 turns 54.874999999999986 one 220.7 two 265.8 flag 142.67499999999998
+INFO:root:=============== TURN 450 ================
+INFO:root:turn 449 mining speed 53.0; MA 213.7; total 231088.0 temp 290872
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045321836999999476
+INFO:root:len 3105
+INFO:root:choose destinations 0.002939760000000291
+INFO:root:resolve destinations 0.0021367649999994853
+INFO:root:next 10 turns 51.187499999999986 one 213.7 two 263.6 flag 127.96874999999997
+INFO:root:=============== TURN 451 ================
+INFO:root:turn 450 mining speed 37.0; MA 204.4; total 231125.0 temp 290835
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.06295263499999848
+INFO:root:len 3103
+INFO:root:choose destinations 0.002531277999999304
+INFO:root:resolve destinations 0.0027268280000001255
+INFO:root:next 10 turns 46.328125 one 204.4 two 260.55 flag 111.1875
+INFO:root:=============== TURN 452 ================
+INFO:root:turn 451 mining speed 11.0; MA 189.25; total 231136.0 temp 290824
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05185846500000224
+INFO:root:len 3085
+INFO:root:choose destinations 0.0010773850000020957
+INFO:root:resolve destinations 0.0022702359999975386
+INFO:root:next 10 turns 37.515625 one 189.25 two 258.45 flag 86.2859375
+INFO:root:=============== TURN 453 ================
+INFO:root:turn 452 mining speed 22.0; MA 176.75; total 231158.0 temp 290802
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.046397979000001754
+INFO:root:len 3103
+INFO:root:choose destinations 0.0016680680000007442
+INFO:root:resolve destinations 0.002136454999998705
+INFO:root:next 10 turns 29.984374999999996 one 176.75 two 257.55 flag 65.96562499999999
+INFO:root:=============== TURN 454 ================
+INFO:root:turn 453 mining speed 56.0; MA 165.0; total 231214.0 temp 290746
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04967544999999873
+INFO:root:len 3103
+INFO:root:choose destinations 0.001702212000001424
+INFO:root:resolve destinations 0.002179290000000833
+INFO:root:next 10 turns 25.96875 one 165.0 two 246.9 flag 54.534375
+INFO:root:=============== TURN 455 ================
+INFO:root:turn 454 mining speed 49.0; MA 155.9; total 231263.0 temp 290697
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045781533000003094
+INFO:root:len 3104
+INFO:root:choose destinations 0.0010950769999986676
+INFO:root:resolve destinations 0.0022460250000015947
+INFO:root:next 10 turns 21.015625 one 155.9 two 244.55 flag 42.03125
+INFO:root:=============== TURN 456 ================
+INFO:root:turn 455 mining speed 20.0; MA 143.05; total 231283.0 temp 290677
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04795151200000092
+INFO:root:choose destinations 0.0002967389999994907
+INFO:root:resolve destinations 0.0021541469999988294
+INFO:root:next 10 turns 16.484375000000007 one 143.05 two 233.35 flag 31.320312500000014
+INFO:root:=============== TURN 457 ================
+INFO:root:turn 456 mining speed 46.0; MA 129.05; total 231329.0 temp 290631
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0467971490000032
+INFO:root:len 3106
+INFO:root:choose destinations 0.0010705559999983905
+INFO:root:resolve destinations 0.0026160169999975835
+INFO:root:next 10 turns 9.406250000000007 one 129.05 two 228.0 flag 16.931250000000013
+INFO:root:=============== TURN 458 ================
+INFO:root:turn 457 mining speed 72.0; MA 113.45; total 231401.0 temp 290559
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05214402899999726
+INFO:root:choose destinations 0.0003069820000014545
+INFO:root:resolve destinations 0.002108208999999306
+INFO:root:next 10 turns 1.9375000000000053 one 113.45 two 220.7 flag 3.293750000000009
+INFO:root:=============== TURN 459 ================
+INFO:root:turn 458 mining speed 89.0; MA 108.55; total 231490.0 temp 290470
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054844783000000064
+INFO:root:choose destinations 0.00030170399999818187
+INFO:root:resolve destinations 0.005078388000001155
+INFO:root:next 10 turns 1.0625000000000018 one 108.55 two 213.7 flag 1.7000000000000028
+INFO:root:=============== TURN 460 ================
+INFO:root:turn 459 mining speed 11.0; MA 102.5; total 231501.0 temp 290459
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.0454736209999993
+INFO:root:choose destinations 0.00030108400000017355
+INFO:root:resolve destinations 0.00369805699999759
+INFO:root:next 10 turns 0.18749999999999822 one 102.5 two 204.4 flag 0.28124999999999734
+INFO:root:=============== TURN 461 ================
+INFO:root:turn 460 mining speed 0.0; MA 91.5; total 231501.0 temp 290459
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04571417800000077
+INFO:root:choose destinations 0.0003004639999986125
+INFO:root:resolve destinations 0.002025954000000496
+INFO:root:next 10 turns -2.717391304347826 one 91.5 two 189.25 flag -3.804347826086956
+INFO:root:=============== TURN 462 ================
+INFO:root:turn 461 mining speed 45.0; MA 83.0; total 231546.0 temp 290414
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045279933999999855
+INFO:root:choose destinations 0.0003268460000001028
+INFO:root:resolve destinations 0.00205544199999963
+INFO:root:next 10 turns -5.657894736842105 one 83.0 two 176.75 flag -7.355263157894736
+INFO:root:=============== TURN 463 ================
+INFO:root:turn 462 mining speed 0.0; MA 77.0; total 231546.0 temp 290414
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045223131000000194
+INFO:root:choose destinations 0.00046559399999779316
+INFO:root:resolve destinations 0.00168917499999921
+INFO:root:next 10 turns -7.857142857142857 one 77.0 two 165.0 flag -9.428571428571429
+INFO:root:=============== TURN 464 ================
+INFO:root:turn 463 mining speed 4.0; MA 65.5; total 231550.0 temp 290410
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045880239000002376
+INFO:root:choose destinations 0.00029984300000052144
+INFO:root:resolve destinations 0.0008619689999989077
+INFO:root:next 10 turns -27.66666666666667 one 65.5 two 155.9 flag -30.433333333333337
+INFO:root:=============== TURN 465 ================
+INFO:root:turn 464 mining speed 0.0; MA 56.0; total 231550.0 temp 290410
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.054661649999999895
+INFO:root:choose destinations 0.00043051900000179444
+INFO:root:resolve destinations 0.001674896999997344
+INFO:root:next 10 turns -34.500000000000014 one 56.0 two 143.05 flag -34.500000000000014
+INFO:root:=============== TURN 466 ================
+INFO:root:turn 465 mining speed 15.0; MA 43.35; total 231565.0 temp 290395
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.044486873000000315
+INFO:root:choose destinations 0.00029456500000080155
+INFO:root:resolve destinations 0.0005674040000016589
+INFO:root:next 10 turns -60.500000000000014 one 43.35 two 129.05 flag -54.45000000000002
+INFO:root:=============== TURN 467 ================
+INFO:root:turn 466 mining speed 3.0; MA 41.75; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.043922261999998824
+INFO:root:choose destinations 0.00029642799999862746
+INFO:root:resolve destinations 0.0006341390000024205
+INFO:root:next 10 turns -42.785714285714285 one 41.75 two 113.45 flag -34.22857142857143
+INFO:root:=============== TURN 468 ================
+INFO:root:turn 467 mining speed 0.0; MA 38.45; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.05723731499999829
+INFO:root:choose destinations 0.00028959899999847494
+INFO:root:resolve destinations 0.0006571080000021823
+INFO:root:next 10 turns -45.2142857142857 one 38.45 two 108.55 flag -31.64999999999999
+INFO:root:=============== TURN 469 ================
+INFO:root:turn 468 mining speed 0.0; MA 33.8; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04442634400000145
+INFO:root:choose destinations 0.0002930140000003689
+INFO:root:resolve destinations 0.0006397260000028382
+INFO:root:next 10 turns -49.85714285714287 one 33.8 two 102.5 flag -29.914285714285718
+INFO:root:=============== TURN 470 ================
+INFO:root:turn 469 mining speed 0.0; MA 26.65; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04444496900000061
+INFO:root:choose destinations 0.0002961170000013169
+INFO:root:resolve destinations 0.000637553000000679
+INFO:root:next 10 turns -54.57142857142857 one 26.65 two 91.5 flag -27.285714285714285
+INFO:root:=============== TURN 471 ================
+INFO:root:turn 470 mining speed 0.0; MA 24.0; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04551242000000144
+INFO:root:choose destinations 0.0002899099999993382
+INFO:root:resolve destinations 0.0006406569999981571
+INFO:root:next 10 turns -50.0 one 24.0 two 83.0 flag -20.0
+INFO:root:=============== TURN 472 ================
+INFO:root:turn 471 mining speed 0.0; MA 22.15; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.044680248999998895
+INFO:root:choose destinations 0.00028990899999925546
+INFO:root:resolve destinations 0.0006356910000029359
+INFO:root:next 10 turns -46.714285714285715 one 22.15 two 77.0 flag -14.014285714285716
+INFO:root:=============== TURN 473 ================
+INFO:root:turn 472 mining speed 0.0; MA 21.6; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.045498141999999575
+INFO:root:choose destinations 0.0003147420000004786
+INFO:root:resolve destinations 0.0006282410000011396
+INFO:root:next 10 turns -31.857142857142854 one 21.6 two 65.5 flag -6.371428571428571
+INFO:root:=============== TURN 474 ================
+INFO:root:turn 473 mining speed 0.0; MA 20.5; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04596994399999943
+INFO:root:choose destinations 0.0002939450000027932
+INFO:root:resolve destinations 0.0006524520000006362
+INFO:root:next 10 turns -21.428571428571427 one 20.5 two 56.0 flag -2.142857142857143
+INFO:root:=============== TURN 475 ================
+INFO:root:turn 474 mining speed 0.0; MA 17.7; total 231568.0 temp 290392
+INFO:root:nearby enemy ship count (56, 56)
+INFO:root:updateFrame 0.04454988200000187
+INFO:root:choose destinations 0.00029518700000252807
+INFO:root:resolve destinations 0.0006335180000007767
+INFO:root:next 10 turns -11.357142857142861 one 17.7 two 43.35 flag -0.0

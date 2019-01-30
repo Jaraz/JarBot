@@ -43,13 +43,13 @@ For 2p, it wasn’t hard to come up with improving my halite collection but this
 First thanks to Two Sigma, this competition was run flawlessly and I’m really impressed. Second, thanks to all the competitors, it was a real honor to compete with everyone! Finally, and perhaps biggest thanks of all, is to Mlomb and Forhstiwhrl, who made some amazing tools for this game. Mlomb’s website absolutely saved me multiple times when I had some big bugs in certain map sizes. 
 
 ## Funny moments (roughly in the order I experienced them):
-Wait I can swap my ships without crashing!? How the hell…
-Oh you’re telling me inspiration creates halite….
-Yes my new build is awesome! FML it timeouts on 48x48 and above… like on turn 10
-The moment your top 50 bot loses to a ~200 because he camped your spawn (that might not be as relatable)
-Ok 4p is freaking annoying I’m just going to avoid all neighboring enemy squares… wait that works pretty well!
-That moment you realize you don’t have to mine a 9 halite square!
-Oh Teccles’ new version lost to my bot, I guess he had a bug. Poor guy but he’ll be fine… or maybe not...
-![Alt text](funny.jpg "Funny")
-Competition locks. Ok, how do these convolutions work because no way people are using np.einsum… holy hell that is easy…
-Sorry to all the people below #16 (especially Kovi, who was a beast in this competition) as you may be depressed after seeing this code!
+*Wait I can swap my ships without crashing!? How the hell…
+*Oh you’re telling me inspiration creates halite….
+*Yes my new build is awesome! FML it timeouts on 48x48 and above… like on turn 10
+*The moment your top 50 bot loses to a ~200 because he camped your spawn (that might not be as relatable)
+*Ok 4p is freaking annoying I’m just going to avoid all neighboring enemy squares… wait that works pretty well!
+*That moment you realize you don’t have to mine a 9 halite square!
+*Oh Teccles’ new version lost to my bot, I guess he had a bug. Poor guy but he’ll be fine… or maybe not...
+![Funny pic](funny.JPG)
+*Competition locks. Ok, how do these convolutions work because no way people are using np.einsum… holy hell that is easy…
+*Sorry to all the people below #16 (especially Kovi, who was a beast in this competition) as you may be depressed after seeing this code!
